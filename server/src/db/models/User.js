@@ -7,6 +7,12 @@ module.exports = (sequelize, DataTypes) => {
         through: models.Favorite,
         foreignKey: 'userId',
       });
+
+      User.hasMany(models.Token, {
+        foreignKey: 'userId',
+        onDelete: 'SET NULL',
+        onUpdate: 'CASCADE',
+      });
     }
   }
   User.init(
