@@ -1,27 +1,17 @@
 import { useState } from 'react';
 
-const RegistrationForm = ({ onRegister }) => {
-  const [fullName, setFullName] = useState('');
+const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onRegister(fullName, email, password);
+    onLogin(email, password);
   };
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <div>
-        <label>Full Name:</label>
-        <input
-          type='text'
-          value={fullName}
-          onChange={(e) => setFullName(e.target.value)}
-          required
-        />
-      </div>
+      <h2>Login</h2>
       <div>
         <label>Email:</label>
         <input
@@ -40,9 +30,9 @@ const RegistrationForm = ({ onRegister }) => {
           required
         />
       </div>
-      <button type='submit'>Register</button>
+      <button type='submit'>Login</button>
     </form>
   );
 };
 
-export default RegistrationForm;
+export default LoginForm;
