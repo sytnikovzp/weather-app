@@ -17,8 +17,6 @@ module.exports.authHandler = (req, res, next) => {
 
     const data = validateAccessToken(accessToken);
 
-    console.log(data);
-
     if (!data) {
       return next(unAuthorizedError());
     }

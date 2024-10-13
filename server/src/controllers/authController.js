@@ -4,6 +4,8 @@ const {
   logout,
   refresh,
   getAllUsers,
+  getUserById,
+  updateUser,
   deleteUser,
 } = require('../services/authService');
 
@@ -47,11 +49,11 @@ class AuthController {
     try {
       const { refreshToken } = req.cookies;
 
-      const token = await logout(refreshToken);
+      await logout(refreshToken);
 
       res.clearCookie('refreshToken');
 
-      res.status(200).json(token);
+      res.sendStatus(res.statusCode);
     } catch (error) {
       console.log('Logout error is: ', error.message);
       next(error);
@@ -68,12 +70,12 @@ class AuthController {
 
       res.status(200).json(authData);
     } catch (error) {
-      console.log('Refresh error is: ', error.message);
+      console.log('Refreshing error is: ', error.message);
       next(error);
     }
   }
 
-  async getUsers(req, res, next) {
+  async getAllUsers(req, res, next) {
     try {
       const users = await getAllUsers();
 
@@ -88,23 +90,46 @@ class AuthController {
     }
   }
 
-  async deleteUser(req, res, next) {
-    const { email } = req.user;
+  async getUserById(req, res, next) {
+    const { id } = req.params;
 
     try {
-      const { refreshToken } = req.cookies;
+      const user = await getUserById(id);
 
-      const token = await logout(refreshToken);
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(401);
+      }
+    } catch (error) {
+      console.log('Geting user error is: ', error.message);
+      next(error);
+    }
+  }
 
-      res.clearCookie('refreshToken');
+  async updateUser(req, res, next) {
+    try {
+      const { id, fullName, email, password } = req.body;
 
-      const delUser = await deleteUser(email);
+      const userData = await updateUser(id, fullName, email, password);
+
+      res.status(201).json(userData);
+    } catch (error) {
+      console.log('Updating user error is: ', error.message);
+      next(error);
+    }
+  }
+
+  async deleteUser(req, res, next) {
+    const { id } = req.params;
+
+    try {
+      const delUser = await deleteUser(id);
 
       if (delUser) {
-        res.status(200).json(token);
+        res.sendStatus(res.statusCode);
       } else {
-        res.status(400).json('User haven`t right for deleting');
-        console.log('User haven`t right for deleting');
+        res.status(401);
       }
     } catch (error) {
       console.log('Deleting user error is: ', error.message);

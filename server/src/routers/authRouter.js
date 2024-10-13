@@ -1,11 +1,13 @@
 const { Router } = require('express');
-// ====================================================
+// ==============================================================
 const {
   registration,
   login,
   logout,
   refresh,
-  getUsers,
+  getAllUsers,
+  getUserById,
+  updateUser,
   deleteUser,
 } = require('../controllers/authController');
 const {
@@ -18,7 +20,9 @@ authRouter.post('/registration', registration);
 authRouter.post('/login', login);
 authRouter.get('/logout', logout);
 authRouter.get('/refresh', refresh);
-authRouter.get('/users', authHandler, getUsers);
-authRouter.delete('/delete', authHandler, deleteUser);
+authRouter.get('/users', authHandler, getAllUsers);
+authRouter.get('/users/:id', authHandler, getUserById);
+authRouter.put('/users', authHandler, updateUser);
+authRouter.delete('/delete/:id', authHandler, deleteUser);
 
 module.exports = authRouter;
