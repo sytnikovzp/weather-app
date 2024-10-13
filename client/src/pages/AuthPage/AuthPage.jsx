@@ -14,7 +14,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async (email, password) => {
+  const loginHandle = async (email, password) => {
     try {
       setErrorMessage('');
       const { data } = await api.post('/auth/login', { email, password });
@@ -27,16 +27,19 @@ const AuthPage = ({ setIsAuthenticated }) => {
     }
   };
 
-  const handleRegister = async (fullName, email, password) => {
+  const registrationHandle = async (fullName, email, password) => {
     try {
       setErrorMessage('');
-      await api.post('/auth/registration', {
+      const { data } = await api.post('/auth/registration', {
         fullName,
         email,
         password,
       });
+
+      localStorage.setItem('accessToken', data.accessToken);
       console.log('Registration successful!');
-      navigate('/auth');
+      setIsAuthenticated(true);
+      navigate('/');
     } catch (error) {
       setErrorMessage('Registration failed. Please try again.');
     }
@@ -46,9 +49,9 @@ const AuthPage = ({ setIsAuthenticated }) => {
     <div className='container'>
       {errorMessage && <div className='error'>{errorMessage}</div>}
       {isLoginMode ? (
-        <LoginForm onLogin={handleLogin} />
+        <LoginForm onLogin={loginHandle} />
       ) : (
-        <RegistrationForm onRegister={handleRegister} />
+        <RegistrationForm onRegister={registrationHandle} />
       )}
       <button
         id='switch-button'

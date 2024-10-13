@@ -5,6 +5,7 @@ const {
   refresh,
   getAllUsers,
   getUserById,
+  getUserByEmail,
   updateUser,
   deleteUser,
 } = require('../services/authService');
@@ -20,9 +21,8 @@ class AuthController {
   async registration(req, res, next) {
     try {
       const { fullName, email, password } = req.body;
-
       const authData = await registration(fullName, email, password);
-
+      setRefreshTokenCookie(res, authData.refreshToken);
       res.status(201).json(authData);
     } catch (error) {
       console.log('Registration error is: ', error.message);
@@ -33,11 +33,8 @@ class AuthController {
   async login(req, res, next) {
     try {
       const { email, password } = req.body;
-
       const authData = await login(email, password);
-
       setRefreshTokenCookie(res, authData.refreshToken);
-
       res.status(200).json(authData);
     } catch (error) {
       console.log('Login error is: ', error.message);
@@ -48,11 +45,8 @@ class AuthController {
   async logout(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-
       await logout(refreshToken);
-
       res.clearCookie('refreshToken');
-
       res.sendStatus(res.statusCode);
     } catch (error) {
       console.log('Logout error is: ', error.message);
@@ -63,11 +57,8 @@ class AuthController {
   async refresh(req, res, next) {
     try {
       const { refreshToken } = req.cookies;
-
       const authData = await refresh(refreshToken);
-
       setRefreshTokenCookie(res, authData.refreshToken);
-
       res.status(200).json(authData);
     } catch (error) {
       console.log('Refreshing error is: ', error.message);
@@ -78,7 +69,6 @@ class AuthController {
   async getAllUsers(req, res, next) {
     try {
       const users = await getAllUsers();
-
       if (users.length > 0) {
         res.status(200).json(users);
       } else {
@@ -90,12 +80,25 @@ class AuthController {
     }
   }
 
+  async getCurrentUserProfile(req, res, next) {
+    try {
+      const userEmail = req.user.email;
+      const user = await getUserByEmail(userEmail);
+      if (user) {
+        res.status(200).json(user);
+      } else {
+        res.status(401);
+      }
+    } catch (error) {
+      console.log('Getting user profile error is: ', error.message);
+      next(error);
+    }
+  }
+
   async getUserById(req, res, next) {
     const { id } = req.params;
-
     try {
       const user = await getUserById(id);
-
       if (user) {
         res.status(200).json(user);
       } else {
@@ -110,9 +113,7 @@ class AuthController {
   async updateUser(req, res, next) {
     try {
       const { id, fullName, email, password } = req.body;
-
       const userData = await updateUser(id, fullName, email, password);
-
       res.status(201).json(userData);
     } catch (error) {
       console.log('Updating user error is: ', error.message);
@@ -122,10 +123,8 @@ class AuthController {
 
   async deleteUser(req, res, next) {
     const { id } = req.params;
-
     try {
       const delUser = await deleteUser(id);
-
       if (delUser) {
         res.sendStatus(res.statusCode);
       } else {
