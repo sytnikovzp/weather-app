@@ -13,7 +13,9 @@ POST http://localhost:5000/api/auth/login HTTP/1.1
 Content-Type: application/json
 
 {
-  "email": "WILL.smith@GMAIL.com",
+  # "email": "WILL.smith@GMAIL.com",
+  # "password": "Qwerty12",
+  "email": "test.user@gmail.com",
   "password": "Qwerty12"
 }
 
@@ -38,7 +40,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IndpbGwuc
 ### Update user data
 PUT http://localhost:5000/api/auth/users HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI4ODA3ODUxLCJleHAiOjE3Mjg4MDkwNTF9.Sj7yqNpS6DGMIMJi5tHkcwe_JHFbaawI2tcq9-_-uD4
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InRlc3QudXNlckBnbWFpbC5jb20iLCJpYXQiOjE3Mjg4MDk5NjYsImV4cCI6MTcyODgxMTE2Nn0.Ph6n6H6QEZGkl5vWw9UUbYIIN-gtbiN2Eripvfy6pFk
 
 {
   "id": 1,
