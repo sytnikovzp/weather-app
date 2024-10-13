@@ -11,13 +11,7 @@ const api = axios.create({
 
 api.interceptors.request.use((config) => {
   const accessToken = localStorage.getItem('accessToken');
-
-  if (!accessToken) {
-    console.log('No AccessToken, need to sign in');
-  } else {
-    config.headers.Authorization = `Bearer ${accessToken}`;
-  }
-
+  config.headers.Authorization = `Bearer ${accessToken}`;
   return config;
 });
 

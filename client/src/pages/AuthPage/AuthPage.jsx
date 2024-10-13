@@ -1,5 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 // ==============================================================
 import api from '../../api';
 // ==============================================================
@@ -7,16 +8,20 @@ import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 import './AuthPage.css';
 
-const AuthPage = () => {
+const AuthPage = ({ setIsAuthenticated }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const navigate = useNavigate();
 
   const handleLogin = async (email, password) => {
     try {
       setErrorMessage('');
       const { data } = await api.post('/auth/login', { email, password });
-      console.log('Login successful!');
       localStorage.setItem('accessToken', data.accessToken);
+      console.log('Login successful!');
+      setIsAuthenticated(true);
+      navigate('/');
     } catch (error) {
       setErrorMessage('Login failed. Please check your credentials.');
     }
@@ -31,6 +36,7 @@ const AuthPage = () => {
         password,
       });
       console.log('Registration successful!');
+      navigate('/auth');
     } catch (error) {
       setErrorMessage('Registration failed. Please try again.');
     }

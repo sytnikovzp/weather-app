@@ -30,7 +30,9 @@ const LoginForm = ({ onLogin }) => {
           required
         />
       </div>
-      <button type='submit'>Login</button>
+      <button type='submit' className='submitButton'>
+        Login
+      </button>
     </form>
   );
 };
