@@ -45,7 +45,7 @@ class TokenService {
       const data = jwt.verify(token, process.env.ACCESS_SECRET);
       return data;
     } catch (error) {
-      console.log(error);
+      console.log('Access token validation error:', error.message);
       return null;
     }
   }
@@ -55,7 +55,7 @@ class TokenService {
       const data = jwt.verify(token, process.env.REFRESH_SECRET);
       return data;
     } catch (error) {
-      console.log(error);
+      console.log('Refresh token validation error:', error.message);
       return null;
     }
   }
