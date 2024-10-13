@@ -5,7 +5,7 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Token.belongsTo(models.User, {
         foreignKey: 'userId',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
     }
@@ -14,6 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     {
       userId: {
         type: DataTypes.INTEGER,
+        allowNull: false,
       },
       refreshToken: {
         type: DataTypes.STRING,

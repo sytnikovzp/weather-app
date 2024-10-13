@@ -8,7 +8,7 @@ module.exports = {
           model: 'users',
           key: 'id',
         },
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
       city_id: {
@@ -17,7 +17,7 @@ module.exports = {
           model: 'cities',
           key: 'id',
         },
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
       created_at: {

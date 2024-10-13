@@ -5,21 +5,33 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Favorite.belongsTo(models.User, {
         foreignKey: 'userId',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
 
       Favorite.belongsTo(models.City, {
         foreignKey: 'cityId',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
     }
   }
   Favorite.init(
     {
-      userId: DataTypes.INTEGER,
-      cityId: DataTypes.INTEGER,
+      userId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'users',
+          key: 'id',
+        },
+      },
+      cityId: {
+        type: DataTypes.INTEGER,
+        references: {
+          model: 'cities',
+          key: 'id',
+        },
+      },
     },
     {
       sequelize,

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
 
       User.hasMany(models.Token, {
         foreignKey: 'userId',
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
     }
@@ -25,6 +25,9 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
+        validate: {
+          isEmail: true,
+        },
       },
       password: {
         type: DataTypes.STRING,

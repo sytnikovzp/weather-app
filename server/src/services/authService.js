@@ -172,18 +172,6 @@ class AuthService {
       throw badRequest('User not found');
     }
 
-    const refreshTokenRecord = await Token.findOne({
-      where: { userId: user.id },
-    });
-
-    const refreshToken = refreshTokenRecord
-      ? refreshTokenRecord.refreshToken
-      : null;
-
-    if (refreshToken) {
-      await deleteToken(refreshToken);
-    }
-
     const delUser = await User.destroy({ where: { id } });
     return delUser;
   }

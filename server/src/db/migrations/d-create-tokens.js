@@ -10,11 +10,12 @@ module.exports = {
       },
       user_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'users',
           key: 'id',
         },
-        onDelete: 'SET NULL',
+        onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
       refresh_token: {
