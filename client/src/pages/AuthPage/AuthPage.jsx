@@ -19,7 +19,6 @@ const AuthPage = ({ setIsAuthenticated }) => {
       setErrorMessage('');
       const { data } = await api.post('/auth/login', { email, password });
       localStorage.setItem('accessToken', data.accessToken);
-      console.log('Login successful!');
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
@@ -35,9 +34,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
         email,
         password,
       });
-
       localStorage.setItem('accessToken', data.accessToken);
-      console.log('Registration successful!');
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
