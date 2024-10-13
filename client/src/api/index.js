@@ -29,8 +29,6 @@ api.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
 
-    console.log('Error is: -----------------', error);
-
     const accessToken = localStorage.getItem('accessToken');
 
     if (!accessToken) {
@@ -43,8 +41,6 @@ api.interceptors.response.use(
 
       try {
         const { data } = await api.get('/auth/refresh');
-
-        console.log('Data is: ---------', data);
 
         originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
 

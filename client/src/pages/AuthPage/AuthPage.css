@@ -7,6 +7,10 @@
   background-color: #f5f5f5;
 }
 
+.error {
+  margin-bottom: 20px;
+}
+
 form {
   background: white;
   padding: 20px;

@@ -1,5 +1,11 @@
+import AuthPage from '../AuthPage/AuthPage'
+
 function HomePage() {
-  return <div>HomePage</div>;
+  return  (
+    <>
+      <AuthPage />
+    </>
+  );
 }
 
 export default HomePage;
