@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
   }
   City.init(
     {
-      name: {
+      title: {
         type: DataTypes.STRING,
         allowNull: false,
       },
