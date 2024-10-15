@@ -1,16 +1,26 @@
 Create your configuration file `.env`
 
 ```yaml
-PORT=5000
-HOST=localhost
+#For client
+VITE_PORT=3000
+
+#For server
+WEATHER_SERVER_HOST=localhost
+WEATHER_SERVER_PORT=5000
+
+ACCESS_SECRET=access_secret
+REFRESH_SECRET=refresh_secret
+ACCESS_TOKEN_TIME=15m
+REFRESH_TOKEN_TIME=60d
+
+SALT_ROUNDS=9
+CLIENT_URL=http://localhost:3000
+
+#For database
 DB_USER=postgres
 DB_PASS=root
 DB_NAME=weatherdb
 DB_DIALECT=postgres
-SALT_ROUNDS=9
-ACCESS_SECRET=access_secret
-REFRESH_SECRET=refresh_secret
-CLIENT_URL=http://localhost:3000
 ```
 
 # API Documentation

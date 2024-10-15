@@ -6,6 +6,10 @@ const morgan = require('morgan');
 const router = require('./routers');
 // ==============================================================
 const {
+  CLIENT: { URL },
+} = require('./constants');
+// ==============================================================
+const {
   time: { getTime, showTime },
 } = require('./middlewares');
 const {
@@ -21,7 +25,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: process.env.CLIENT_URL,
+    origin: URL,
   })
 );
 
@@ -35,11 +39,6 @@ app.use(morgan('dev'));
 
 app.use('/api', router);
 
-app.use(
-  validationErrorHandler,
-  sequelizeErrorHandler,
-  errorHandler
-);
-
+app.use(validationErrorHandler, sequelizeErrorHandler, errorHandler);
 
 module.exports = app;

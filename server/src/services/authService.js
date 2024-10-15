@@ -2,7 +2,10 @@ const bcrypt = require('bcrypt');
 // ==============================================================
 const { User, Token } = require('../db/models');
 // ==============================================================
-const { SALT_ROUNDS } = require('../constants');
+const {
+  HASH: { SALT_ROUNDS },
+} = require('../constants');
+// ==============================================================
 const {
   generateTokens,
   saveToken,
@@ -10,6 +13,7 @@ const {
   validateRefreshToken,
   findToken,
 } = require('./tokenService');
+// ==============================================================
 const { badRequest, unAuthorizedError } = require('../errors/authError');
 
 async function hashPassword(password) {

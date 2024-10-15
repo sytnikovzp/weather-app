@@ -1,7 +1,10 @@
 /* eslint-disable no-unused-vars */
 const { createServer } = require('http');
 // ==============================================================
-require('dotenv').config();
+const {
+  SERVER_CONFIG: { HOST, PORT },
+  DATABASE: { DB_NAME },
+} = require('./src/constants');
 // ==============================================================
 const app = require('./src/app');
 const dbPostgres = require('./src/db/models');
@@ -12,9 +15,9 @@ const { syncModel, syncAllModels } = require('./src/utils/syncModels');
 const postgresConnect = async () => {
   try {
     await dbPostgres.sequelize.authenticate();
-    console.log(`Connection to DB <<< ${process.env.DB_NAME} >>> is done!`);
+    console.log(`Connection to DB <<< ${DB_NAME} >>> is done!`);
   } catch (error) {
-    console.log(`Can not connect to DB ${process.env.DB_NAME}!`, error.message);
+    console.log(`Can not connect to DB ${DB_NAME}!`, error.message);
   }
 };
 
@@ -26,9 +29,6 @@ postgresConnect();
 // syncAllModels();
 
 // ================ Create server with HTTP module ===============
-
-const PORT = process.env.PORT || 5000;
-const HOST = process.env.HOST;
 
 const server = createServer(app);
 

@@ -6,3 +6,5 @@ server/.vs_code/
 server/.env
 server/sequelize-meta.json
 server/sequelize-data.json
+
+.env

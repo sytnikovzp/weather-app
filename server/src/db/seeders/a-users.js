@@ -1,7 +1,9 @@
 /* eslint-disable camelcase */
 const bcrypt = require('bcrypt');
-
-const { SALT_ROUNDS } = require('../../constants');
+// ==============================================================
+const {
+  HASH: { SALT_ROUNDS },
+} = require('../../constants');
 
 const users = [
   {
