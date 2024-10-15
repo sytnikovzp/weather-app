@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
+import WeatherCard from '../../components/WeatherCard/WeatherCard';
 
 const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -46,11 +47,17 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       {userProfile && <p>Hi, {userProfile.fullName}!</p>}
       <button onClick={handleLogout}>Logout</button>
       <CityAutocomplete onCitySelect={handleCitySelect} />
-      {selectedCity && (
-        <p>
-          Selected city: {selectedCity.name}, {selectedCity.state},{' '}
-          {selectedCity.country}
-        </p>
+
+      {selectedCity ? (
+        <div>
+          <WeatherCard
+            cityName={selectedCity.name}
+            cityState={selectedCity.state}
+            cityCountry={selectedCity.country}
+          />
+        </div>
+      ) : (
+        <p>Please select a city to view the weather.</p>
       )}
     </div>
   );
