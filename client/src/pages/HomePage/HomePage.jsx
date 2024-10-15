@@ -1,9 +1,13 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+// ==============================================================
 import api from '../../api';
+// ==============================================================
+import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 
 const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null);
   const navigate = useNavigate();
 
   const handleLogout = async () => {
@@ -14,6 +18,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     } catch (error) {
       console.log('Logout error:', error);
     }
+  };
+
+  const handleCitySelect = (city) => {
+    setSelectedCity(city);
   };
 
   useEffect(() => {
@@ -34,9 +42,16 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
   return (
     <div>
-      <h1>Home Page</h1>
+      <h1>Weather App</h1>
       {userProfile && <p>Hi, {userProfile.fullName}!</p>}
       <button onClick={handleLogout}>Logout</button>
+      <CityAutocomplete onCitySelect={handleCitySelect} />
+      {selectedCity && (
+        <p>
+          Selected city: {selectedCity.name}, {selectedCity.state},{' '}
+          {selectedCity.country}
+        </p>
+      )}
     </div>
   );
 };
