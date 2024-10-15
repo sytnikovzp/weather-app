@@ -5,6 +5,7 @@ import api from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
+import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 
 const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
@@ -55,6 +56,14 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
             cityState={selectedCity.state}
             cityCountry={selectedCity.country}
           />
+        </div>
+      ) : (
+        <p>Please select a city to view the weather.</p>
+      )}
+
+      {selectedCity ? (
+        <div>
+          <TemperatureChart cityName={selectedCity.name} />
         </div>
       ) : (
         <p>Please select a city to view the weather.</p>
