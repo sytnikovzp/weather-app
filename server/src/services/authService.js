@@ -23,19 +23,22 @@ async function hashPassword(password) {
 }
 
 class AuthService {
-  async registration(fullName, email, password) {
+  async registration(fullName, email, password, transaction) {
     const emailToLower = emailToLowerCase(email);
     const person = await User.findOne({ where: { email: emailToLower } });
     if (person) throw badRequest('This user already exists');
     const hashedPassword = await hashPassword(password);
-    const user = await User.create({
-      fullName,
-      email: emailToLower,
-      password: hashedPassword,
-    });
+    const user = await User.create(
+      {
+        fullName,
+        email: emailToLower,
+        password: hashedPassword,
+      },
+      { transaction }
+    );
     const tokens = generateTokens({ email });
     const userId = user.id;
-    await saveToken(userId, tokens.refreshToken);
+    await saveToken(userId, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -46,14 +49,14 @@ class AuthService {
     };
   }
 
-  async login(email, password) {
+  async login(email, password, transaction) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw unAuthorizedError();
     const isPassRight = await bcrypt.compare(password, user.password);
     if (!isPassRight) throw unAuthorizedError();
     const tokens = generateTokens({ email });
-    await saveToken(user.id, tokens.refreshToken);
+    await saveToken(user.id, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -64,13 +67,13 @@ class AuthService {
     };
   }
 
-  async logout(refreshToken) {
+  async logout(refreshToken, transaction) {
     if (!refreshToken) throw unAuthorizedError();
-    const token = await deleteToken(refreshToken);
+    const token = await deleteToken(refreshToken, transaction);
     return token;
   }
 
-  async refresh(refreshToken) {
+  async refresh(refreshToken, transaction) {
     if (!refreshToken) throw unAuthorizedError();
     const data = validateRefreshToken(refreshToken);
     const dbToken = await findToken(refreshToken);
@@ -79,7 +82,7 @@ class AuthService {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     const tokens = generateTokens({ email: emailToLower });
-    await saveToken(user.id, tokens.refreshToken);
+    await saveToken(user.id, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -115,7 +118,7 @@ class AuthService {
     return user;
   }
 
-  async updateUser(id, fullName, email, password) {
+  async updateUser(id, fullName, email, password, transaction) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
       throw badRequest('User not found');
@@ -127,7 +130,7 @@ class AuthService {
       if (person) throw badRequest('This email is already used');
       updateData.email = newEmail;
       const token = await Token.findOne({ where: { userId: id } });
-      await deleteToken(token.refreshToken);
+      await deleteToken(token.refreshToken, transaction);
     }
     if (password) {
       const hashedPassword = await hashPassword(password);
@@ -136,6 +139,7 @@ class AuthService {
     const [affectedRows, [updatedUser]] = await User.update(updateData, {
       where: { id },
       returning: true,
+      transaction,
     });
     if (affectedRows === 0) {
       throw badRequest('User not found');
@@ -149,12 +153,12 @@ class AuthService {
     };
   }
 
-  async deleteUser(id) {
+  async deleteUser(id, transaction) {
     const user = await User.findByPk(id);
     if (!user) {
       throw badRequest('User not found');
     }
-    const delUser = await User.destroy({ where: { id } });
+    const delUser = await User.destroy({ where: { id }, transaction });
     return delUser;
   }
 }

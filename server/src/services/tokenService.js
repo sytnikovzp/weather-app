@@ -27,20 +27,23 @@ class TokenService {
     };
   }
 
-  async saveToken(userId, refreshToken) {
+  async saveToken(userId, refreshToken, transaction) {
     const tokenData = await Token.findOne({ where: { userId } });
 
     if (tokenData) {
       tokenData.refreshToken = refreshToken;
-      return await tokenData.save();
+      return await tokenData.save({ transaction });
     }
 
-    const token = await Token.create({ userId, refreshToken });
+    const token = await Token.create({ userId, refreshToken }, { transaction });
     return token;
   }
 
-  async deleteToken(refreshToken) {
-    const token = await Token.destroy({ where: { refreshToken } });
+  async deleteToken(refreshToken, transaction) {
+    const token = await Token.destroy({
+      where: { refreshToken },
+      transaction,
+    });
     return token;
   }
 

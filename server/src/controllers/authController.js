@@ -1,3 +1,5 @@
+const { sequelize } = require('../db/models');
+// ==============================================================
 const {
   registration,
   login,
@@ -19,48 +21,65 @@ function setRefreshTokenCookie(res, refreshToken) {
 
 class AuthController {
   async registration(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
       const { fullName, email, password } = req.body;
-      const authData = await registration(fullName, email, password);
+      const authData = await registration(
+        fullName,
+        email,
+        password,
+        transaction
+      );
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(201).json(authData);
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Registration error is: ', error.message);
       next(error);
     }
   }
 
   async login(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
       const { email, password } = req.body;
-      const authData = await login(email, password);
+      const authData = await login(email, password, transaction);
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Login error is: ', error.message);
       next(error);
     }
   }
 
   async logout(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
       const { refreshToken } = req.cookies;
-      await logout(refreshToken);
+      await logout(refreshToken, transaction);
       res.clearCookie('refreshToken');
       res.sendStatus(res.statusCode);
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Logout error is: ', error.message);
       next(error);
     }
   }
 
   async refresh(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
       const { refreshToken } = req.cookies;
-      const authData = await refresh(refreshToken);
+      const authData = await refresh(refreshToken, transaction);
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Refreshing error is: ', error.message);
       next(error);
     }
@@ -111,26 +130,38 @@ class AuthController {
   }
 
   async updateUser(req, res, next) {
+    const transaction = await sequelize.transaction();
     try {
       const { id, fullName, email, password } = req.body;
-      const userData = await updateUser(id, fullName, email, password);
+      const userData = await updateUser(
+        id,
+        fullName,
+        email,
+        password,
+        transaction
+      );
       res.status(201).json(userData);
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Updating user error is: ', error.message);
       next(error);
     }
   }
 
   async deleteUser(req, res, next) {
+    const transaction = await sequelize.transaction();
     const { id } = req.params;
     try {
-      const delUser = await deleteUser(id);
+      const delUser = await deleteUser(id, transaction);
       if (delUser) {
         res.sendStatus(res.statusCode);
       } else {
         res.status(401);
       }
+      await transaction.commit();
     } catch (error) {
+      await transaction.rollback();
       console.log('Deleting user error is: ', error.message);
       next(error);
     }
