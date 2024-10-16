@@ -8,6 +8,8 @@ import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 // ==============================================================
+import { getWeather } from '../../services/weatherService';
+// ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
 
@@ -16,6 +18,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [userProfile, setUserProfile] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
+  const [weatherData, setWeatherData] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
@@ -49,6 +55,19 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setFavorites(favorites.filter((fav) => fav.name !== cityName));
   };
 
+  const fetchWeatherData = async (city) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getWeather(city.name);
+      setWeatherData(data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/auth', { replace: true });
@@ -64,6 +83,12 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       fetchUserProfile();
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (selectedCity) {
+      fetchWeatherData(selectedCity);
+    }
+  }, [selectedCity]);
 
   return (
     <div className='app-container'>
@@ -111,6 +136,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                 <WeatherCard
                   cityName={selectedCity.name}
                   cityCountry={selectedCity.country}
+                  weatherData={weatherData}
+                  loading={loading}
+                  error={error}
+                  onRefresh={() => fetchWeatherData(selectedCity)}
                 />
 
                 <TemperatureChart cityName={selectedCity.name} />

@@ -1,40 +1,15 @@
-import axios from 'axios';
-import { useEffect, useState, useCallback } from 'react'; // добавлен useCallback
-// ==============================================================
-import { WEATHER_API_KEY } from '../../constants';
 import { formatDate, getWindDirection } from '../../services/weatherService';
 // ==============================================================
 import './WeatherCard.css';
 
-const WeatherCard = ({ cityName, cityCountry }) => {
-  const [weatherData, setWeatherData] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
-
-  const getWeather = useCallback(async () => {
-    const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
-
-    setLoading(true);
-    setError(null);
-    try {
-      const response = await axios.get(weatherUrl);
-      setWeatherData(response.data);
-    } catch (error) {
-      setError('Error fetching weather data');
-      console.log(error.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [cityName]);
-
-  useEffect(() => {
-    if (cityName) {
-      getWeather();
-    }
-  }, [cityName, getWeather]);
-
-  console.log(weatherData);
-
+const WeatherCard = ({
+  cityName,
+  cityCountry,
+  weatherData,
+  loading,
+  error,
+  onRefresh,
+}) => {
   return (
     <div className='weather-card'>
       {loading && <p>Loading...</p>}
@@ -44,7 +19,7 @@ const WeatherCard = ({ cityName, cityCountry }) => {
           <div className='updated-info'>
             <p>
               Updated at: {formatDate(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
-              <button className='refresh-button' onClick={getWeather}>
+              <button className='refresh-button' onClick={onRefresh}>
                 ⟳
               </button>
             </p>
