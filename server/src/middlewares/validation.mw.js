@@ -1,6 +1,7 @@
 const {
   REGISTRATION_VALIDATION_SCHEMA,
   AUTH_VALIDATION_SCHEMA,
+  FAVORITES_SCHEMA,
 } = require('../utils/validationSchemes');
 
 const validateSchema = (schema) => async (req, res, next) => {
@@ -19,4 +20,5 @@ const validateSchema = (schema) => async (req, res, next) => {
 module.exports = {
   validateRegistration: validateSchema(REGISTRATION_VALIDATION_SCHEMA),
   validateAuth: validateSchema(AUTH_VALIDATION_SCHEMA),
+  validateFavorites: validateSchema(FAVORITES_SCHEMA),
 };

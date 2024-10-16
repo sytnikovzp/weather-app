@@ -5,6 +5,7 @@ const { User, Token } = require('../db/models');
 const {
   HASH: { SALT_ROUNDS },
 } = require('../constants');
+const { emailToLowerCase } = require('../utils/sharedFunctions');
 // ==============================================================
 const {
   generateTokens,
@@ -14,14 +15,11 @@ const {
   findToken,
 } = require('./tokenService');
 // ==============================================================
-const { badRequest, unAuthorizedError } = require('../errors/authError');
+const { unAuthorizedError } = require('../errors/authErrors');
+const { badRequest } = require('../errors/customErrors');
 
 async function hashPassword(password) {
   return await bcrypt.hash(password, SALT_ROUNDS);
-}
-
-function emailToLowerCase(email) {
-  return email.toLowerCase();
 }
 
 class AuthService {

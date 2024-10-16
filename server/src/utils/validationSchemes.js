@@ -19,7 +19,14 @@ const AUTH_VALIDATION_SCHEMA = yup.object().shape({
   password: PASSWORD_SCHEMA,
 });
 
+const FAVORITES_SCHEMA = yup.object().shape({
+  openWeatherId: yup.number().required(),
+  cityName: TITLE_NAME_SCHEMA,
+  country: TITLE_NAME_SCHEMA,
+});
+
 module.exports = {
   REGISTRATION_VALIDATION_SCHEMA,
   AUTH_VALIDATION_SCHEMA,
+  FAVORITES_SCHEMA
 };

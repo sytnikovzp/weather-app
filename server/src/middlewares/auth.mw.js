@@ -1,4 +1,4 @@
-const { unAuthorizedError } = require('../errors/authError');
+const { unAuthorizedError } = require('../errors/authErrors');
 const { validateAccessToken } = require('../services/tokenService');
 
 module.exports.authHandler = (req, res, next) => {
