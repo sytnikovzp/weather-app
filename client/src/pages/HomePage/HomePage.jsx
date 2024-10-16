@@ -89,7 +89,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                 <div>
                   <WeatherCard
                     cityName={selectedCity.name}
-                    cityState={selectedCity.state}
                     cityCountry={selectedCity.country}
                   />
 

@@ -48,7 +48,7 @@ const CityAutocomplete = ({ onCitySelect }) => {
         className='autocomplete-input'
         value={query}
         onChange={handleInputChange}
-        placeholder='Enter city name'
+        placeholder='Введіть назву міста'
       />
       {suggestions.length > 0 && (
         <ul className='autocomplete-list'>
