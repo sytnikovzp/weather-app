@@ -10,6 +10,7 @@ import Layout from './pages/Layout/Layout';
 import HomePage from './pages/HomePage/HomePage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+import './App.css';
 
 const App = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);

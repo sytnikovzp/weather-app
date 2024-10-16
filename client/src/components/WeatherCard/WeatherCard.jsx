@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react';
 import { WEATHER_API_KEY } from '../../constants';
 import { formatDate, getWindDirection } from '../../services/weatherService';
 // ==============================================================
-import './WeatherCard.css';
 
 const WeatherCard = ({ cityName, cityState, cityCountry }) => {
   const [weatherData, setWeatherData] = useState(null);

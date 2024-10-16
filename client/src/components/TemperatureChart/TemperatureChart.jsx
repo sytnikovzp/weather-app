@@ -3,7 +3,6 @@ import axios from 'axios';
 import Chart from 'chart.js/auto';
 // ==============================================================
 import { WEATHER_API_KEY } from '../../constants';
-import './TemperatureChart.css';
 
 const TemperatureChart = ({ cityName }) => {
   const chartRef = useRef(null);

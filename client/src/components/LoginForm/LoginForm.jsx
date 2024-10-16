@@ -11,9 +11,9 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Login</h2>
-      <div>
-        <label>Email:</label>
+      <h2>Авторизація</h2>
+      <div className='inputField'>
+        <label>E-mail:</label>
         <input
           type='email'
           value={email}
@@ -21,8 +21,8 @@ const LoginForm = ({ onLogin }) => {
           required
         />
       </div>
-      <div>
-        <label>Password:</label>
+      <div className='inputField'>
+        <label>Пароль:</label>
         <input
           type='password'
           value={password}
@@ -31,7 +31,7 @@ const LoginForm = ({ onLogin }) => {
         />
       </div>
       <button type='submit' className='submitButton'>
-        Login
+        Увійти
       </button>
     </form>
   );

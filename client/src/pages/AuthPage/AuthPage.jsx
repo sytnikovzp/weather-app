@@ -6,7 +6,6 @@ import api from '../../api';
 // ==============================================================
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
-import './AuthPage.css';
 
 const AuthPage = ({ setIsAuthenticated }) => {
   const [isLoginMode, setIsLoginMode] = useState(true);
@@ -22,7 +21,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
-      setErrorMessage('Login failed. Please check your credentials.');
+      setErrorMessage('Авторизація неуспішна. Перевірте свои облікові данні.');
     }
   };
 
@@ -38,12 +37,12 @@ const AuthPage = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
-      setErrorMessage('Registration failed. Please try again.');
+      setErrorMessage('Реєстрація неуспішна. Спробуйте знову.');
     }
   };
 
   return (
-    <div className='container'>
+    <div className='auth-container'>
       {errorMessage && <div className='error'>{errorMessage}</div>}
       {isLoginMode ? (
         <LoginForm onLogin={loginHandle} />
@@ -57,7 +56,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
           setErrorMessage('');
         }}
       >
-        Switch to {isLoginMode ? 'Register' : 'Login'}
+        Перейти до {isLoginMode ? 'реєстрації користувача' : 'авторизації'}
       </button>
     </div>
   );

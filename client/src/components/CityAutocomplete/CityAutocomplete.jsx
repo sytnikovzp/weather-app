@@ -2,6 +2,7 @@ import { useState } from 'react';
 import axios from 'axios';
 // ==============================================================
 import { WEATHER_API_KEY } from '../../constants';
+// ==============================================================
 import './CityAutocomplete.css';
 
 const CityAutocomplete = ({ onCitySelect }) => {

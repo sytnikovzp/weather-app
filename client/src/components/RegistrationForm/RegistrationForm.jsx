@@ -12,9 +12,9 @@ const RegistrationForm = ({ onRegister }) => {
 
   return (
     <form onSubmit={handleSubmit}>
-      <h2>Register</h2>
-      <div>
-        <label>Full Name:</label>
+      <h2>Реєстрація</h2>
+      <div className='inputField'>
+        <label>Повне імʼя:</label>
         <input
           type='text'
           value={fullName}
@@ -22,8 +22,8 @@ const RegistrationForm = ({ onRegister }) => {
           required
         />
       </div>
-      <div>
-        <label>Email:</label>
+      <div className='inputField'>
+        <label>E-mail:</label>
         <input
           type='email'
           value={email}
@@ -31,8 +31,8 @@ const RegistrationForm = ({ onRegister }) => {
           required
         />
       </div>
-      <div>
-        <label>Password:</label>
+      <div className='inputField'>
+        <label>Пароль:</label>
         <input
           type='password'
           value={password}
@@ -41,7 +41,7 @@ const RegistrationForm = ({ onRegister }) => {
         />
       </div>
       <button type='submit' className='submitButton'>
-        Register
+        Зареєструватися та увійти
       </button>
     </form>
   );
