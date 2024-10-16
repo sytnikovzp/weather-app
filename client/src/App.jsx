@@ -6,7 +6,7 @@ import {
   Navigate,
 } from 'react-router-dom';
 // ==============================================================
-import Layout from './pages/Layout/Layout';
+import Layout from './components/Layout/Layout';
 import HomePage from './pages/HomePage/HomePage';
 import AuthPage from './pages/AuthPage/AuthPage';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
