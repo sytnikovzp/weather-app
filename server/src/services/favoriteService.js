@@ -27,7 +27,7 @@ class FavoriteService {
     return formattedFavorites;
   }
 
-  async addFavorite(userEmail, openWeatherId, cityName, country) {
+  async addFavorite(userEmail, openWeatherId, cityName, country, transaction) {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
@@ -35,11 +35,14 @@ class FavoriteService {
     let city = await City.findOne({ where: { openWeatherId } });
 
     if (!city) {
-      city = await City.create({
-        title: cityName,
-        country,
-        openWeatherId,
-      });
+      city = await City.create(
+        {
+          title: cityName,
+          country,
+          openWeatherId,
+        },
+        { transaction }
+      );
     }
 
     const existingFavorite = await Favorite.findOne({
@@ -47,15 +50,18 @@ class FavoriteService {
     });
     if (existingFavorite) throw badRequest('The city is already in favorites');
 
-    const favorite = await Favorite.create({
-      userId: user.id,
-      cityId: city.id,
-    });
+    const favorite = await Favorite.create(
+      {
+        userId: user.id,
+        cityId: city.id,
+      },
+      { transaction }
+    );
 
     return favorite;
   }
 
-  async removeFavorite(userEmail, cityId) {
+  async removeFavorite(userEmail, cityId, transaction) {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
@@ -68,6 +74,7 @@ class FavoriteService {
 
     await Favorite.destroy({
       where: { userId: user.id, cityId },
+      transaction,
     });
   }
 }

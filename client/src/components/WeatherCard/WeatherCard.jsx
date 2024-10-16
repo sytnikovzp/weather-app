@@ -11,7 +11,6 @@ const WeatherCard = ({ cityName, cityCountry }) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  // Функция для получения погоды
   const getWeather = useCallback(async () => {
     const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
 

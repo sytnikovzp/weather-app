@@ -1,12 +1,12 @@
 ### Get list of favorite cities
 GET http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTExOTI0LCJleHAiOjE3MjkxMTI4MjR9.ONc1SWkIg_sEQbD3RCkDDk9_rmHQjLO52S6L-MHOTkU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
 
 ### Add city to favorites
 POST http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTExOTI0LCJleHAiOjE3MjkxMTI4MjR9.ONc1SWkIg_sEQbD3RCkDDk9_rmHQjLO52S6L-MHOTkU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
 
 {
   "openWeatherId": 1,
@@ -17,4 +17,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc
 ### Remove city from favorites
 DELETE http://localhost:5000/api/favorites/1 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTExOTI0LCJleHAiOjE3MjkxMTI4MjR9.ONc1SWkIg_sEQbD3RCkDDk9_rmHQjLO52S6L-MHOTkU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
