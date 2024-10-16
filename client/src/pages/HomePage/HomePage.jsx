@@ -83,7 +83,15 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       <div className='weather-container'>
         {activeTab === 'main' ? (
           <div className='main-content'>
-            <CityAutocomplete onCitySelect={handleCitySelect} />
+            <div className='autocomplete-header'>
+              <CityAutocomplete onCitySelect={handleCitySelect} />
+              <button
+                className='favorite-button'
+                // onClick={handleAddToFavorites}
+              >
+                в обране
+              </button>
+            </div>
             {selectedCity ? (
               <>
                 <div>
@@ -96,7 +104,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                 </div>
               </>
             ) : (
-              <p>Виберіть місто, щоб переглянути погоду.</p>
+              <p>Для перегляду погоди треба обрати місто</p>
             )}
           </div>
         ) : (
