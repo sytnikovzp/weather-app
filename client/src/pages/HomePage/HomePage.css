@@ -7,7 +7,7 @@
 }
 
 .logo {
-  height: 150px;
+  width: 250px;
   padding: 1.5em;
   will-change: filter;
   transition: filter 300ms;
@@ -74,7 +74,7 @@
   padding: 4px 10px;
   cursor: pointer;
   height: 40px;
-  font-size: 12px;
+  font-size: 10px;
   margin-left: 5px;
 }
 
@@ -84,7 +84,7 @@
 
 .main-content,
 .favorites-content {
-  width: 100%;
+  width: 360px;
   height: 500px;
   background-color: white;
   border-radius: 8px;

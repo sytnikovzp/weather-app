@@ -15,6 +15,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [activeTab, setActiveTab] = useState('main');
   const [userProfile, setUserProfile] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
+  const [favorites, setFavorites] = useState([]);
   const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
@@ -33,6 +34,19 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
   const handleCitySelect = (city) => {
     setSelectedCity(city);
+  };
+
+  const handleAddToFavorites = () => {
+    if (
+      selectedCity &&
+      !favorites.some((fav) => fav.name === selectedCity.name)
+    ) {
+      setFavorites([...favorites, selectedCity]);
+    }
+  };
+
+  const handleRemoveFromFavorites = (cityName) => {
+    setFavorites(favorites.filter((fav) => fav.name !== cityName));
   };
 
   useEffect(() => {
@@ -87,9 +101,9 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
               <CityAutocomplete onCitySelect={handleCitySelect} />
               <button
                 className='favorite-button'
-                // onClick={handleAddToFavorites}
+                onClick={handleAddToFavorites}
               >
-                в обране
+                В обране
               </button>
             </div>
             {selectedCity ? (
@@ -106,7 +120,12 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
             )}
           </div>
         ) : (
-          <div className='favorites-content'>{<FavoritesList />}</div>
+          <div className='favorites-content'>
+            <FavoritesList
+              favorites={favorites}
+              onRemoveFavorite={handleRemoveFromFavorites}
+            />
+          </div>
         )}
       </div>
     </div>
