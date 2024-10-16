@@ -73,7 +73,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           </div>
         </div>
         <div className='user-container'>
-          {userProfile && <p>Привіт, {userProfile.fullName}!</p>}
+          {userProfile && <p id='welcome'>Привіт, {userProfile.fullName}!</p>}
           <button id='logout' onClick={handleLogout}>
             Вихід
           </button>
@@ -94,17 +94,15 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
             </div>
             {selectedCity ? (
               <>
-                <div>
-                  <WeatherCard
-                    cityName={selectedCity.name}
-                    cityCountry={selectedCity.country}
-                  />
+                <WeatherCard
+                  cityName={selectedCity.name}
+                  cityCountry={selectedCity.country}
+                />
 
-                  <TemperatureChart cityName={selectedCity.name} />
-                </div>
+                <TemperatureChart cityName={selectedCity.name} />
               </>
             ) : (
-              <p>Для перегляду погоди треба обрати місто</p>
+              <p id='info'>Для перегляду погоди треба обрати місто</p>
             )}
           </div>
         ) : (

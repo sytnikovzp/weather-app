@@ -1,10 +1,10 @@
 .weather-card {
-  background-color: #705959;
+  background-color: #f9f9f9;
   border: 1px solid #e1e1e1;
   border-radius: 8px;
   padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 10px;
+  margin: 15px;
   font-size: 14px;
 }
 
