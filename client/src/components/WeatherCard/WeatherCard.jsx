@@ -49,10 +49,10 @@ const WeatherCard = ({
           <div className='weather-details'>
             <div className='weather-column'>
               <p>
-                <strong>Humidity:</strong> {weatherData.main.humidity}%
+                <strong>Visibility:</strong> {weatherData.visibility / 1000} km
               </p>
               <p>
-                <strong>Visibility:</strong> {weatherData.visibility / 1000} km
+                <strong>Humidity:</strong> {weatherData.main.humidity}%
               </p>
               <p>
                 <strong>Sunrise:</strong>{' '}
@@ -61,11 +61,11 @@ const WeatherCard = ({
             </div>
             <div className='weather-column'>
               <p>
-                <strong>Cloudiness:</strong> {weatherData.clouds.all}%
-              </p>
-              <p>
                 <strong>Wind:</strong> {weatherData.wind.speed} m/s{' '}
                 {getWindDirection(weatherData.wind.deg)}
+              </p>
+              <p>
+                <strong>Cloudiness:</strong> {weatherData.clouds.all}%
               </p>
               <p>
                 <strong>Sunset:</strong>{' '}

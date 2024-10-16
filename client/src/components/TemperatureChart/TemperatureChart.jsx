@@ -1,59 +1,10 @@
-import { useEffect, useRef, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useRef } from 'react';
 import Chart from 'chart.js/auto';
-// ==============================================================
-import { WEATHER_API_KEY } from '../../constants';
 // ==============================================================
 import './TemperatureChart.css';
 
-const TemperatureChart = ({ cityName }) => {
+const TemperatureChart = ({ cityName, data, loading, error }) => {
   const chartRef = useRef(null);
-  const [data, setData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const fetchTemperatureData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
-        const response = await axios.get(weatherUrl);
-        const hourlyData = response.data.list.slice(0, 8);
-
-        const labels = hourlyData.map((item) =>
-          new Date(item.dt * 1000).toLocaleTimeString([], {
-            hour: '2-digit',
-            minute: '2-digit',
-          })
-        );
-        const temperatures = hourlyData.map((item) => item.main.temp);
-
-        setData({
-          labels: labels,
-          datasets: [
-            {
-              label: 'Temperature (°C)',
-              data: temperatures,
-              borderColor: 'rgba(75, 192, 192, 1)',
-              backgroundColor: 'rgba(75, 192, 192, 0.2)',
-              fill: false,
-              tension: 0.4,
-            },
-          ],
-        });
-      } catch (error) {
-        setError('Error fetching temperature data');
-        console.log(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (cityName) {
-      fetchTemperatureData();
-    }
-  }, [cityName]);
 
   useEffect(() => {
     if (data) {

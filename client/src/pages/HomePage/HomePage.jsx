@@ -9,6 +9,7 @@ import TemperatureChart from '../../components/TemperatureChart/TemperatureChart
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 // ==============================================================
 import { getWeather } from '../../services/weatherService';
+import { getTemperatureData } from '../../services/temperatureService';
 // ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
@@ -19,6 +20,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
+  const [temperatureData, setTemperatureData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -68,6 +70,19 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
   };
 
+  const fetchTemperatureData = async (city) => {
+    setLoading(true);
+    setError(null);
+    try {
+      const data = await getTemperatureData(city.name);
+      setTemperatureData(data);
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/auth', { replace: true });
@@ -87,6 +102,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   useEffect(() => {
     if (selectedCity) {
       fetchWeatherData(selectedCity);
+      fetchTemperatureData(selectedCity);
     }
   }, [selectedCity]);
 
@@ -142,7 +158,12 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                   onRefresh={() => fetchWeatherData(selectedCity)}
                 />
 
-                <TemperatureChart cityName={selectedCity.name} />
+                <TemperatureChart
+                  cityName={selectedCity.name}
+                  data={temperatureData}
+                  loading={loading}
+                  error={error}
+                />
               </>
             ) : (
               <p id='info'>Для перегляду погоди треба обрати місто</p>
