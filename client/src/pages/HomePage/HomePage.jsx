@@ -64,7 +64,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       const openWeatherId = weatherData.id;
       const cityName = weatherData.name;
       const country = weatherData.sys.country;
-
       try {
         const response = await addCityToFavorites(
           openWeatherId,

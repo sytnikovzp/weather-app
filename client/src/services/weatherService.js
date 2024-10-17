@@ -40,8 +40,8 @@ export const fetchWeatherData = async (selectedCity) => {
 
 export const fetchFavorites = async () => {
   try {
-    const response = await getFavoriteCities();
-    return response.data;
+    const data = await getFavoriteCities();
+    return data;
   } catch (error) {
     console.log('Error loading list of favorite cities:', error.message);
     throw new Error('Error loading list of favorite cities');
