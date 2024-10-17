@@ -82,8 +82,13 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         favorites.filter((fav) => fav.openWeatherId !== openWeatherId)
       );
     } catch (error) {
-      console.error('Error removing from favorites:', error);
+      console.log('Error removing from favorites:', error);
     }
+  };
+
+  const handleFavoriteClick = (city) => {
+    setSelectedCity(city);
+    setActiveTab('main');
   };
 
   const fetchWeatherData = async (selectedCity) => {
@@ -121,7 +126,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         setSelectedCity(lastFavorite);
       }
     } catch (error) {
-      console.error('Error loading list of favorite cities:', error);
+      console.log('Error loading list of favorite cities:', error);
     }
   };
 
@@ -217,6 +222,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
             <FavoritesList
               favorites={favorites}
               onRemoveFavorite={handleRemoveFromFavorites}
+              onCityClick={handleFavoriteClick}
             />
           </div>
         )}

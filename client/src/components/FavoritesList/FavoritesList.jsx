@@ -1,6 +1,6 @@
 import './FavoritesList.css';
 
-const FavoritesList = ({ favorites, onRemoveFavorite }) => {
+const FavoritesList = ({ favorites, onRemoveFavorite, onCityClick }) => {
   return (
     <div className='favorites-list'>
       <h3>Обрані міста</h3>
@@ -10,7 +10,12 @@ const FavoritesList = ({ favorites, onRemoveFavorite }) => {
         <ul>
           {favorites.map((city) => (
             <li key={city.openWeatherId}>
-              {city.cityName}, {city.country}
+              <span
+                className='clickable-city'
+                onClick={() => onCityClick(city)}
+              >
+                {city.cityName}, {city.country}
+              </span>
               <button
                 className='remove-favorite-button'
                 onClick={() => onRemoveFavorite(city.openWeatherId)}

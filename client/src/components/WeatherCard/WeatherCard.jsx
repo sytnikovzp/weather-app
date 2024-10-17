@@ -12,8 +12,6 @@ const WeatherCard = ({
 }) => {
   return (
     <div className='weather-card'>
-      {loading && <p>Loading...</p>}
-      {error && <p>{error}</p>}
       {weatherData && (
         <div className='weather-content'>
           <div className='updated-info'>
@@ -75,6 +73,8 @@ const WeatherCard = ({
           </div>
         </div>
       )}
+      {loading && <p>Loading...</p>}
+      {error && <p>{error}</p>}
     </div>
   );
 };

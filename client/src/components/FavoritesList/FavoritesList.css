@@ -17,6 +17,16 @@
   font-size: 20px;
 }
 
+.clickable-city {
+  cursor: pointer;
+  color: #007bff;
+  transition: color 0.3s;
+}
+
+.clickable-city:hover {
+  color: #0056b3;
+}
+
 .remove-favorite-button {
   padding: 5px 10px;
   background-color: #dc3545;
