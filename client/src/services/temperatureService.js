@@ -2,7 +2,7 @@ import axios from 'axios';
 // ==============================================================
 import { WEATHER_API_KEY } from '../constants';
 
-export const getTemperatureData = async (cityName) => {
+const getTemperatureData = async (cityName) => {
   try {
     const weatherUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
     const response = await axios.get(weatherUrl);
@@ -29,6 +29,16 @@ export const getTemperatureData = async (cityName) => {
         },
       ],
     };
+  } catch (error) {
+    console.log('Error fetching temperature data:', error.message);
+    throw new Error('Error fetching temperature data');
+  }
+};
+
+export const fetchTemperatureData = async (selectedCity) => {
+  try {
+    const data = await getTemperatureData(selectedCity.cityName);
+    return data;
   } catch (error) {
     console.log('Error fetching temperature data:', error.message);
     throw new Error('Error fetching temperature data');

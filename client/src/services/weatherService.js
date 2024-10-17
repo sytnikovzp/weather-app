@@ -2,6 +2,7 @@ import axios from 'axios';
 import { format } from 'date-fns';
 // ==============================================================
 import { WEATHER_API_KEY } from '../constants';
+import { getFavoriteCities } from '../api';
 
 export const formatDate = (timestamp, dateFormat) => {
   return format(new Date(timestamp * 1000), dateFormat);
@@ -29,7 +30,7 @@ export function getWindDirection(deg) {
   }
 }
 
-export const getWeather = async (cityName) => {
+const getWeather = async (cityName) => {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
   try {
     const response = await axios.get(weatherUrl);
@@ -37,5 +38,25 @@ export const getWeather = async (cityName) => {
   } catch (error) {
     console.log('Error fetching weather data:', error.message);
     throw new Error('Failed to fetch weather data');
+  }
+};
+
+export const fetchWeatherData = async (selectedCity) => {
+  try {
+    const data = await getWeather(selectedCity.cityName);
+    return data;
+  } catch (error) {
+    console.log('Error fetching weather data:', error.message);
+    throw new Error('Error fetching weather data');
+  }
+};
+
+export const fetchFavorites = async () => {
+  try {
+    const response = await getFavoriteCities();
+    return response.data;
+  } catch (error) {
+    console.log('Error loading list of favorite cities:', error.message);
+    throw new Error('Error loading list of favorite cities');
   }
 };

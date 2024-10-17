@@ -1,19 +1,19 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
-import api, {
-  addCityToFavorites,
-  removeCityFromFavorites,
-  getFavoriteCities,
-} from '../../api';
+import { addCityToFavorites, removeCityFromFavorites } from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 // ==============================================================
-import { getWeather } from '../../services/weatherService';
-import { getTemperatureData } from '../../services/temperatureService';
+import { logout, fetchUserProfile } from '../../services/authService';
+import {
+  fetchWeatherData,
+  fetchFavorites,
+} from '../../services/weatherService';
+import { fetchTemperatureData } from '../../services/temperatureService';
 // ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
@@ -36,8 +36,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
   const handleLogout = async () => {
     try {
-      await api.get('/auth/logout');
-      localStorage.removeItem('accessToken');
+      await logout();
       setIsAuthenticated(false);
     } catch (error) {
       console.log('Logout error:', error);
@@ -91,66 +90,45 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setActiveTab('main');
   };
 
-  const fetchWeatherData = async (selectedCity) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getWeather(selectedCity.cityName);
-      setWeatherData(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchTemperatureData = async (selectedCity) => {
-    setLoading(true);
-    setError(null);
-    try {
-      const data = await getTemperatureData(selectedCity.cityName);
-      setTemperatureData(data);
-    } catch (err) {
-      setError(err);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchFavorites = async () => {
-    try {
-      const response = await getFavoriteCities();
-      setFavorites(response.data);
-      if (response.data.length > 0) {
-        const lastFavorite = response.data[response.data.length - 1];
-        setSelectedCity(lastFavorite);
-      }
-    } catch (error) {
-      console.log('Error loading list of favorite cities:', error);
-    }
-  };
-
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/auth', { replace: true });
     } else {
-      const fetchUserProfile = async () => {
+      const fetchUserProfileData = async () => {
         try {
-          const response = await api.get('/auth/profile');
-          setUserProfile(response.data);
-          fetchFavorites();
+          const profileData = await fetchUserProfile();
+          setUserProfile(profileData);
+          const favoriteCities = await fetchFavorites();
+          setFavorites(favoriteCities);
+          if (favoriteCities.length > 0) {
+            const lastFavorite = favoriteCities[favoriteCities.length - 1];
+            setSelectedCity(lastFavorite);
+          }
         } catch (error) {
           console.log('Error fetching user profile:', error);
         }
       };
-      fetchUserProfile();
+      fetchUserProfileData();
     }
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {
     if (selectedCity) {
-      fetchWeatherData(selectedCity);
-      fetchTemperatureData(selectedCity);
+      const fetchWeather = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+          const data = await fetchWeatherData(selectedCity);
+          setWeatherData(data);
+          const temperatureData = await fetchTemperatureData(selectedCity);
+          setTemperatureData(temperatureData);
+        } catch (err) {
+          setError(err);
+        } finally {
+          setLoading(false);
+        }
+      };
+      fetchWeather();
     }
   }, [selectedCity]);
 
