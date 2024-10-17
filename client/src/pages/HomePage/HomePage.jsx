@@ -1,17 +1,21 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
-import { addCityToFavorites, removeCityFromFavorites } from '../../api';
+import {
+  fetchUserProfile,
+  logout,
+  addCityToFavorites,
+  removeCityFromFavorites,
+} from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 // ==============================================================
-import { logout, fetchUserProfile } from '../../services/authService';
 import {
-  fetchWeatherData,
   fetchFavorites,
+  fetchWeatherData,
 } from '../../services/weatherService';
 import { fetchTemperatureData } from '../../services/temperatureService';
 // ==============================================================
