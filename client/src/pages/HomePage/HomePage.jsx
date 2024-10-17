@@ -12,6 +12,7 @@ import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
+import ModalWindow from '../../components/ModalWindow/ModalWindow';
 // ==============================================================
 import {
   fetchFavorites,
@@ -30,6 +31,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
   const [isFavButtonEnabled, setIsFavButtonEnabled] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -58,6 +60,11 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   };
 
   const handleAddToFavorites = async () => {
+    if (favorites.length >= 5) {
+      setIsModalOpen(true);
+      return;
+    }
+
     if (
       selectedCity &&
       !favorites.some((fav) => fav.cityName === selectedCity.cityName)
@@ -222,6 +229,13 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           </div>
         )}
       </div>
+
+      <ModalWindow
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        title='Максимум обраних'
+        message='Для додавання видаліть місто. Максимум 5.'
+      />
     </div>
   );
 };

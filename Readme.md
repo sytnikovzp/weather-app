@@ -47,7 +47,7 @@
 ## Схема бази даних
 
 <p align="center">
-  <img src="./screenshots/ERD.png" alt="Entity relationship diagram" style="max-width: 80%;">
+  <img src="./screenshots/ERD.png" alt="Entity relationship diagram" style="max-width: 50%;">
 
 ## Використані технології та біблиотеки
 

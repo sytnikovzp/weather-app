@@ -28,6 +28,10 @@ class FavoriteService {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
+    const favoriteCount = await Favorite.count({ where: { userId: user.id } });
+    if (favoriteCount >= 5) {
+      throw badRequest('Cannot add more than 5 favorites');
+    }
     let city = await City.findOne({ where: { openWeatherId } });
     if (!city) {
       city = await City.create(
