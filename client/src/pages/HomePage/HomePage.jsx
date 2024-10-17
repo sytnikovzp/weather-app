@@ -45,13 +45,18 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   };
 
   const handleCitySelect = (city) => {
-    setSelectedCity(city);
+    setSelectedCity({
+      cityName: city.name,
+      country: city.country,
+      lat: city.lat,
+      lon: city.lon,
+    });
   };
 
   const handleAddToFavorites = async () => {
     if (
       selectedCity &&
-      !favorites.some((fav) => fav.cityName === selectedCity.name)
+      !favorites.some((fav) => fav.cityName === selectedCity.cityName)
     ) {
       const openWeatherId = weatherData.id;
       const cityName = weatherData.name;
@@ -81,11 +86,11 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
   };
 
-  const fetchWeatherData = async (city) => {
+  const fetchWeatherData = async (selectedCity) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getWeather(city.name);
+      const data = await getWeather(selectedCity.cityName);
       setWeatherData(data);
     } catch (err) {
       setError(err);
@@ -94,11 +99,11 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
   };
 
-  const fetchTemperatureData = async (city) => {
+  const fetchTemperatureData = async (selectedCity) => {
     setLoading(true);
     setError(null);
     try {
-      const data = await getTemperatureData(city.name);
+      const data = await getTemperatureData(selectedCity.cityName);
       setTemperatureData(data);
     } catch (err) {
       setError(err);
@@ -111,6 +116,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     try {
       const response = await getFavoriteCities();
       setFavorites(response.data);
+      if (response.data.length > 0) {
+        const lastFavorite = response.data[response.data.length - 1];
+        setSelectedCity(lastFavorite);
+      }
     } catch (error) {
       console.error('Error loading list of favorite cities:', error);
     }
@@ -184,7 +193,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
             {selectedCity ? (
               <>
                 <WeatherCard
-                  cityName={selectedCity.name}
+                  cityName={selectedCity.cityName}
                   cityCountry={selectedCity.country}
                   weatherData={weatherData}
                   loading={loading}
@@ -193,7 +202,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                 />
 
                 <TemperatureChart
-                  cityName={selectedCity.name}
+                  cityName={selectedCity.cityName}
                   data={temperatureData}
                   loading={loading}
                   error={error}
