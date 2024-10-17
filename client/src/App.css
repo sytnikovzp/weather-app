@@ -25,6 +25,12 @@ button:hover {
   background-color: #0056b3;
 }
 
+button:disabled {
+  background-color: #cccccc;
+  color: #666666;
+  cursor: not-allowed;
+}
+
 #switch-button {
   width: 320px;
   margin-top: 15px;

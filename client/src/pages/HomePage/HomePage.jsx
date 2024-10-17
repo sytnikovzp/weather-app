@@ -29,6 +29,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [favorites, setFavorites] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
+  const [isFavButtonEnabled, setIsFavButtonEnabled] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -71,6 +72,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           country
         );
         setFavorites([...favorites, response.data]);
+        setIsFavButtonEnabled(false);
       } catch (error) {
         console.log('Error adding to favorites:', error);
       }
@@ -114,6 +116,17 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       fetchUserProfileData();
     }
   }, [isAuthenticated, navigate]);
+
+  useEffect(() => {
+    if (selectedCity) {
+      const cityExistsInFavorites = favorites.some(
+        (fav) => fav.cityName === selectedCity.cityName
+      );
+      setIsFavButtonEnabled(!cityExistsInFavorites);
+    } else {
+      setIsFavButtonEnabled(false);
+    }
+  }, [selectedCity, favorites]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -172,6 +185,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
               <button
                 className='favorite-button'
                 onClick={handleAddToFavorites}
+                disabled={!isFavButtonEnabled}
               >
                 В обране
               </button>

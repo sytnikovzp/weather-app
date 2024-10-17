@@ -3,6 +3,7 @@ Create your configuration file `.env`
 ```yaml
 #For client
 VITE_PORT=3000
+WEATHER_API_KEY = '0a7384eacf0bf030169dafe3d90513f6'
 
 #For server
 WEATHER_SERVER_HOST=localhost
