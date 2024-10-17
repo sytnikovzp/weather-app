@@ -9,11 +9,11 @@ const FavoritesList = ({ favorites, onRemoveFavorite }) => {
       ) : (
         <ul>
           {favorites.map((city) => (
-            <li key={city.name}>
-              {city.name}, {city.country}
+            <li key={city.openWeatherId}>
+              {city.cityName}, {city.country}
               <button
                 className='remove-favorite-button'
-                onClick={() => onRemoveFavorite(city.name)}
+                onClick={() => onRemoveFavorite(city.openWeatherId)}
               >
                 Видалити
               </button>

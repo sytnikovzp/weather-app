@@ -49,4 +49,20 @@ api.interceptors.response.use(
   }
 );
 
+export const addCityToFavorites = (openWeatherId, cityName, country) => {
+  return api.post('/favorites', {
+    openWeatherId,
+    cityName,
+    country,
+  });
+};
+
+export const removeCityFromFavorites = (openWeatherId) => {
+  return api.delete(`/favorites/${openWeatherId}`);
+};
+
+export const getFavoriteCities = () => {
+  return api.get('/favorites');
+};
+
 export default api;

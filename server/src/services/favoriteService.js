@@ -8,22 +8,18 @@ class FavoriteService {
   async getFavorites(email) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
-
     if (!user) throw notFound('User not found');
-
     const favorites = await Favorite.findAll({
       where: { userId: user.id },
       include: [
         { model: City, attributes: ['title', 'country', 'openWeatherId'] },
       ],
     });
-
     const formattedFavorites = favorites.map((favorite) => ({
       cityName: favorite.City.title,
       country: favorite.City.country,
       openWeatherId: favorite.City.openWeatherId,
     }));
-
     return formattedFavorites;
   }
 
@@ -31,9 +27,7 @@ class FavoriteService {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
-
     let city = await City.findOne({ where: { openWeatherId } });
-
     if (!city) {
       city = await City.create(
         {
@@ -44,36 +38,36 @@ class FavoriteService {
         { transaction }
       );
     }
-
     const existingFavorite = await Favorite.findOne({
       where: { userId: user.id, cityId: city.id },
     });
     if (existingFavorite) throw badRequest('The city is already in favorites');
-
-    const favorite = await Favorite.create(
+    await Favorite.create(
       {
         userId: user.id,
         cityId: city.id,
       },
       { transaction }
     );
-
-    return favorite;
+    return {
+      openWeatherId: city.openWeatherId,
+      cityName: city.title,
+      country: city.country,
+    };
   }
 
-  async removeFavorite(userEmail, cityId, transaction) {
+  async removeFavorite(userEmail, openWeatherId, transaction) {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
-
+    const city = await City.findOne({ where: { openWeatherId } });
+    if (!city) throw notFound('City not found');
     const favorite = await Favorite.findOne({
-      where: { userId: user.id, cityId },
+      where: { userId: user.id, cityId: city.id },
     });
-
     if (!favorite) throw notFound('Favorite not found');
-
     await Favorite.destroy({
-      where: { userId: user.id, cityId },
+      where: { userId: user.id, cityId: city.id },
       transaction,
     });
   }

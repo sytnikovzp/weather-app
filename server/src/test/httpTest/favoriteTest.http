@@ -1,20 +1,20 @@
 ### Get list of favorite cities
 GET http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU
 
 ### Add city to favorites
 POST http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU
 
 {
-  "openWeatherId": 1,
-  "cityName": "Test city",
+  "openWeatherId": 709930,
+  "cityName": "Dnipro",
   "country": "UA"
 }
 
 ### Remove city from favorites
-DELETE http://localhost:5000/api/favorites/1 HTTP/1.1
+DELETE http://localhost:5000/api/favorites/709930 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTE1ODk4LCJleHAiOjE3MjkxMTY3OTh9.GDgJNzqXMTkNoRu7raIH7xxZrq8M1IfG6z7ebCZDnbk
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU

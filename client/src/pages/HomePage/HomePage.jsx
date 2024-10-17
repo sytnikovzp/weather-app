@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
-import api from '../../api';
+import api, {
+  addCityToFavorites,
+  removeCityFromFavorites,
+  getFavoriteCities,
+} from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
@@ -44,17 +48,37 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setSelectedCity(city);
   };
 
-  const handleAddToFavorites = () => {
+  const handleAddToFavorites = async () => {
     if (
       selectedCity &&
-      !favorites.some((fav) => fav.name === selectedCity.name)
+      !favorites.some((fav) => fav.cityName === selectedCity.name)
     ) {
-      setFavorites([...favorites, selectedCity]);
+      const openWeatherId = weatherData.id;
+      const cityName = weatherData.name;
+      const country = weatherData.sys.country;
+
+      try {
+        const response = await addCityToFavorites(
+          openWeatherId,
+          cityName,
+          country
+        );
+        setFavorites([...favorites, response.data]);
+      } catch (error) {
+        console.log('Error adding to favorites:', error);
+      }
     }
   };
 
-  const handleRemoveFromFavorites = (cityName) => {
-    setFavorites(favorites.filter((fav) => fav.name !== cityName));
+  const handleRemoveFromFavorites = async (openWeatherId) => {
+    try {
+      await removeCityFromFavorites(openWeatherId);
+      setFavorites(
+        favorites.filter((fav) => fav.openWeatherId !== openWeatherId)
+      );
+    } catch (error) {
+      console.error('Error removing from favorites:', error);
+    }
   };
 
   const fetchWeatherData = async (city) => {
@@ -83,6 +107,15 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
   };
 
+  const fetchFavorites = async () => {
+    try {
+      const response = await getFavoriteCities();
+      setFavorites(response.data);
+    } catch (error) {
+      console.error('Error loading list of favorite cities:', error);
+    }
+  };
+
   useEffect(() => {
     if (!isAuthenticated) {
       navigate('/auth', { replace: true });
@@ -91,6 +124,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         try {
           const response = await api.get('/auth/profile');
           setUserProfile(response.data);
+          fetchFavorites();
         } catch (error) {
           console.log('Error fetching user profile:', error);
         }

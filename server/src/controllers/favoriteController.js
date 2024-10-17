@@ -42,9 +42,9 @@ class FavoriteController {
   static async removeFavorite(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { cityId } = req.params;
+      const { openWeatherId } = req.params;
       const { email } = req.user;
-      await removeFavorite(email, cityId, transaction);
+      await removeFavorite(email, openWeatherId, transaction);
       await transaction.commit();
       res.sendStatus(res.statusCode);
     } catch (error) {
