@@ -1,3 +1,29 @@
+### Опис Додатку Weather
+
+Додаток Weather — це веб-додаток для отримання інформації про погоду в реальному часі. Основна мета цього додатку полягає в наданні користувачам можливості легко отримувати актуальні погодні дані для різних міст, здійснювати пошук за містами та зберігати улюблені місця для швидкого доступу.
+
+#### Основна Функціональність:
+
+1. **Реєстрація та Авторизація**: Користувачі можуть зареєструватися та увійти до системи, використовуючи свої облікові дані (логін/пароль). Всі роутери, що потребують авторизації, є приватними.
+
+2. **Автокомпліт для Міст**: Додаток включає функціональність автокомпліта, яка дозволяє користувачам швидко знаходити потрібні міста для отримання прогнозу погоди.
+
+3. **Відображення Погоди**: Інформація про погоду відображається у вигляді картки, яка містить дані про погоду на поточний день.
+
+4. **Графік Температури**: Додаток реалізує графік температури на поточний день, використовуючи бібліотеки для візуалізації (Chart.js).
+
+5. ~~**Блоки Погоди**: Користувачі можуть створити до п'яти блоків погоди для різних міст, із можливістю додавати нові блоки через кнопку “+”.~~
+
+6. ~~**Видалення Блоків**: Користувачі можуть видаляти блоки погоди з підтвердженням через модальне вікно.~~
+
+7. **Вкладка "Обране"**: Користувачі можуть додавати та видаляти улюблені міста. Обрані міста зберігаються у базі даних, а максимальна кількість улюблених міст обмежена п'ятьма.
+
+8. **Адаптивний Дизайн**: Додаток має адаптивний дизайн, що забезпечує комфортне використання на різних пристроях.
+
+9. ~~**Перемикання Відображення**: Додаток надає можливість перемикання між відображенням погодних умов "День/Ніч", а також "День/На 5 днів".~~
+
+10. **Прелоадери**: Включені прелоадери для візуалізації процесу завантаження даних з API.
+
 Create your configuration file `.env`
 
 ```yaml
@@ -24,212 +50,190 @@ DB_NAME=weatherdb
 DB_DIALECT=postgres
 ```
 
-# API Documentation
+# Документація API
 
-## Overview
+## Контролер аутентифікації
 
-This API provides authentication and user management functionalities.
+Цей контролер керує аутентифікацією користувачів і включає в себе наступні функції:
 
-## Base URL
+### 1. Реєстрація
 
-http://localhost:3000/api/auth
+**POST** `/auth/registration`
 
-## Authentication Endpoints
+**Опис:** Реєстрація нового користувача.
 
-### 1. User Registration
+**Тіло запиту:**
 
-- **URL:** `/registration`
-- **Method:** `POST`
-- **Description:** Registers a new user.
-- **Request Body:**
-  ```json
-  {
-    "fullName": "John Doe",
-    "email": "john@example.com",
-    "password": "password123"
+<pre><code>{
+  "fullName": "Ім'я Прізвище",
+  "email": "user@example.com",
+  "password": "Пароль"
+}
+</code></pre>
+
+**Відповідь:**
+
+- **201 Created**
+<pre><code>{
+  "refreshToken": "Токен оновлення",
+  "user": {
+    "id": "ID користувача",
+    "fullName": "Ім'я Прізвище",
+    "email": "user@example.com"
   }
-  ```
-- **Responses:**
-  - **201 Created**
-    - **Description:** User registered successfully.
-    - **Response Body:**
-      ```json
-      {
-        "user": {
-          "id": 1,
-          "email": "john@example.com"
-        }
-      }
-      ```
-  - **400 Bad Request**
-    - **Description:** User already exists.
+}
+</code></pre>
+- **Помилка 400** - При неправильних даних.
 
 ---
 
-### 2. User Login
+### 2. Авторизація
 
-- **URL:** `/login`
-- **Method:** `POST`
-- **Description:** Logs in an existing user.
-- **Request Body:**
-  ```json
-  {
-    "email": "john@example.com",
-    "password": "password123"
+**POST** `/auth/login`
+
+**Опис:** Авторизація користувача в систему.
+
+**Тіло запиту:**
+
+<pre><code>{
+  "email": "user@example.com",
+  "password": "Пароль"
+}
+</code></pre>
+
+**Відповідь:**
+
+- **200 OK**
+<pre><code>{
+  "refreshToken": "Токен оновлення",
+  "user": {
+    "id": "ID користувача",
+    "fullName": "Ім'я Прізвище",
+    "email": "user@example.com"
   }
-  ```
-- **Responses:**
-  - **200 OK**
-    - **Description:** User logged in successfully.
-    - **Response Body:**
-      ```json
-      {
-        "accessToken": "access_token_value",
-        "refreshToken": "refresh_token_value",
-        "user": {
-          "id": 1,
-          "email": "john@example.com"
-        }
-      }
-      ```
-  - **401 Unauthorized**
-    - **Description:** Invalid email or password.
+}
+</code></pre>
+- **Помилка 401** - При неправильних облікових даних.
 
 ---
 
-### 3. User Logout
+### 3. Вийти
 
-- **URL:** `/logout`
-- **Method:** `POST`
-- **Description:** Logs out the current user.
-- **Cookies:** `refreshToken` (set in the login response)
-- **Responses:**
-  - **204 No Content**
-    - **Description:** User logged out successfully.
-  - **401 Unauthorized**
-    - **Description:** No refresh token provided.
+**POST** `/auth/logout`
 
----
+**Опис:** Вихід користувача з системи.
 
-### 4. Refresh Access Token
+**Відповідь:**
 
-- **URL:** `/refresh`
-- **Method:** `POST`
-- **Description:** Refreshes the access token using a valid refresh token.
-- **Cookies:** `refreshToken`
-- **Responses:**
-  - **200 OK**
-    - **Description:** Access token refreshed successfully.
-    - **Response Body:**
-      ```json
-      {
-        "accessToken": "new_access_token_value",
-        "refreshToken": "new_refresh_token_value",
-        "user": {
-          "id": 1,
-          "email": "john@example.com"
-        }
-      }
-      ```
-  - **401 Unauthorized**
-    - **Description:** Invalid refresh token.
+- **204 No Content** - Успішний вихід.
+- **Помилка 401** - Якщо користувач не авторизований.
 
 ---
 
-## User Management Endpoints
+### 4. Оновлення токена
 
-### 5. Get All Users
+**POST** `/auth/refresh`
 
-- **URL:** `/users`
-- **Method:** `GET`
-- **Description:** Retrieves all users.
-- **Responses:**
-  - **200 OK**
-    - **Description:** List of users.
-    - **Response Body:**
-      ```json
-        [
-          {
-            "id": 1,
-            "email": "john@example.com",
-            "fullName": "John Doe"
-          },
-          {
-            "id": 2,
-            "email": "jane@example.com",
-            "fullName": "Jane Doe"
-          }
-        ]
-      ```
+**Опис:** Оновлення токена доступу з використанням токена оновлення.
 
-- **401 Unauthorized**
-  - **Description:** No users found.
+**Відповідь:**
 
----
-
-### 6. Get User by ID
-
-- **URL:** `/users/:id`
-- **Method:** `GET`
-- **Description:** Retrieves a user by their ID.
-- **Parameters:**
-  - `id` (path parameter)
-- **Responses:**
-  - **200 OK**
-    - **Description:** User found.
-    - **Response Body:**
-      ```json
-      {
-        "id": 1,
-        "email": "john@example.com",
-        "fullName": "John Doe"
-      }
-      ```
-  - **401 Unauthorized**
-    - **Description:** User not found.
-
----
-
-### 7. Update User
-
-- **URL:** `/users`
-- **Method:** `PUT`
-- **Description:** Updates user information.
-- **Request Body:**
-  ```json
-  {
-    "id": 1,
-    "fullName": "John Doe Updated",
-    "email": "john_updated@example.com",
-    "password": "newpassword123"
+- **200 OK**
+<pre><code>{
+  "refreshToken": "Токен оновлення",
+  "user": {
+    "id": "ID користувача",
+    "fullName": "Ім'я Прізвище",
+    "email": "user@example.com"
   }
-  ```
-- **Responses:**
-  - **201 Created**
-    - **Description:** User updated successfully.
-    - **Response Body:**
-      ```json
-      {
-        "user": {
-          "id": 1,
-          "email": "john_updated@example.com"
-        }
-      }
-      ```
-  - **400 Bad Request**
-    - **Description:** User not found or email already in use.
+}
+</code></pre>
+- **Помилка 401** - Якщо токен оновлення недійсний.
 
 ---
 
-### 8. Delete User
+### 5. Отримати список всіх зареєстрованих користувачів
 
-- **URL:** `/users/:id`
-- **Method:** `DELETE`
-- **Description:** Deletes a user by their ID.
-- **Parameters:**
-  - `id` (path parameter)
-- **Responses:**
-  - **204 No Content**
-    - **Description:** User deleted successfully.
-  - **401 Unauthorized**
-    - **Description:** User not found.
+**GET** `/auth/users`
+
+**Опис:** Отримати список усіх користувачів.
+
+**Відповідь:**
+
+- **200 OK**
+<pre><code>[
+  {
+    "id": "ID користувача",
+    "fullName": "Ім'я Прізвище",
+    "email": "user@example.com"
+  },
+  ...
+]
+</code></pre>
+- **Помилка 401** - Якщо немає доступних користувачів.
+
+## Контролер обраних міст
+
+Цей контролер керує обраними містами користувачів і включає в себе наступні функції:
+
+### 1. Отримати список обраних міст користувача
+
+**GET** `/favorites`
+
+**Опис:** Отримати список обраних міст користувача.
+
+**Відповідь:**
+
+- **200 OK**
+<pre><code>[
+  {
+    "openWeatherId": "ID погоди",
+    "cityName": "Назва міста",
+    "country": "Країна"
+  },
+  ...
+]
+</code></pre>
+- **Помилка 401** - Якщо користувач не авторизований.
+
+---
+
+### 2. Додати обране місто
+
+**POST** `/favorites`
+
+**Опис:** Додати місто до обраних.
+
+**Тіло запиту:**
+
+<pre><code>{
+  "openWeatherId": "ID погоди",
+  "cityName": "Назва міста",
+  "country": "Країна"
+}
+</code></pre>
+
+**Відповідь:**
+
+- **201 Created**
+<pre><code>{
+  "openWeatherId": "ID погоди",
+  "cityName": "Назва міста",
+  "country": "Країна"
+}
+</code></pre>
+- **Помилка 400** - При неправильних даних.
+
+---
+
+### 3. Видалити обране місто
+
+**DELETE** `/favorites/:openWeatherId`
+
+**Опис:** Видалити місто з обраних за ID міста з OpenWeather.
+
+**Відповідь:**
+
+- **204 No Content** - Успішне видалення.
+- **Помилка 404** - Якщо місто не знайдено.
+- **Помилка 401** - Якщо користувач не авторизований.
