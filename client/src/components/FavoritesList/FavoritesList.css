@@ -1,11 +1,14 @@
 .favorites-list {
   padding: 20px;
   border-radius: 8px;
+  max-height: 450px;
+  overflow-y: auto;
 }
 
 .favorites-list ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
 .favorites-list li {

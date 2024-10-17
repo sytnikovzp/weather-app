@@ -14,6 +14,7 @@ class FavoriteService {
       include: [
         { model: City, attributes: ['title', 'country', 'openWeatherId'] },
       ],
+      order: [['created_at', 'ASC']],
     });
     const formattedFavorites = favorites.map((favorite) => ({
       cityName: favorite.City.title,
