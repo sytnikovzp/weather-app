@@ -61,6 +61,24 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     });
   };
 
+  const handleRefresh = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+        selectedCity
+      );
+      const { dayData, fiveDayData } = await fetchTemperatureData(selectedCity);
+      setWeatherData(currentWeather);
+      setFiveDayData(fiveDayWeather);
+      setTemperatureData({ dayData, fiveDayData });
+    } catch (err) {
+      setError(err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleAddToFavorites = async () => {
     if (favorites.length >= 5) {
       setIsModalOpen(true);
@@ -212,7 +230,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                   cityCountry={selectedCity.country}
                   weatherData={weatherData}
                   fiveDayData={fiveDayData}
-                  onRefresh={() => fetchWeatherData(selectedCity)}
+                  onRefresh={handleRefresh}
                   isFavorite={isFavorite}
                   loading={loading}
                   error={error}

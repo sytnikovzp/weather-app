@@ -19,9 +19,6 @@ const WeatherCard = ({
 }) => {
   const [viewMode, setViewMode] = useState('current');
 
-  console.log(loading);
-  console.log(error);
-
   return (
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
       <div className='view-toggle'>
