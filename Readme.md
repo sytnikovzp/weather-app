@@ -179,7 +179,7 @@ DB_DIALECT=postgres
   <summary><strong>Або запустіть ЦЕЙ скрипт в кореневому каталогу проєкту, натисніть щоб розгорнути</strong></summary>
 
 ```bash
-cat <<EOL > /.env
+cat <<EOL > .env
 #For client
 VITE_PORT=3000
 WEATHER_API_KEY = '0a7384eacf0bf030169dafe3d90513f6'
