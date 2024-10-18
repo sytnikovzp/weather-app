@@ -1,9 +1,12 @@
 import { useState } from 'react';
+// ==============================================================
 import {
   formatDate,
   getDayLabel,
   getWindDirection,
 } from '../../services/weatherService';
+// ==============================================================
+import Preloader from '../Preloader/Preloader';
 // ==============================================================
 import './WeatherCard.css';
 
@@ -35,6 +38,9 @@ const WeatherCard = ({
           На 5 днів
         </button>
       </div>
+
+      {loading && <Preloader message='Завантаження даних про погоду...' />}
+      {error && <p>{error}</p>}
 
       {viewMode === 'current' && weatherData && (
         <div className='weather-content'>
@@ -117,9 +123,6 @@ const WeatherCard = ({
             </div>
           </div>
         )}
-
-      {loading && <p>Завантаження даних про погоду...</p>}
-      {error && <p>{error}</p>}
     </div>
   );
 };

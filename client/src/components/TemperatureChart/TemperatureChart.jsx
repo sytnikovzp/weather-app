@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 // ==============================================================
+import Preloader from '../Preloader/Preloader';
+// ==============================================================
 import './TemperatureChart.css';
 
 const TemperatureChart = ({
@@ -73,7 +75,8 @@ const TemperatureChart = ({
           На 5 днів
         </button>
       </div>
-      {loading && <p>Завантаження даних про температуру...</p>}
+
+      {loading && <Preloader message='Завантаження даних про температуру...' />}
       {error && <p>{error}</p>}
       <canvas ref={chartRef}></canvas>
     </div>

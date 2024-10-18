@@ -47,7 +47,7 @@ const processFiveDayTemperatureData = (data) => {
 
   const labels = Object.keys(dailyData);
   const temperatures = Object.values(dailyData).map((day) =>
-    (day.tempSum / day.count).toFixed(2)
+    Math.round(day.tempSum / day.count)
   );
 
   return {
