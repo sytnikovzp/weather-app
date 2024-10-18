@@ -1,6 +1,5 @@
 import { format } from 'date-fns';
-// ==============================================================
-import { getWeather, getFavoriteCities } from '../api';
+import { getWeather, getWeatherForecast, getFavoriteCities } from '../api';
 
 export const formatDate = (timestamp, dateFormat) => {
   return format(new Date(timestamp * 1000), dateFormat);
@@ -8,30 +7,79 @@ export const formatDate = (timestamp, dateFormat) => {
 
 export function getWindDirection(deg) {
   if ((deg >= 0 && deg <= 22.5) || (deg > 337.5 && deg <= 360)) {
-    return 'North';
+    return 'Півн.';
   } else if (deg > 22.5 && deg <= 67.5) {
-    return 'N-East';
+    return 'Пн-Схід.';
   } else if (deg > 67.5 && deg <= 112.5) {
-    return 'East';
+    return 'Схід.';
   } else if (deg > 112.5 && deg <= 157.5) {
-    return 'S-East';
+    return 'Пд-Схід';
   } else if (deg > 157.5 && deg <= 202.5) {
-    return 'South';
+    return 'Півд.';
   } else if (deg > 202.5 && deg <= 247.5) {
-    return 'S-West';
+    return 'Пд-Зах.';
   } else if (deg > 247.5 && deg <= 292.5) {
-    return 'West';
+    return 'Зах.';
   } else if (deg > 292.5 && deg <= 337.5) {
-    return 'N-West';
+    return 'Пн-Зах.';
   } else {
     return 'Invalid degree';
   }
 }
 
+const formatFiveDayData = (forecastData) => {
+  const dailyData = forecastData.list.reduce((acc, data) => {
+    const date = data.dt_txt.split(' ')[0];
+    if (!acc[date]) {
+      acc[date] = { sum: 0, count: 0 };
+    }
+    acc[date].sum += data.main.temp;
+    acc[date].count += 1;
+    return acc;
+  }, {});
+  const labels = Object.keys(dailyData).slice(0, 5);
+  const data = labels.map((date) =>
+    Math.round(dailyData[date].sum / dailyData[date].count)
+  );
+  return {
+    labels,
+    datasets: [
+      {
+        data,
+      },
+    ],
+  };
+};
+
+export const getDayLabel = (index) => {
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(today.getDate() + 1);
+  const dayNames = [
+    'Неділя',
+    'Понеділок',
+    'Вівторок',
+    'Середа',
+    'Четвер',
+    'П’ятниця',
+    'Субота',
+  ];
+  if (index === 0) return 'Сьогодні';
+  if (index === 1) return 'Завтра';
+  const dayOfWeek = new Date(today);
+  dayOfWeek.setDate(today.getDate() + index);
+  return dayNames[dayOfWeek.getDay()];
+};
+
 export const fetchWeatherData = async (selectedCity) => {
   try {
-    const data = await getWeather(selectedCity.cityName);
-    return data;
+    const currentWeather = await getWeather(selectedCity.cityName);
+    const fiveDayWeather = await getWeatherForecast(selectedCity.cityName);
+    const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
+    return {
+      currentWeather,
+      fiveDayWeather: formattedFiveDayData,
+    };
   } catch (error) {
     console.log('Error fetching weather data:', error.message);
     throw new Error('Error fetching weather data');

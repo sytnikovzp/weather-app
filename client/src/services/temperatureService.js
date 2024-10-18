@@ -1,4 +1,4 @@
-import { getTemperatureData } from '../api';
+import { getWeatherForecast } from '../api';
 
 const processTemperatureData = (data) => {
   const hourlyData = data.list.slice(0, 8);
@@ -15,7 +15,7 @@ const processTemperatureData = (data) => {
     labels: labels,
     datasets: [
       {
-        label: 'Temperature (°C)',
+        label: 'Температура на сьогодні (°C)',
         data: temperatures,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -50,7 +50,7 @@ const processFiveDayTemperatureData = (data) => {
     labels: labels,
     datasets: [
       {
-        label: 'Average Temp (°C)',
+        label: 'Середня температура на день (°C)',
         data: temperatures,
         borderColor: 'rgba(75, 192, 192, 1)',
         backgroundColor: 'rgba(75, 192, 192, 0.2)',
@@ -63,7 +63,7 @@ const processFiveDayTemperatureData = (data) => {
 
 export const fetchTemperatureData = async (selectedCity) => {
   try {
-    const data = await getTemperatureData(selectedCity.cityName);
+    const data = await getWeatherForecast(selectedCity.cityName);
     const dayData = processTemperatureData(data);
     const fiveDayData = processFiveDayTemperatureData(data);
     return { dayData, fiveDayData };

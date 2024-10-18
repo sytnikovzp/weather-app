@@ -129,7 +129,7 @@ export const getWeather = (cityName) => {
   return fetchOpenWeatherData(weatherUrl);
 };
 
-export const getTemperatureData = (cityName) => {
+export const getWeatherForecast = (cityName) => {
   const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
   return fetchOpenWeatherData(forecastUrl);
 };

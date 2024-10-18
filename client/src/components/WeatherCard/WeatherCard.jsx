@@ -1,4 +1,9 @@
-import { formatDate, getWindDirection } from '../../services/weatherService';
+import { useState } from 'react';
+import {
+  formatDate,
+  getDayLabel,
+  getWindDirection,
+} from '../../services/weatherService';
 // ==============================================================
 import './WeatherCard.css';
 
@@ -6,18 +11,39 @@ const WeatherCard = ({
   cityName,
   cityCountry,
   weatherData,
+  fiveDayData,
   loading,
   error,
   onRefresh,
-  isFavorite, 
+  isFavorite,
 }) => {
+  const [viewMode, setViewMode] = useState('current');
+
+  console.log(loading);
+  console.log(error);
+
   return (
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
-      {weatherData && (
+      <div className='view-toggle'>
+        <button
+          onClick={() => setViewMode('current')}
+          className={viewMode === 'current' ? 'active' : ''}
+        >
+          Зараз
+        </button>
+        <button
+          onClick={() => setViewMode('forecast')}
+          className={viewMode === 'forecast' ? 'active' : ''}
+        >
+          На 5 днів
+        </button>
+      </div>
+
+      {viewMode === 'current' && weatherData && (
         <div className='weather-content'>
           <div className='updated-info'>
             <p>
-              Updated at: {formatDate(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
+              Оновлено: {formatDate(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
               <button className='refresh-button' onClick={onRefresh}>
                 ⟳
               </button>
@@ -39,7 +65,7 @@ const WeatherCard = ({
           </div>
 
           <p className='weather-description'>
-            Feels like {Math.round(weatherData.main.feels_like)}°C.{' '}
+            Відчувається як {Math.round(weatherData.main.feels_like)}°C.{' '}
             {weatherData.weather[0].description.charAt(0).toUpperCase() +
               weatherData.weather[0].description.slice(1)}
             .
@@ -48,33 +74,54 @@ const WeatherCard = ({
           <div className='weather-details'>
             <div className='weather-column'>
               <p>
-                <strong>Visibility:</strong> {weatherData.visibility / 1000} km
+                <strong>Видимість:</strong> {weatherData.visibility / 1000} км
               </p>
               <p>
-                <strong>Humidity:</strong> {weatherData.main.humidity}%
+                <strong>Вологість:</strong> {weatherData.main.humidity}%
               </p>
               <p>
-                <strong>Sunrise:</strong>{' '}
+                <strong>Схід сонця:</strong>{' '}
                 {formatDate(weatherData.sys.sunrise, 'HH:mm')}
               </p>
             </div>
             <div className='weather-column'>
               <p>
-                <strong>Wind:</strong> {weatherData.wind.speed} m/s{' '}
+                <strong>Вітер:</strong> {weatherData.wind.speed} м/с{' '}
                 {getWindDirection(weatherData.wind.deg)}
               </p>
               <p>
-                <strong>Cloudiness:</strong> {weatherData.clouds.all}%
+                <strong>Облачність:</strong> {weatherData.clouds.all}%
               </p>
               <p>
-                <strong>Sunset:</strong>{' '}
+                <strong>Захід сонця:</strong>{' '}
                 {formatDate(weatherData.sys.sunset, 'HH:mm')}
               </p>
             </div>
           </div>
         </div>
       )}
-      {loading && <p>Loading...</p>}
+
+      {viewMode === 'forecast' &&
+        fiveDayData &&
+        Array.isArray(fiveDayData.labels) &&
+        fiveDayData.labels.length > 0 &&
+        Array.isArray(fiveDayData.datasets) &&
+        fiveDayData.datasets.length > 0 && (
+          <div className='five-day-forecast'>
+            <div className='five-day-details'>
+              {fiveDayData.labels.map((_, index) => (
+                <div key={index} className='five-day-item'>
+                  <p className='day-label'>{getDayLabel(index)}</p>
+                  <p className='temperature'>
+                    {fiveDayData.datasets[0].data[index]}°C
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      {loading && <p>Завантаження даних про погоду...</p>}
       {error && <p>{error}</p>}
     </div>
   );

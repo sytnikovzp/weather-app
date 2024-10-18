@@ -2,6 +2,26 @@
   border: 1px solid #e1e1e1;
   border-radius: 8px;
   margin: 15px;
+  padding: 15px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   background-color: #f9f9f9;
+}
+
+.view-toggle {
+  display: flex;
+  width: 100%;
+}
+
+.view-toggle button {
+  flex: 1;
+  padding: 10px;
+  cursor: pointer;
+  margin: 5px;
+  border: none;
+  transition: background-color 0.3s;
+}
+
+.view-toggle button.active {
+  background-color: #007bff;
+  color: white;
 }

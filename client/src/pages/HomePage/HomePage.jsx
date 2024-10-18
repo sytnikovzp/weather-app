@@ -29,6 +29,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
+  const [fiveDayData, setFiveDayData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
   const [isFavButtonEnabled, setIsFavButtonEnabled] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
@@ -143,11 +144,14 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         setLoading(true);
         setError(null);
         try {
-          const data = await fetchWeatherData(selectedCity);
-          setWeatherData(data);
+          const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+            selectedCity
+          );
           const { dayData, fiveDayData } = await fetchTemperatureData(
             selectedCity
           );
+          setWeatherData(currentWeather);
+          setFiveDayData(fiveDayWeather);
           setTemperatureData({ dayData, fiveDayData });
         } catch (err) {
           setError(err);
@@ -207,10 +211,11 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                   cityName={selectedCity.cityName}
                   cityCountry={selectedCity.country}
                   weatherData={weatherData}
-                  loading={loading}
-                  isFavorite={isFavorite}
-                  error={error}
+                  fiveDayData={fiveDayData}
                   onRefresh={() => fetchWeatherData(selectedCity)}
+                  isFavorite={isFavorite}
+                  loading={loading}
+                  error={error}
                 />
 
                 <TemperatureChart
@@ -239,8 +244,8 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       <ModalWindow
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        title='Максимум обраних'
-        message='Для додавання видаліть місто. Максимум 5.'
+        title='Максимум обраних міст'
+        message='Для додавання нового видаліть існуюче місто з обраних. Максимум 5.'
       />
     </div>
   );

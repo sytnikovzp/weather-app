@@ -18,7 +18,6 @@ const TemperatureChart = ({
   useEffect(() => {
     if (data) {
       const ctx = chartRef.current.getContext('2d');
-
       const config = {
         type: 'line',
         data: data,
@@ -26,10 +25,8 @@ const TemperatureChart = ({
           responsive: true,
           plugins: {
             title: {
-              display: true,
-              text: `Temperature in ${cityName} (${
-                mode === 'day' ? 'Day' : '5 Days'
-              })`,
+              display: false,
+              text: `Температура в ${cityName}`,
             },
           },
           interaction: {
@@ -62,11 +59,21 @@ const TemperatureChart = ({
 
   return (
     <div className='temperature-chart'>
-      <div className='chart-controls'>
-        <button onClick={() => setMode('day')}>Day</button>
-        <button onClick={() => setMode('5days')}>5 Days</button>
+      <div className='view-toggle'>
+        <button
+          onClick={() => setMode('day')}
+          className={mode === 'day' ? 'active' : ''}
+        >
+          Сьогодні
+        </button>
+        <button
+          onClick={() => setMode('5days')}
+          className={mode === '5days' ? 'active' : ''}
+        >
+          На 5 днів
+        </button>
       </div>
-      {loading && <p>Loading temperature data...</p>}
+      {loading && <p>Завантаження даних про температуру...</p>}
       {error && <p>{error}</p>}
       <canvas ref={chartRef}></canvas>
     </div>

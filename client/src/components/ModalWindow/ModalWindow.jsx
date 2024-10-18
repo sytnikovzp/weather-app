@@ -8,7 +8,7 @@ const ModalWindow = ({ isOpen, onClose, title, message }) => {
       <div className='modal-content'>
         <h3>{title}</h3>
         <p>{message}</p>
-        <button onClick={onClose}>Закрыть</button>
+        <button onClick={onClose}>Закрити</button>
       </div>
     </div>
   );
