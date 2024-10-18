@@ -36,15 +36,22 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (response) => {
+    return response;
+  },
   async (error) => {
     const originalRequest = error.config;
+    const accessToken = getAccessToken();
+    if (!accessToken) {
+      console.log('No AccessToken, need to sign in');
+      return null;
+    }
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
         const { data } = await api.get('/auth/refresh');
-        localStorage.setItem('accessToken', data.accessToken);
         originalRequest.headers['Authorization'] = `Bearer ${data.accessToken}`;
+        localStorage.setItem('accessToken', data.accessToken);
         return api.request(originalRequest);
       } catch (err) {
         if (err.response.status === 401) {
@@ -53,7 +60,6 @@ api.interceptors.response.use(
         return Promise.reject(err);
       }
     }
-
     return Promise.reject(error);
   }
 );
