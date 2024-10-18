@@ -28,7 +28,11 @@ const processTemperatureData = (data) => {
 
 const processFiveDayTemperatureData = (data) => {
   const dailyData = data.list.reduce((acc, current) => {
-    const date = new Date(current.dt * 1000).toLocaleDateString();
+    const date = new Date(current.dt * 1000).toLocaleDateString([], {
+      day: '2-digit',
+      month: '2-digit',
+    });
+
     if (!acc[date]) {
       acc[date] = {
         tempSum: current.main.temp,

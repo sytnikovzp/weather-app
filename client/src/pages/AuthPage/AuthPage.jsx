@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
@@ -21,6 +20,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
+      console.log('Авторизація неуспішна: ', error.message);
       setErrorMessage('Авторизація неуспішна. Перевірте свои облікові данні.');
     }
   };
@@ -37,6 +37,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
       setIsAuthenticated(true);
       navigate('/');
     } catch (error) {
+      console.log('Реєстрація неуспішна: ', error.message);
       setErrorMessage('Реєстрація неуспішна. Спробуйте знову.');
     }
   };
