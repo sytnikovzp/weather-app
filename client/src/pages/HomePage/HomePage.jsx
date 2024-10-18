@@ -31,6 +31,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   const [weatherData, setWeatherData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
   const [isFavButtonEnabled, setIsFavButtonEnabled] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -129,6 +130,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       const cityExistsInFavorites = favorites.some(
         (fav) => fav.cityName === selectedCity.cityName
       );
+      setIsFavorite(cityExistsInFavorites);
       setIsFavButtonEnabled(!cityExistsInFavorites);
     } else {
       setIsFavButtonEnabled(false);
@@ -204,6 +206,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                   cityCountry={selectedCity.country}
                   weatherData={weatherData}
                   loading={loading}
+                  isFavorite={isFavorite}
                   error={error}
                   onRefresh={() => fetchWeatherData(selectedCity)}
                 />

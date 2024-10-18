@@ -9,9 +9,10 @@ const WeatherCard = ({
   loading,
   error,
   onRefresh,
+  isFavorite, 
 }) => {
   return (
-    <div className='weather-card'>
+    <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
       {weatherData && (
         <div className='weather-content'>
           <div className='updated-info'>

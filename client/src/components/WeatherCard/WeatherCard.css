@@ -8,6 +8,12 @@
   font-size: 14px;
 }
 
+.favorite {
+  border-color: gold;
+  background-color: #fff5e6; 
+  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
 .refresh-button {
   background-color: transparent;
   width: 24px;
