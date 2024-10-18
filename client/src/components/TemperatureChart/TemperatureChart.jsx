@@ -1,10 +1,19 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 // ==============================================================
 import './TemperatureChart.css';
 
-const TemperatureChart = ({ cityName, data, loading, error }) => {
+const TemperatureChart = ({
+  cityName,
+  dayData,
+  fiveDayData,
+  loading,
+  error,
+}) => {
   const chartRef = useRef(null);
+  const [mode, setMode] = useState('day');
+
+  const data = mode === 'day' ? dayData : fiveDayData;
 
   useEffect(() => {
     if (data) {
@@ -18,7 +27,9 @@ const TemperatureChart = ({ cityName, data, loading, error }) => {
           plugins: {
             title: {
               display: true,
-              text: `Temperature in ${cityName} by Hours`,
+              text: `Temperature in ${cityName} (${
+                mode === 'day' ? 'Day' : '5 Days'
+              })`,
             },
           },
           interaction: {
@@ -29,14 +40,12 @@ const TemperatureChart = ({ cityName, data, loading, error }) => {
               display: true,
               title: {
                 display: false,
-                text: 'Time',
               },
             },
             y: {
               display: true,
               title: {
                 display: false,
-                text: 'Temperature (°C)',
               },
             },
           },
@@ -49,10 +58,14 @@ const TemperatureChart = ({ cityName, data, loading, error }) => {
         tempChart.destroy();
       };
     }
-  }, [data, cityName]);
+  }, [data, cityName, mode]);
 
   return (
     <div className='temperature-chart'>
+      <div className='chart-controls'>
+        <button onClick={() => setMode('day')}>Day</button>
+        <button onClick={() => setMode('5days')}>5 Days</button>
+      </div>
       {loading && <p>Loading temperature data...</p>}
       {error && <p>{error}</p>}
       <canvas ref={chartRef}></canvas>

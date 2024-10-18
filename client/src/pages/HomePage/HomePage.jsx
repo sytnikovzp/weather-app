@@ -145,8 +145,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         try {
           const data = await fetchWeatherData(selectedCity);
           setWeatherData(data);
-          const temperatureData = await fetchTemperatureData(selectedCity);
-          setTemperatureData(temperatureData);
+          const { dayData, fiveDayData } = await fetchTemperatureData(
+            selectedCity
+          );
+          setTemperatureData({ dayData, fiveDayData });
         } catch (err) {
           setError(err);
         } finally {
@@ -213,7 +215,8 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
                 <TemperatureChart
                   cityName={selectedCity.cityName}
-                  data={temperatureData}
+                  dayData={temperatureData?.dayData}
+                  fiveDayData={temperatureData?.fiveDayData}
                   loading={loading}
                   error={error}
                 />

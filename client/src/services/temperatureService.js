@@ -26,10 +26,47 @@ const processTemperatureData = (data) => {
   };
 };
 
+const processFiveDayTemperatureData = (data) => {
+  const dailyData = data.list.reduce((acc, current) => {
+    const date = new Date(current.dt * 1000).toLocaleDateString();
+    if (!acc[date]) {
+      acc[date] = {
+        tempSum: current.main.temp,
+        count: 1,
+      };
+    } else {
+      acc[date].tempSum += current.main.temp;
+      acc[date].count += 1;
+    }
+    return acc;
+  }, {});
+
+  const labels = Object.keys(dailyData);
+  const temperatures = Object.values(dailyData).map((day) =>
+    (day.tempSum / day.count).toFixed(2)
+  );
+
+  return {
+    labels: labels,
+    datasets: [
+      {
+        label: 'Average Temp (°C)',
+        data: temperatures,
+        borderColor: 'rgba(75, 192, 192, 1)',
+        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+        fill: false,
+        tension: 0.4,
+      },
+    ],
+  };
+};
+
 export const fetchTemperatureData = async (selectedCity) => {
   try {
     const data = await getTemperatureData(selectedCity.cityName);
-    return processTemperatureData(data);
+    const dayData = processTemperatureData(data);
+    const fiveDayData = processFiveDayTemperatureData(data);
+    return { dayData, fiveDayData };
   } catch (error) {
     console.log('Error fetching temperature data:', error.message);
     throw new Error('Error fetching temperature data');
