@@ -93,12 +93,21 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       const cityName = weatherData.name;
       const country = weatherData.sys.country;
       try {
-        const response = await addCityToFavorites(
-          openWeatherId,
+        await addCityToFavorites(openWeatherId, cityName, country);
+        const { currentWeather, fiveDayWeather } = await fetchWeatherData({
           cityName,
-          country
-        );
-        setFavorites([...favorites, response.data]);
+          country,
+        });
+        setFavorites([
+          ...favorites,
+          {
+            openWeatherId,
+            cityName,
+            country,
+            weather: currentWeather,
+            fiveDayWeather,
+          },
+        ]);
         setIsFavButtonEnabled(false);
       } catch (error) {
         console.log('Error adding to favorites:', error);
@@ -131,9 +140,22 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           const profileData = await fetchUserProfile();
           setUserProfile(profileData);
           const favoriteCities = await fetchFavorites();
-          setFavorites(favoriteCities);
-          if (favoriteCities.length > 0) {
-            const lastFavorite = favoriteCities[favoriteCities.length - 1];
+          const favoritesWithWeather = await Promise.all(
+            favoriteCities.map(async (city) => {
+              const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+                city
+              );
+              return {
+                ...city,
+                weather: currentWeather,
+                fiveDayWeather: fiveDayWeather,
+              };
+            })
+          );
+          setFavorites(favoritesWithWeather);
+          if (favoritesWithWeather.length > 0) {
+            const lastFavorite =
+              favoritesWithWeather[favoritesWithWeather.length - 1];
             setSelectedCity(lastFavorite);
           }
         } catch (error) {
@@ -252,8 +274,12 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           <div className='favorites-content'>
             <FavoritesList
               favorites={favorites}
+              onRefresh={handleRefresh}
+              isFavorite={isFavorite}
               onRemoveFavorite={handleRemoveFromFavorites}
               onCityClick={handleFavoriteClick}
+              loading={loading}
+              error={error}
             />
           </div>
         )}

@@ -26,13 +26,19 @@ const WeatherCard = ({
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
       <div className='view-toggle'>
         <button
-          onClick={() => setViewMode('current')}
+          onClick={(e) => {
+            e.stopPropagation();
+            setViewMode('current');
+          }}
           className={viewMode === 'current' ? 'active' : ''}
         >
           Зараз
         </button>
         <button
-          onClick={() => setViewMode('forecast')}
+          onClick={(e) => {
+            e.stopPropagation();
+            setViewMode('forecast');
+          }}
           className={viewMode === 'forecast' ? 'active' : ''}
         >
           На 5 днів
@@ -47,7 +53,13 @@ const WeatherCard = ({
           <div className='updated-info'>
             <p>
               Оновлено: {formatDate(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
-              <button className='refresh-button' onClick={onRefresh}>
+              <button
+                className='refresh-button'
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onRefresh();
+                }}
+              >
                 ⟳
               </button>
             </p>
