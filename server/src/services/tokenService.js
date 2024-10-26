@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken');
 // ==============================================================
-const { Token } = require('../db/models');
-// ==============================================================
 const {
   AUTH: {
     ACCESS_SECRET,
@@ -25,31 +23,6 @@ class TokenService {
       accessToken,
       refreshToken,
     };
-  }
-
-  async saveToken(userId, refreshToken, transaction) {
-    const tokenData = await Token.findOne({ where: { userId } });
-
-    if (tokenData) {
-      tokenData.refreshToken = refreshToken;
-      return await tokenData.save({ transaction });
-    }
-
-    const token = await Token.create({ userId, refreshToken }, { transaction });
-    return token;
-  }
-
-  async deleteToken(refreshToken, transaction) {
-    const token = await Token.destroy({
-      where: { refreshToken },
-      transaction,
-    });
-    return token;
-  }
-
-  async findToken(refreshToken) {
-    const token = await Token.findOne({ where: { refreshToken } });
-    return token;
   }
 
   validateAccessToken(token) {

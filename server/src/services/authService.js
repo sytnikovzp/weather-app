@@ -1,19 +1,13 @@
 const bcrypt = require('bcrypt');
 // ==============================================================
-const { User, Token } = require('../db/models');
+const { User } = require('../db/models');
 // ==============================================================
 const {
   HASH: { SALT_ROUNDS },
 } = require('../constants');
 const { emailToLowerCase } = require('../utils/sharedFunctions');
 // ==============================================================
-const {
-  generateTokens,
-  saveToken,
-  deleteToken,
-  validateRefreshToken,
-  findToken,
-} = require('./tokenService');
+const { generateTokens, validateRefreshToken } = require('./tokenService');
 // ==============================================================
 const { unAuthorizedError } = require('../errors/authErrors');
 const { badRequest } = require('../errors/customErrors');
@@ -37,8 +31,6 @@ class AuthService {
       { transaction }
     );
     const tokens = generateTokens({ email });
-    const userId = user.id;
-    await saveToken(userId, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -49,14 +41,13 @@ class AuthService {
     };
   }
 
-  async login(email, password, transaction) {
+  async login(email, password) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw unAuthorizedError();
     const isPassRight = await bcrypt.compare(password, user.password);
     if (!isPassRight) throw unAuthorizedError();
     const tokens = generateTokens({ email });
-    await saveToken(user.id, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -67,22 +58,14 @@ class AuthService {
     };
   }
 
-  async logout(refreshToken, transaction) {
-    if (!refreshToken) throw unAuthorizedError();
-    const token = await deleteToken(refreshToken, transaction);
-    return token;
-  }
-
-  async refresh(refreshToken, transaction) {
+  async refresh(refreshToken) {
     if (!refreshToken) throw unAuthorizedError();
     const data = validateRefreshToken(refreshToken);
-    const dbToken = await findToken(refreshToken);
-    if (!data || !dbToken) throw unAuthorizedError();
+    if (!data) throw unAuthorizedError();
     const { email } = data;
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     const tokens = generateTokens({ email: emailToLower });
-    await saveToken(user.id, tokens.refreshToken, transaction);
     return {
       ...tokens,
       user: {
@@ -129,8 +112,6 @@ class AuthService {
       const person = await User.findOne({ where: { email: newEmail } });
       if (person) throw badRequest('This email is already used');
       updateData.email = newEmail;
-      const token = await Token.findOne({ where: { userId: id } });
-      await deleteToken(token.refreshToken, transaction);
     }
     if (password) {
       const hashedPassword = await hashPassword(password);

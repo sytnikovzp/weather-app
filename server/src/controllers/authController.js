@@ -3,7 +3,6 @@ const { sequelize } = require('../db/models');
 const {
   registration,
   login,
-  logout,
   refresh,
   getAllUsers,
   getUserById,
@@ -58,8 +57,6 @@ class AuthController {
   async logout(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { refreshToken } = req.cookies;
-      await logout(refreshToken, transaction);
       res.clearCookie('refreshToken');
       res.sendStatus(res.statusCode);
       await transaction.commit();
