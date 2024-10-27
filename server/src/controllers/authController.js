@@ -40,28 +40,22 @@ class AuthController {
   }
 
   async login(req, res, next) {
-    const transaction = await sequelize.transaction();
     try {
       const { email, password } = req.body;
-      const authData = await login(email, password, transaction);
+      const authData = await login(email, password);
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
-      await transaction.commit();
     } catch (error) {
-      await transaction.rollback();
       console.log('Login error is: ', error.message);
       next(error);
     }
   }
 
   async logout(req, res, next) {
-    const transaction = await sequelize.transaction();
     try {
       res.clearCookie('refreshToken');
       res.sendStatus(res.statusCode);
-      await transaction.commit();
     } catch (error) {
-      await transaction.rollback();
       console.log('Logout error is: ', error.message);
       next(error);
     }

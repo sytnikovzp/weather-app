@@ -21,7 +21,7 @@ Content-Type: application/json
 GET http://localhost:5000/api/auth/logout HTTP/1.1
 Content-Type: application/json
 
-### Get new Access token by Refresh token
+### Regenerate Tokens
 GET http://localhost:5000/api/auth/refresh HTTP/1.1
 Content-Type: application/json
 
@@ -33,7 +33,7 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc
 ### Get current user profile
 GET http://localhost:5000/api/auth/profile HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5OTgxNDgwLCJleHAiOjE3Mjk5ODIzODB9.pNJIXnPd_UaVQzkKBqTrvs7gGg4PWtwL2dwvubznr2o
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGwuU21pdGhAR21haWwuY29tIiwiaWF0IjoxNzMwMDU3Mzk0LCJleHAiOjE3MzAwNTgyOTR9.bxromfcMWZpI7cCPi56nWSrUZnNSOTD-sDkGFN2d9q0
 
 ### Get user by id
 GET http://localhost:5000/api/auth/users/1 HTTP/1.1

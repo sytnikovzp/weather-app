@@ -16,6 +16,8 @@
 ![Home page](./screenshots/screen-1.png)
 ![Home page (5 days)](./screenshots/screen-2.png)
 ![Home page (favorites)](./screenshots/screen-3.png)
+![Auth page](./screenshots/screen-4.png)
+![Registration page](./screenshots/screen-5.png)
 
 </details>
 

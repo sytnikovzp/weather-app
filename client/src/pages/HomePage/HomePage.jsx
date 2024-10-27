@@ -132,37 +132,37 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth', { replace: true });
-    } else {
-      const fetchUserProfileData = async () => {
-        try {
-          const profileData = await fetchUserProfile();
-          setUserProfile(profileData);
-          const favoriteCities = await fetchFavorites();
-          const favoritesWithWeather = await Promise.all(
-            favoriteCities.map(async (city) => {
-              const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-                city
-              );
-              return {
-                ...city,
-                weather: currentWeather,
-                fiveDayWeather: fiveDayWeather,
-              };
-            })
+    const redirectToAuthIfNotAuthenticated = () => {
+      if (!isAuthenticated) {
+        navigate('/auth', { replace: true });
+      }
+    };
+    const fetchProfileAndFavorites = async () => {
+      try {
+        const profileData = await fetchUserProfile();
+        setUserProfile(profileData);
+        const favoriteCities = await fetchFavorites();
+        const favoritesWithWeather = await Promise.all(
+          favoriteCities.map(async (city) => {
+            const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+              city
+            );
+            return { ...city, weather: currentWeather, fiveDayWeather };
+          })
+        );
+        setFavorites(favoritesWithWeather);
+        if (favoritesWithWeather.length > 0) {
+          setSelectedCity(
+            favoritesWithWeather[favoritesWithWeather.length - 1]
           );
-          setFavorites(favoritesWithWeather);
-          if (favoritesWithWeather.length > 0) {
-            const lastFavorite =
-              favoritesWithWeather[favoritesWithWeather.length - 1];
-            setSelectedCity(lastFavorite);
-          }
-        } catch (error) {
-          console.log('Error fetching user profile:', error);
         }
-      };
-      fetchUserProfileData();
+      } catch (error) {
+        console.error('Error fetching user profile or favorites:', error);
+      }
+    };
+    redirectToAuthIfNotAuthenticated();
+    if (isAuthenticated) {
+      fetchProfileAndFavorites();
     }
   }, [isAuthenticated, navigate]);
 

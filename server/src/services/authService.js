@@ -36,7 +36,7 @@ class AuthService {
       user: {
         id: user.id,
         fullName: user.fullName,
-        email: user.email,
+        email: emailToLower,
       },
     };
   }
