@@ -7,15 +7,20 @@ const BASE_URL = `http://${SERVER_CONFIG.HOST}:${SERVER_CONFIG.PORT}/api/`;
 
 const WEATHER_API_KEY = import.meta.env.WEATHER_API_KEY;
 
-const AUTH_FORM = {
+const AUTH_FORM_INITIAL = {
   email: '',
   password: '',
 };
 
-const REGISTRATION_FORM = {
+const REGISTRATION_FORM_INITIAL = {
   fullName: '',
   email: '',
   password: '',
 };
 
-export { BASE_URL, WEATHER_API_KEY, AUTH_FORM, REGISTRATION_FORM };
+export {
+  BASE_URL,
+  WEATHER_API_KEY,
+  AUTH_FORM_INITIAL,
+  REGISTRATION_FORM_INITIAL,
+};

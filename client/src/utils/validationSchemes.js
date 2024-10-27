@@ -4,7 +4,7 @@ const TITLE_NAME_SCHEMA = yup.string().required('Це поле є обовʼяз
 
 const EMAIL_VALIDATION_SCHEMA = yup
   .string()
-  .email('Введіть корректний e-mail')
+  .email('Введіть коректний e-mail')
   .required('E-mail є обовʼязковим полем!');
 
 const PASSWORD_SCHEMA = yup

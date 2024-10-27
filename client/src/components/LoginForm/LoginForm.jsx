@@ -1,6 +1,6 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 // ==============================================================
-import { AUTH_FORM } from '../../constants';
+import { AUTH_FORM_INITIAL } from '../../constants';
 import { AUTH_VALIDATION_SCHEMA } from '../../utils/validationSchemes';
 
 const LoginForm = ({ onLogin }) => {
@@ -48,7 +48,7 @@ const LoginForm = ({ onLogin }) => {
 
   return (
     <Formik
-      initialValues={AUTH_FORM}
+      initialValues={AUTH_FORM_INITIAL}
       onSubmit={onFormSubmit}
       validationSchema={AUTH_VALIDATION_SCHEMA}
       validateOnMount={true}

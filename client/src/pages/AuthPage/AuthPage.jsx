@@ -57,7 +57,8 @@ const AuthPage = ({ setIsAuthenticated }) => {
           setErrorMessage('');
         }}
       >
-        Перейти до {isLoginMode ? 'реєстрації користувача' : 'авторизації'}
+        Перейти до
+        {isLoginMode ? ' реєстрації користувача' : ' авторизації користувача'}
       </button>
     </div>
   );
