@@ -30,8 +30,8 @@ class AuthController {
         transaction
       );
       setRefreshTokenCookie(res, authData.refreshToken);
-      res.status(201).json(authData);
       await transaction.commit();
+      res.status(201).json(authData);
     } catch (error) {
       await transaction.rollback();
       console.log('Registration error is: ', error.message);
@@ -67,8 +67,8 @@ class AuthController {
       const { refreshToken } = req.cookies;
       const authData = await refresh(refreshToken, transaction);
       setRefreshTokenCookie(res, authData.refreshToken);
-      res.status(200).json(authData);
       await transaction.commit();
+      res.status(200).json(authData);
     } catch (error) {
       await transaction.rollback();
       console.log('Refreshing error is: ', error.message);
@@ -131,8 +131,8 @@ class AuthController {
         password,
         transaction
       );
-      res.status(201).json(userData);
       await transaction.commit();
+      res.status(201).json(userData);
     } catch (error) {
       await transaction.rollback();
       console.log('Updating user error is: ', error.message);
