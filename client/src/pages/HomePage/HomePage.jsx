@@ -6,6 +6,8 @@ import {
   logout,
   addCityToFavorites,
   removeCityFromFavorites,
+  fetchLocationByIP,
+  getWeatherByCoordinates,
 } from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
@@ -84,7 +86,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       setIsModalOpen(true);
       return;
     }
-
     if (
       selectedCity &&
       !favorites.some((fav) => fav.cityName === selectedCity.cityName)
@@ -131,39 +132,52 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setActiveTab('main');
   };
 
-  useEffect(() => {
-    const redirectToAuthIfNotAuthenticated = () => {
-      if (!isAuthenticated) {
-        navigate('/auth', { replace: true });
-      }
-    };
-    const fetchProfileAndFavorites = async () => {
-      try {
-        const profileData = await fetchUserProfile();
-        setUserProfile(profileData);
-        const favoriteCities = await fetchFavorites();
-        const favoritesWithWeather = await Promise.all(
-          favoriteCities.map(async (city) => {
-            const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-              city
-            );
-            return { ...city, weather: currentWeather, fiveDayWeather };
-          })
-        );
-        setFavorites(favoritesWithWeather);
-        if (favoritesWithWeather.length > 0) {
-          setSelectedCity(
-            favoritesWithWeather[favoritesWithWeather.length - 1]
+  const fetchProfileAndFavorites = async () => {
+    try {
+      const profileData = await fetchUserProfile();
+      setUserProfile(profileData);
+      const favoriteCities = await fetchFavorites();
+      const favoritesWithWeather = await Promise.all(
+        favoriteCities.map(async (city) => {
+          const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+            city
           );
-        }
-      } catch (error) {
-        console.error('Error fetching user profile or favorites:', error);
-      }
-    };
-    redirectToAuthIfNotAuthenticated();
-    if (isAuthenticated) {
-      fetchProfileAndFavorites();
+          return { ...city, weather: currentWeather, fiveDayWeather };
+        })
+      );
+      setFavorites(favoritesWithWeather);
+    } catch (error) {
+      console.error('Error fetching user profile or favorites:', error);
     }
+  };
+
+  const fetchWeatherForUserLocation = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const { latitude, longitude } = await fetchLocationByIP();
+      const weather = await getWeatherByCoordinates(latitude, longitude);
+      setWeatherData(weather);
+      setSelectedCity({
+        cityName: weather.name,
+        country: weather.sys.country,
+        lat: latitude,
+        lon: longitude,
+      });
+    } catch (error) {
+      setError(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!isAuthenticated) {
+      navigate('/auth', { replace: true });
+      return;
+    }
+    fetchProfileAndFavorites();
+    fetchWeatherForUserLocation();
   }, [isAuthenticated, navigate]);
 
   useEffect(() => {

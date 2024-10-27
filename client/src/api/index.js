@@ -130,6 +130,21 @@ export const getFavoriteCities = async () => {
   }
 };
 
+export const fetchLocationByIP = async () => {
+  try {
+    const response = await axios.get(`https://ipapi.co/json/`);
+    const { latitude, longitude } = response.data;
+    return { latitude, longitude };
+  } catch (error) {
+    return handleError(error, 'Failed to fetch location by IP');
+  }
+};
+
+export const getWeatherByCoordinates = async (latitude, longitude) => {
+  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`;
+  return fetchOpenWeatherData(weatherUrl);
+};
+
 export const getWeather = (cityName) => {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
   return fetchOpenWeatherData(weatherUrl);
