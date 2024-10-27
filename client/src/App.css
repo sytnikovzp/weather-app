@@ -113,7 +113,9 @@ form {
 }
 
 .error {
-  margin: 20px auto;
+  margin: 0px auto 15px auto;
   max-width: 250px;
   text-align: center;
+  color: red;
+  font-size: 0.8em;
 }

@@ -3,6 +3,19 @@ const SERVER_CONFIG = {
   PORT: parseInt(import.meta.env.WEATHER_SERVER_PORT),
 };
 
-export const BASE_URL = `http://${SERVER_CONFIG.HOST}:${SERVER_CONFIG.PORT}/api/`;
+const BASE_URL = `http://${SERVER_CONFIG.HOST}:${SERVER_CONFIG.PORT}/api/`;
 
-export const WEATHER_API_KEY = import.meta.env.WEATHER_API_KEY;
+const WEATHER_API_KEY = import.meta.env.WEATHER_API_KEY;
+
+const AUTH_FORM = {
+  email: '',
+  password: '',
+};
+
+const REGISTRATION_FORM = {
+  fullName: '',
+  email: '',
+  password: '',
+};
+
+export { BASE_URL, WEATHER_API_KEY, AUTH_FORM, REGISTRATION_FORM };

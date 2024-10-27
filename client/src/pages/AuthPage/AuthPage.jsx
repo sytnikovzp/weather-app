@@ -21,7 +21,7 @@ const AuthPage = ({ setIsAuthenticated }) => {
       navigate('/');
     } catch (error) {
       console.log('Авторизація неуспішна: ', error.message);
-      setErrorMessage('Авторизація неуспішна. Перевірте свои облікові данні.');
+      setErrorMessage('Авторизація неуспішна. Перевірте свої облікові данні.');
     }
   };
 

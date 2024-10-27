@@ -1,4 +1,4 @@
-const yup = require('yup');
+import * as yup from 'yup';
 
 const TITLE_NAME_SCHEMA = yup.string().required('Це поле є обовʼязкове!');
 
@@ -12,7 +12,7 @@ const PASSWORD_SCHEMA = yup
   .min(8, 'Мінімальна довжина 8 символів')
   .required('Пароль є обовʼязковим полем!');
 
-// ====================================================
+// ==============================================================
 
 const REGISTRATION_VALIDATION_SCHEMA = yup.object().shape({
   fullName: TITLE_NAME_SCHEMA,
@@ -31,7 +31,7 @@ const FAVORITES_SCHEMA = yup.object().shape({
   country: TITLE_NAME_SCHEMA,
 });
 
-module.exports = {
+export {
   REGISTRATION_VALIDATION_SCHEMA,
   AUTH_VALIDATION_SCHEMA,
   FAVORITES_SCHEMA,
