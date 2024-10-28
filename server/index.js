@@ -32,7 +32,7 @@ postgresConnect();
 
 const server = createServer(app);
 
-// ============= Start server with HTTP & WS module ===============
+// ================ Start server with HTTP module ================
 
 server.listen(PORT, HOST, () =>
   console.log(`Server running at http://${HOST}:${PORT}/api`)

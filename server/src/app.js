@@ -14,6 +14,7 @@ const {
 } = require('./middlewares');
 const {
   errorHandlers: {
+    authErrorHandler,
     validationErrorHandler,
     sequelizeErrorHandler,
     errorHandler,
@@ -39,6 +40,11 @@ app.use(morgan('dev'));
 
 app.use('/api', router);
 
-app.use(validationErrorHandler, sequelizeErrorHandler, errorHandler);
+app.use(
+  authErrorHandler,
+  validationErrorHandler,
+  sequelizeErrorHandler,
+  errorHandler
+);
 
 module.exports = app;
