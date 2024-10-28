@@ -72,20 +72,25 @@ export const getDayLabel = (index) => {
 };
 
 export const fetchWeatherData = async (selectedCity) => {
-  try {
-    const currentWeather = await getWeather(selectedCity.lat, selectedCity.lon);
-    const fiveDayWeather = await getWeatherForecast(
-      selectedCity.lat,
-      selectedCity.lon
-    );
-    const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
-    return {
-      currentWeather,
-      fiveDayWeather: formattedFiveDayData,
-    };
-  } catch (error) {
-    console.log('Error fetching weather data:', error.message);
-    throw new Error('Error fetching weather data');
+  if (selectedCity.lat !== undefined && selectedCity.lon !== undefined) {
+    try {
+      const currentWeather = await getWeather(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const fiveDayWeather = await getWeatherForecast(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
+      return {
+        currentWeather,
+        fiveDayWeather: formattedFiveDayData,
+      };
+    } catch (error) {
+      console.log('Error fetching weather data:', error.message);
+      throw new Error('Error fetching weather data');
+    }
   }
 };
 

@@ -106,8 +106,8 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           {
             cityName,
             country,
-            latitude,
-            longitude,
+            lat: latitude,
+            lon: longitude,
             weather: currentWeather,
             fiveDayWeather,
           },
