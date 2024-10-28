@@ -21,13 +21,14 @@ class FavoriteController {
   static async addFavorite(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { openWeatherId, cityName, country } = req.body;
+      const { cityName, country, latitude, longitude } = req.body;
       const { email } = req.user;
       const favorite = await addFavorite(
         email,
-        openWeatherId,
         cityName,
         country,
+        latitude,
+        longitude,
         transaction
       );
       await transaction.commit();
@@ -42,9 +43,9 @@ class FavoriteController {
   static async removeFavorite(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { openWeatherId } = req.params;
+      const { latitude, longitude } = req.query;
       const { email } = req.user;
-      await removeFavorite(email, openWeatherId, transaction);
+      await removeFavorite(email, latitude, longitude, transaction);
       await transaction.commit();
       res.sendStatus(res.statusCode);
     } catch (error) {

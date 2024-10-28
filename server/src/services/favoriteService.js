@@ -12,19 +12,30 @@ class FavoriteService {
     const favorites = await Favorite.findAll({
       where: { userId: user.id },
       include: [
-        { model: City, attributes: ['title', 'country', 'openWeatherId'] },
+        {
+          model: City,
+          attributes: ['title', 'country', 'latitude', 'longitude'],
+        },
       ],
       order: [['created_at', 'ASC']],
     });
     const formattedFavorites = favorites.map((favorite) => ({
       cityName: favorite.City.title,
       country: favorite.City.country,
-      openWeatherId: favorite.City.openWeatherId,
+      lat: favorite.City.latitude,
+      lon: favorite.City.longitude,
     }));
     return formattedFavorites;
   }
 
-  async addFavorite(userEmail, openWeatherId, cityName, country, transaction) {
+  async addFavorite(
+    userEmail,
+    cityName,
+    country,
+    latitude,
+    longitude,
+    transaction
+  ) {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
@@ -32,13 +43,14 @@ class FavoriteService {
     if (favoriteCount >= 5) {
       throw badRequest('Cannot add more than 5 favorites');
     }
-    let city = await City.findOne({ where: { openWeatherId } });
+    let city = await City.findOne({ where: { latitude, longitude } });
     if (!city) {
       city = await City.create(
         {
           title: cityName,
           country,
-          openWeatherId,
+          latitude,
+          longitude,
         },
         { transaction }
       );
@@ -55,17 +67,18 @@ class FavoriteService {
       { transaction }
     );
     return {
-      openWeatherId: city.openWeatherId,
       cityName: city.title,
       country: city.country,
+      lat: city.latitude,
+      lon: city.longitude,
     };
   }
 
-  async removeFavorite(userEmail, openWeatherId, transaction) {
+  async removeFavorite(userEmail, latitude, longitude, transaction) {
     const emailToLower = emailToLowerCase(userEmail);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) throw notFound('User not found');
-    const city = await City.findOne({ where: { openWeatherId } });
+    const city = await City.findOne({ where: { latitude, longitude } });
     if (!city) throw notFound('City not found');
     const favorite = await Favorite.findOne({
       where: { userId: user.id, cityId: city.id },

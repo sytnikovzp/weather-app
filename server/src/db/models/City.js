@@ -19,8 +19,12 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.STRING,
         allowNull: false,
       },
-      openWeatherId: {
-        type: DataTypes.INTEGER,
+      latitude: {
+        type: DataTypes.FLOAT,
+        allowNull: false,
+      },
+      longitude: {
+        type: DataTypes.FLOAT,
         allowNull: false,
       },
     },

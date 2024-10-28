@@ -16,8 +16,12 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      open_weather_id: {
-        type: Sequelize.INTEGER,
+      latitude: {
+        type: Sequelize.FLOAT,
+        allowNull: false,
+      },
+      longitude: {
+        type: Sequelize.FLOAT,
         allowNull: false,
       },
       created_at: {

@@ -1,20 +1,21 @@
 ### Get list of favorite cities
 GET http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGwuU21pdGhAR21haWwuY29tIiwiaWF0IjoxNzMwMDc1Mzg4LCJleHAiOjE3MzAwNzYyODh9.lEBT7QNS9rh423Nysz1ava2t-Q0pTGAyEM-JV_0p0mU
 
 ### Add city to favorites
 POST http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGwuU21pdGhAR21haWwuY29tIiwiaWF0IjoxNzMwMDc1Mzg4LCJleHAiOjE3MzAwNzYyODh9.lEBT7QNS9rh423Nysz1ava2t-Q0pTGAyEM-JV_0p0mU
 
 {
-  "openWeatherId": 709930,
-  "cityName": "Dnipro",
-  "country": "UA"
+  "cityName": "Zaporizhia",
+  "country": "UA",
+  "latitude": 47.8167,
+  "longitude": 35.1833
 }
 
 ### Remove city from favorites
-DELETE http://localhost:5000/api/favorites/709930 HTTP/1.1
+DELETE http://localhost:5000/api/favorites?latitude=47.8167&longitude=35.1833 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzI5MTI3NDczLCJleHAiOjE3MjkxMjgzNzN9.HsFhmgfBSMyThi4QQ2sd4BifkycC4-joZYjQUbVbeLU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldpbGwuU21pdGhAR21haWwuY29tIiwiaWF0IjoxNzMwMDc1Mzg4LCJleHAiOjE3MzAwNzYyODh9.lEBT7QNS9rh423Nysz1ava2t-Q0pTGAyEM-JV_0p0mU

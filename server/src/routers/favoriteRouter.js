@@ -14,6 +14,6 @@ const favoriteRouter = new Router();
 
 favoriteRouter.get('/', authHandler, getFavorites);
 favoriteRouter.post('/', authHandler, validateFavorites, addFavorite);
-favoriteRouter.delete('/:openWeatherId', authHandler, removeFavorite);
+favoriteRouter.delete('/', authHandler, removeFavorite);
 
 module.exports = favoriteRouter;
