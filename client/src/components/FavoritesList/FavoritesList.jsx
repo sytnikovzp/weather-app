@@ -20,7 +20,7 @@ const FavoritesList = ({
         <div className='favorites-container'>
           {favorites.map((city) => (
             <div
-              key={city.openWeatherId}
+              key={city.cityName}
               className='favorite-card'
               onClick={() => onCityClick(city)}
             >
@@ -38,7 +38,7 @@ const FavoritesList = ({
                 className='remove-favorite-button'
                 onClick={(e) => {
                   e.stopPropagation();
-                  onRemoveFavorite(city.openWeatherId);
+                  onRemoveFavorite(city.lat, city.lon);
                 }}
               >
                 Видалити

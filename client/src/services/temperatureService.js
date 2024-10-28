@@ -67,7 +67,7 @@ const processFiveDayTemperatureData = (data) => {
 
 export const fetchTemperatureData = async (selectedCity) => {
   try {
-    const data = await getWeatherForecast(selectedCity.cityName);
+    const data = await getWeatherForecast(selectedCity.lat, selectedCity.lon);
     const dayData = processTemperatureData(data);
     const fiveDayData = processFiveDayTemperatureData(data);
     return { dayData, fiveDayData };

@@ -2,6 +2,8 @@ import * as yup from 'yup';
 
 const TITLE_NAME_SCHEMA = yup.string().required('Це поле є обовʼязкове!');
 
+const COORD_SCHEMA = yup.number().required();
+
 const EMAIL_VALIDATION_SCHEMA = yup
   .string()
   .email('Введіть коректний e-mail')
@@ -26,9 +28,10 @@ const AUTH_VALIDATION_SCHEMA = yup.object().shape({
 });
 
 const FAVORITES_SCHEMA = yup.object().shape({
-  openWeatherId: yup.number().required(),
   cityName: TITLE_NAME_SCHEMA,
   country: TITLE_NAME_SCHEMA,
+  latitude: COORD_SCHEMA,
+  longitude: COORD_SCHEMA,
 });
 
 export {

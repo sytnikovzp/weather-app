@@ -7,7 +7,7 @@ import {
   addCityToFavorites,
   removeCityFromFavorites,
   fetchLocationByIP,
-  getWeatherByCoordinates,
+  getWeather,
 } from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
@@ -88,23 +88,26 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
     if (
       selectedCity &&
-      !favorites.some((fav) => fav.cityName === selectedCity.cityName)
+      !favorites.some(
+        (fav) => fav.lat === selectedCity.lat && fav.lon === selectedCity.lon
+      )
     ) {
-      const openWeatherId = weatherData.id;
-      const cityName = weatherData.name;
+      const cityName = selectedCity.cityName;
       const country = weatherData.sys.country;
+      const latitude = weatherData.coord.lat;
+      const longitude = weatherData.coord.lon;
       try {
-        await addCityToFavorites(openWeatherId, cityName, country);
-        const { currentWeather, fiveDayWeather } = await fetchWeatherData({
-          cityName,
-          country,
-        });
+        await addCityToFavorites(cityName, country, latitude, longitude);
+        const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+          selectedCity
+        );
         setFavorites([
           ...favorites,
           {
-            openWeatherId,
             cityName,
             country,
+            latitude,
+            longitude,
             weather: currentWeather,
             fiveDayWeather,
           },
@@ -116,11 +119,11 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     }
   };
 
-  const handleRemoveFromFavorites = async (openWeatherId) => {
+  const handleRemoveFromFavorites = async (latitude, longitude) => {
     try {
-      await removeCityFromFavorites(openWeatherId);
+      await removeCityFromFavorites(latitude, longitude);
       setFavorites(
-        favorites.filter((fav) => fav.openWeatherId !== openWeatherId)
+        favorites.filter((fav) => fav.lat !== latitude && fav.lon !== longitude)
       );
     } catch (error) {
       console.log('Error removing from favorites:', error);
@@ -156,7 +159,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setError(null);
     try {
       const { latitude, longitude } = await fetchLocationByIP();
-      const weather = await getWeatherByCoordinates(latitude, longitude);
+      const weather = await getWeather(latitude, longitude);
       setWeatherData(weather);
       setSelectedCity({
         cityName: weather.name,

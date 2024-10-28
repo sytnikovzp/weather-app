@@ -445,7 +445,8 @@ CTRL + C
     "id": 1,
     "cityName": "Назва міста",
     "country": "Країна",
-    "openWeatherId": "ID з OpenWeather"
+    "latitude": "Широта міста з OpenWeather",
+    "longitude": "Довгота міста з OpenWeather"
   },
   ...
 ]</code></pre>
@@ -460,9 +461,10 @@ CTRL + C
 
 <pre><code>
 {
-  "openWeatherId": "ID з OpenWeather",
   "cityName": "Назва міста",
-  "country": "Країна"
+  "country": "Країна",
+  "latitude": "Широта міста з OpenWeather",
+  "longitude": "Довгота міста з OpenWeather"
 }</code></pre>
 
 **Відповідь**:
@@ -472,15 +474,16 @@ CTRL + C
   "id": 1,
   "cityName": "Назва міста",
   "country": "Країна",
-  "openWeatherId": "ID з OpenWeather",
+  "latitude": "Широта міста з OpenWeather",
+  "longitude": "Довгота міста з OpenWeather"
   "email": "email користувача"
 }</code></pre>
 
 #### 3. Видалення міста з обраного
 
 **Метод**: DELETE
-**URL**: `/api/favorites/:openWeatherId`
-**Опис**: Видаляє місто з обраного списку користувача за його OpenWeather ID.
+**URL**: `/api/favorites?latitude=47.8167&longitude=35.1833`
+**Опис**: Видаляє місто з обраного списку користувача за його широтою та довготою OpenWeather.
 
 **Відповідь**:
 

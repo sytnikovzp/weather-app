@@ -73,8 +73,11 @@ export const getDayLabel = (index) => {
 
 export const fetchWeatherData = async (selectedCity) => {
   try {
-    const currentWeather = await getWeather(selectedCity.cityName);
-    const fiveDayWeather = await getWeatherForecast(selectedCity.cityName);
+    const currentWeather = await getWeather(selectedCity.lat, selectedCity.lon);
+    const fiveDayWeather = await getWeatherForecast(
+      selectedCity.lat,
+      selectedCity.lon
+    );
     const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
     return {
       currentWeather,

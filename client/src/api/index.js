@@ -100,12 +100,27 @@ export const fetchCitySuggestions = async (searchTerm) => {
   }
 };
 
-export const addCityToFavorites = async (openWeatherId, cityName, country) => {
+export const getFavoriteCities = async () => {
+  try {
+    const response = await api.get('/favorites');
+    return response.data;
+  } catch (error) {
+    handleError(error, 'Error fetching favorite cities');
+  }
+};
+
+export const addCityToFavorites = async (
+  cityName,
+  country,
+  latitude,
+  longitude
+) => {
   try {
     const response = await api.post('/favorites', {
-      openWeatherId,
       cityName,
       country,
+      latitude,
+      longitude,
     });
     return response;
   } catch (error) {
@@ -113,20 +128,11 @@ export const addCityToFavorites = async (openWeatherId, cityName, country) => {
   }
 };
 
-export const removeCityFromFavorites = async (openWeatherId) => {
+export const removeCityFromFavorites = async (latitude, longitude) => {
   try {
-    await api.delete(`/favorites/${openWeatherId}`);
+    await api.delete(`/favorites?latitude=${latitude}&longitude=${longitude}`);
   } catch (error) {
     handleError(error, 'Error removing city from favorites');
-  }
-};
-
-export const getFavoriteCities = async () => {
-  try {
-    const response = await api.get('/favorites');
-    return response.data;
-  } catch (error) {
-    handleError(error, 'Error fetching favorite cities');
   }
 };
 
@@ -140,18 +146,13 @@ export const fetchLocationByIP = async () => {
   }
 };
 
-export const getWeatherByCoordinates = async (latitude, longitude) => {
+export const getWeather = async (latitude, longitude) => {
   const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`;
   return fetchOpenWeatherData(weatherUrl);
 };
 
-export const getWeather = (cityName) => {
-  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
-  return fetchOpenWeatherData(weatherUrl);
-};
-
-export const getWeatherForecast = (cityName) => {
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&units=metric&appid=${WEATHER_API_KEY}`;
+export const getWeatherForecast = (latitude, longitude) => {
+  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`;
   return fetchOpenWeatherData(forecastUrl);
 };
 
