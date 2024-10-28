@@ -10,7 +10,7 @@ const { emailToLowerCase } = require('../utils/sharedFunctions');
 const { generateTokens, validateRefreshToken } = require('./tokenService');
 // ==============================================================
 const { unAuthorizedError } = require('../errors/authErrors');
-const { badRequest } = require('../errors/customErrors');
+const { badRequest, notFound } = require('../errors/customErrors');
 
 async function hashPassword(password) {
   return await bcrypt.hash(password, SALT_ROUNDS);
@@ -79,7 +79,7 @@ class AuthService {
   async getAllUsers() {
     const users = await User.findAll();
     if (users.length === 0) {
-      throw badRequest('Users not found');
+      throw notFound('Users not found');
     }
     return users;
   }
@@ -87,7 +87,7 @@ class AuthService {
   async getUserById(id) {
     const user = await User.findByPk(id);
     if (!user) {
-      throw badRequest('User not found');
+      throw notFound('User not found');
     }
     return user;
   }
@@ -96,7 +96,7 @@ class AuthService {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) {
-      throw badRequest('User not found');
+      throw notFound('User not found');
     }
     return user;
   }
@@ -104,7 +104,7 @@ class AuthService {
   async updateUser(id, fullName, email, password, transaction) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
-      throw badRequest('User not found');
+      throw notFound('User not found');
     }
     const updateData = { fullName };
     if (email && email.toLowerCase() !== user.email.toLowerCase()) {
@@ -123,7 +123,7 @@ class AuthService {
       transaction,
     });
     if (affectedRows === 0) {
-      throw badRequest('User not found');
+      throw notFound('User not found');
     }
     return {
       user: {
@@ -137,7 +137,7 @@ class AuthService {
   async deleteUser(id, transaction) {
     const user = await User.findByPk(id);
     if (!user) {
-      throw badRequest('User not found');
+      throw notFound('User not found');
     }
     const delUser = await User.destroy({ where: { id }, transaction });
     return delUser;
