@@ -3,10 +3,10 @@ import { useNavigate } from 'react-router-dom';
 // ==============================================================
 import {
   fetchUserProfile,
+  fetchLocationByIP,
   logout,
   addCityToFavorites,
   removeCityFromFavorites,
-  fetchLocationByIP,
   getWeather,
 } from '../../api';
 // ==============================================================
