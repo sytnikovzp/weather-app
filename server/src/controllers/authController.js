@@ -34,7 +34,7 @@ class AuthController {
       res.status(201).json(authData);
     } catch (error) {
       await transaction.rollback();
-      console.log('Registration error is: ', error.message);
+      console.log('Registration error: ', error.message);
       next(error);
     }
   }
@@ -46,7 +46,7 @@ class AuthController {
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
     } catch (error) {
-      console.log('Login error is: ', error.message);
+      console.log('Login error: ', error.message);
       next(error);
     }
   }
@@ -56,7 +56,7 @@ class AuthController {
       res.clearCookie('refreshToken');
       res.sendStatus(res.statusCode);
     } catch (error) {
-      console.log('Logout error is: ', error.message);
+      console.log('Logout error: ', error.message);
       next(error);
     }
   }
@@ -68,7 +68,7 @@ class AuthController {
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
     } catch (error) {
-      console.log('Refreshing error is: ', error.message);
+      console.log('Refresh error: ', error.message);
       next(error);
     }
   }
@@ -82,7 +82,7 @@ class AuthController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Get users error is: ', error.message);
+      console.log('Get all users error: ', error.message);
       next(error);
     }
   }
@@ -97,7 +97,7 @@ class AuthController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Getting user profile error is: ', error.message);
+      console.log('Get user profile error: ', error.message);
       next(error);
     }
   }
@@ -112,7 +112,7 @@ class AuthController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Geting user error is: ', error.message);
+      console.log('Get user error: ', error.message);
       next(error);
     }
   }
@@ -132,7 +132,7 @@ class AuthController {
       res.status(201).json(userData);
     } catch (error) {
       await transaction.rollback();
-      console.log('Updating user error is: ', error.message);
+      console.log('Update user error: ', error.message);
       next(error);
     }
   }
@@ -146,7 +146,7 @@ class AuthController {
       res.sendStatus(res.statusCode);
     } catch (error) {
       await transaction.rollback();
-      console.log('Deleting user error is: ', error.message);
+      console.log('Delete user error: ', error.message);
       next(error);
     }
   }

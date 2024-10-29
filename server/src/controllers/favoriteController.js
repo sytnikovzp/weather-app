@@ -13,7 +13,7 @@ class FavoriteController {
       const favorites = await getFavorites(email);
       res.status(200).json(favorites);
     } catch (error) {
-      console.log('Error getting favorites is: ', error.message);
+      console.log('Get favorites error: ', error.message);
       next(error);
     }
   }
@@ -35,7 +35,7 @@ class FavoriteController {
       res.status(201).json(favorite);
     } catch (error) {
       await transaction.rollback();
-      console.log('Error adding to favorites is: ', error.message);
+      console.log('Add to favorites error: ', error.message);
       next(error);
     }
   }
@@ -50,7 +50,7 @@ class FavoriteController {
       res.sendStatus(res.statusCode);
     } catch (error) {
       await transaction.rollback();
-      console.log('Error deleting from favorites is: ', error.message);
+      console.log('Delete from favorites error: ', error.message);
       next(error);
     }
   }
