@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const { format } = require('date-fns');
 // ==============================================================
 const { User } = require('../db/models');
 // ==============================================================
@@ -65,7 +66,7 @@ class AuthService {
     const { email } = data;
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
-    const tokens = generateTokens({ email: emailToLower });
+    const tokens = generateTokens({ email });
     return {
       ...tokens,
       user: {
@@ -81,7 +82,18 @@ class AuthService {
     if (users.length === 0) {
       throw notFound('Users not found');
     }
-    return users;
+    const allUsers = await Promise.all(
+      users.map(async (user) => {
+        return {
+          id: user.id,
+          fullName: user.fullName,
+          email: user.email,
+          createdAt: format(new Date(user.createdAt), 'dd MMMM yyyy, HH:mm'),
+          updatedAt: format(new Date(user.updatedAt), 'dd MMMM yyyy, HH:mm'),
+        };
+      })
+    );
+    return allUsers;
   }
 
   async getUserById(id) {
@@ -89,7 +101,13 @@ class AuthService {
     if (!user) {
       throw notFound('User not found');
     }
-    return user;
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      createdAt: format(new Date(user.createdAt), 'dd MMMM yyyy, HH:mm'),
+      updatedAt: format(new Date(user.updatedAt), 'dd MMMM yyyy, HH:mm'),
+    };
   }
 
   async getUserByEmail(email) {
@@ -98,7 +116,13 @@ class AuthService {
     if (!user) {
       throw notFound('User not found');
     }
-    return user;
+    return {
+      id: user.id,
+      fullName: user.fullName,
+      email: user.email,
+      createdAt: format(new Date(user.createdAt), 'dd MMMM yyyy, HH:mm'),
+      updatedAt: format(new Date(user.updatedAt), 'dd MMMM yyyy, HH:mm'),
+    };
   }
 
   async updateUser(id, fullName, email, password, transaction) {
