@@ -29,8 +29,8 @@ class AuthController {
         password,
         transaction
       );
-      setRefreshTokenCookie(res, authData.refreshToken);
       await transaction.commit();
+      setRefreshTokenCookie(res, authData.refreshToken);
       res.status(201).json(authData);
     } catch (error) {
       await transaction.rollback();
@@ -62,15 +62,12 @@ class AuthController {
   }
 
   async refresh(req, res, next) {
-    const transaction = await sequelize.transaction();
     try {
       const { refreshToken } = req.cookies;
-      const authData = await refresh(refreshToken, transaction);
+      const authData = await refresh(refreshToken);
       setRefreshTokenCookie(res, authData.refreshToken);
-      await transaction.commit();
       res.status(200).json(authData);
     } catch (error) {
-      await transaction.rollback();
       console.log('Refreshing error is: ', error.message);
       next(error);
     }
@@ -106,8 +103,8 @@ class AuthController {
   }
 
   async getUserById(req, res, next) {
-    const { id } = req.params;
     try {
+      const { id } = req.params;
       const user = await getUserById(id);
       if (user) {
         res.status(200).json(user);
@@ -142,15 +139,11 @@ class AuthController {
 
   async deleteUser(req, res, next) {
     const transaction = await sequelize.transaction();
-    const { id } = req.params;
     try {
-      const delUser = await deleteUser(id, transaction);
-      if (delUser) {
-        res.sendStatus(res.statusCode);
-      } else {
-        res.status(401);
-      }
+      const { id } = req.params;
+      await deleteUser(id, transaction);
       await transaction.commit();
+      res.sendStatus(res.statusCode);
     } catch (error) {
       await transaction.rollback();
       console.log('Deleting user error is: ', error.message);
