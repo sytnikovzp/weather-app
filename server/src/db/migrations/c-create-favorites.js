@@ -29,7 +29,6 @@ module.exports = {
         type: Sequelize.DATE,
       },
     });
-
     await queryInterface.addConstraint('favorites', {
       fields: ['user_id', 'city_id'],
       type: 'primary key',

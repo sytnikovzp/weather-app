@@ -1,5 +1,4 @@
 const { sequelize } = require('../db/models');
-// ==============================================================
 const {
   getFavorites,
   addFavorite,

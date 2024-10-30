@@ -10,7 +10,7 @@ const app = require('./src/app');
 const dbPostgres = require('./src/db/models');
 const { syncModel, syncAllModels } = require('./src/utils/syncModels');
 
-// ==================== POSTGRES DB CHECK =======================
+// =================== POSTGRES DB CONNECT =======================
 
 const postgresConnect = async () => {
   try {

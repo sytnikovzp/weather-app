@@ -8,7 +8,6 @@ module.exports = (sequelize, DataTypes) => {
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
-
       Favorite.belongsTo(models.City, {
         foreignKey: 'cityId',
         onDelete: 'CASCADE',

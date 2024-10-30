@@ -1,5 +1,5 @@
+const { setRefreshTokenCookie } = require('../utils/sharedFunctions');
 const { sequelize } = require('../db/models');
-// ==============================================================
 const {
   registration,
   login,
@@ -10,13 +10,6 @@ const {
   updateUser,
   deleteUser,
 } = require('../services/authService');
-
-function setRefreshTokenCookie(res, refreshToken) {
-  res.cookie('refreshToken', refreshToken, {
-    maxAge: 60 * 24 * 60 * 60 * 1000,
-    httpOnly: true,
-  });
-}
 
 class AuthController {
   async registration(req, res, next) {
