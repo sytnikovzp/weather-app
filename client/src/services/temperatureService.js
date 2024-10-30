@@ -2,7 +2,6 @@ import { getWeatherForecast } from '../api';
 
 const processTemperatureData = (data) => {
   const hourlyData = data.list.slice(0, 8);
-
   const labels = hourlyData.map((item) =>
     new Date(item.dt * 1000).toLocaleTimeString([], {
       hour: '2-digit',
@@ -10,7 +9,6 @@ const processTemperatureData = (data) => {
     })
   );
   const temperatures = hourlyData.map((item) => item.main.temp);
-
   return {
     labels: labels,
     datasets: [
@@ -32,7 +30,6 @@ const processFiveDayTemperatureData = (data) => {
       day: '2-digit',
       month: '2-digit',
     });
-
     if (!acc[date]) {
       acc[date] = {
         tempSum: current.main.temp,
@@ -44,12 +41,10 @@ const processFiveDayTemperatureData = (data) => {
     }
     return acc;
   }, {});
-
   const labels = Object.keys(dailyData);
   const temperatures = Object.values(dailyData).map((day) =>
     Math.round(day.tempSum / day.count)
   );
-
   return {
     labels: labels,
     datasets: [

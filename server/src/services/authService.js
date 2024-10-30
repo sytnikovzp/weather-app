@@ -3,18 +3,15 @@ const bcrypt = require('bcrypt');
 const { User } = require('../db/models');
 // ==============================================================
 const {
-  HASH: { SALT_ROUNDS },
-} = require('../constants');
-const { emailToLowerCase, formatDate } = require('../utils/sharedFunctions');
+  hashPassword,
+  emailToLowerCase,
+  formatDate,
+} = require('../utils/sharedFunctions');
 // ==============================================================
 const { generateTokens, validateRefreshToken } = require('./tokenService');
 // ==============================================================
 const { unAuthorizedError } = require('../errors/authErrors');
 const { badRequest, notFound } = require('../errors/customErrors');
-
-async function hashPassword(password) {
-  return await bcrypt.hash(password, SALT_ROUNDS);
-}
 
 class AuthService {
   async registration(fullName, email, password, transaction) {
@@ -28,8 +25,9 @@ class AuthService {
         email: emailToLower,
         password: hashedPassword,
       },
-      { transaction }
+      { transaction, returning: true }
     );
+    if (!user) throw badRequest('User is not registered');
     const tokens = generateTokens({ email });
     return {
       ...tokens,
@@ -78,9 +76,7 @@ class AuthService {
 
   async getAllUsers() {
     const users = await User.findAll();
-    if (users.length === 0) {
-      throw notFound('Users not found');
-    }
+    if (users.length === 0) throw notFound('Users not found');
     const allUsers = await Promise.all(
       users.map(async (user) => {
         return {
@@ -95,9 +91,7 @@ class AuthService {
 
   async getUserById(id) {
     const user = await User.findByPk(id);
-    if (!user) {
-      throw notFound('User not found');
-    }
+    if (!user) throw notFound('User not found');
     return {
       id: user.id,
       fullName: user.fullName,
@@ -110,9 +104,7 @@ class AuthService {
   async getUserByEmail(email) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
-      throw notFound('User not found');
-    }
+    if (!user) throw notFound('User not found');
     return {
       id: user.id,
       fullName: user.fullName,
@@ -124,9 +116,7 @@ class AuthService {
 
   async updateUser(id, fullName, email, password, transaction) {
     const user = await User.findOne({ where: { id } });
-    if (!user) {
-      throw notFound('User not found');
-    }
+    if (!user) throw notFound('User not found');
     const updateData = { fullName };
     if (email && email.toLowerCase() !== user.email.toLowerCase()) {
       const newEmail = emailToLowerCase(email);
@@ -143,9 +133,7 @@ class AuthService {
       returning: true,
       transaction,
     });
-    if (affectedRows === 0) {
-      throw notFound('User not found');
-    }
+    if (affectedRows === 0) throw badRequest('User is not updated');
     return {
       user: {
         id: updatedUser.id,
@@ -157,10 +145,9 @@ class AuthService {
 
   async deleteUser(id, transaction) {
     const user = await User.findByPk(id);
-    if (!user) {
-      throw notFound('User not found');
-    }
+    if (!user) throw notFound('User not found');
     const delUser = await User.destroy({ where: { id }, transaction });
+    if (!delUser) throw badRequest('User is not deleted');
     return delUser;
   }
 }

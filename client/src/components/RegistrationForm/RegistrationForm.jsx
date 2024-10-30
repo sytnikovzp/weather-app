@@ -12,7 +12,6 @@ const RegistrationForm = ({ onRegister }) => {
     return (
       <Form id='registration-form'>
         <h2>Реєстрація</h2>
-
         <div className='inputField'>
           <Field
             type='text'
@@ -25,7 +24,6 @@ const RegistrationForm = ({ onRegister }) => {
         <ErrorMessage name='fullName'>
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
-
         <div className='inputField'>
           <Field
             type='email'
@@ -38,7 +36,6 @@ const RegistrationForm = ({ onRegister }) => {
         <ErrorMessage name='email'>
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
-
         <div className='inputField'>
           <Field
             type='password'
@@ -51,7 +48,6 @@ const RegistrationForm = ({ onRegister }) => {
         <ErrorMessage name='password'>
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
-
         <button type='submit' className='submitButton' disabled={!isValid}>
           Зареєструватися та увійти
         </button>

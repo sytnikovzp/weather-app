@@ -12,7 +12,6 @@ const LoginForm = ({ onLogin }) => {
     return (
       <Form id='auth-form'>
         <h2>Авторизація</h2>
-
         <div className='inputField'>
           <Field
             type='email'
@@ -25,7 +24,6 @@ const LoginForm = ({ onLogin }) => {
         <ErrorMessage name='email'>
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
-
         <div className='inputField'>
           <Field
             type='password'
@@ -38,14 +36,12 @@ const LoginForm = ({ onLogin }) => {
         <ErrorMessage name='password'>
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
-
         <button type='submit' className='submitButton' disabled={!isValid}>
           Увійти
         </button>
       </Form>
     );
   };
-
   return (
     <Formik
       initialValues={AUTH_FORM_INITIAL}

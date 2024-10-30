@@ -225,7 +225,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       <div className='logo-container'>
         <img src={weatherLogo} className='logo' alt='Weather logo' />
       </div>
-
       <div className='tabs-wrapper'>
         <div className='tabs-container'>
           <div
@@ -248,7 +247,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
           </button>
         </div>
       </div>
-
       <div className='weather-container'>
         {activeTab === 'main' ? (
           <div className='main-content'>
@@ -274,7 +272,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
                   loading={loading}
                   error={error}
                 />
-
                 <TemperatureChart
                   cityName={selectedCity.cityName}
                   dayData={temperatureData?.dayData}

@@ -20,7 +20,6 @@ module.exports = {
     for (const user of users) {
       user.password = await bcrypt.hash(user.password, SALT_ROUNDS);
     }
-
     await queryInterface.bulkInsert('users', users, {});
   },
 

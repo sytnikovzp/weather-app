@@ -14,7 +14,6 @@ const TemperatureChart = ({
 }) => {
   const chartRef = useRef(null);
   const [mode, setMode] = useState('day');
-
   const data = mode === 'day' ? dayData : fiveDayData;
 
   useEffect(() => {
@@ -50,15 +49,12 @@ const TemperatureChart = ({
           },
         },
       };
-
       const tempChart = new Chart(ctx, config);
-
       return () => {
         tempChart.destroy();
       };
     }
   }, [data, cityName, mode]);
-
   return (
     <div className='temperature-chart'>
       <div className='view-toggle'>
@@ -75,7 +71,6 @@ const TemperatureChart = ({
           На 5 днів
         </button>
       </div>
-
       {loading && <Preloader message='Завантаження даних про температуру...' />}
       {error && <p>{error}</p>}
       <canvas ref={chartRef}></canvas>

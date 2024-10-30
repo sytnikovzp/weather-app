@@ -6,7 +6,6 @@
   max-height: 100vh;
   overflow-y: auto;
 }
-
 .logo-container {
   width: 100%;
   height: 300px;
@@ -15,7 +14,6 @@
   align-items: flex-end;
   margin-top: 20px;
 }
-
 .logo {
   width: 100%;
   max-width: 250px;
@@ -24,53 +22,43 @@
   will-change: filter;
   transition: filter 300ms;
 }
-
 .logo:hover {
   filter: drop-shadow(0 0 3em #b63c07aa);
 }
-
 .tabs-wrapper {
   display: flex;
   justify-content: space-between;
   margin-bottom: 20px;
   width: 360px;
 }
-
 .tabs-container {
   display: flex;
   align-items: center;
 }
-
 .tab {
   padding: 10px 15px;
   cursor: pointer;
   color: #007bff;
   transition: background-color 0.3s ease;
 }
-
 .tab:hover {
   background-color: #f0f0f0;
 }
-
 .active {
   border-bottom: 2px solid #007bff;
   font-weight: bold;
 }
-
 .user-container {
   display: flex;
   align-items: center;
 }
-
 #welcome {
   margin-right: 5px;
   text-align: center;
 }
-
 #logout {
   margin-right: 10px;
 }
-
 .autocomplete-header {
   display: flex;
   justify-content: space-between;
@@ -78,7 +66,6 @@
   padding-left: 20px;
   padding-right: 15px;
 }
-
 .favorite-button {
   border: 1px solid #ccc;
   border-radius: 5px;
@@ -89,11 +76,9 @@
   margin-left: 5px;
   transition: border-color 0.3s ease;
 }
-
 .favorite-button:hover {
   border-color: #888;
 }
-
 .main-content,
 .favorites-content {
   background-color: white;
@@ -103,7 +88,6 @@
   min-height: 600px;
   width: 360px;
 }
-
 #info {
   text-align: center;
 }

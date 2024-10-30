@@ -21,7 +21,6 @@ const WeatherCard = ({
   isFavorite,
 }) => {
   const [viewMode, setViewMode] = useState('current');
-
   return (
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
       <div className='view-toggle'>
@@ -44,10 +43,8 @@ const WeatherCard = ({
           На 5 днів
         </button>
       </div>
-
       {loading && <Preloader message='Завантаження даних про погоду...' />}
       {error && <p>{error}</p>}
-
       {viewMode === 'current' && weatherData && (
         <div className='weather-content'>
           <div className='updated-info'>
@@ -64,7 +61,6 @@ const WeatherCard = ({
               </button>
             </p>
           </div>
-
           <div className='city-info'>
             <h2>
               {cityName}, {cityCountry}
@@ -78,14 +74,12 @@ const WeatherCard = ({
               />
             </div>
           </div>
-
           <p className='weather-description'>
             Відчувається як {Math.round(weatherData.main.feels_like)}°C.{' '}
             {weatherData.weather[0].description.charAt(0).toUpperCase() +
               weatherData.weather[0].description.slice(1)}
             .
           </p>
-
           <div className='weather-details'>
             <div className='weather-column'>
               <p>
@@ -115,7 +109,6 @@ const WeatherCard = ({
           </div>
         </div>
       )}
-
       {viewMode === 'forecast' &&
         fiveDayData &&
         Array.isArray(fiveDayData.labels) &&

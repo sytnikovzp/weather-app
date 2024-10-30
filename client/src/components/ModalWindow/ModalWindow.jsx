@@ -2,7 +2,6 @@ import './ModalWindow.css';
 
 const ModalWindow = ({ isOpen, onClose, title, message }) => {
   if (!isOpen) return null;
-
   return (
     <div className='modal'>
       <div className='modal-content'>
