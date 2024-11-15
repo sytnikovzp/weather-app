@@ -1,12 +1,12 @@
 const {
-  REGISTRATION_VALIDATION_SCHEMA,
-  AUTH_VALIDATION_SCHEMA,
-  FAVORITES_SCHEMA,
+  REGISTRATION_VALIDATION_SCHEME,
+  AUTH_VALIDATION_SCHEME,
+  FAVORITES_SCHEME,
 } = require('../utils/validationSchemes');
 
 const validateSchema = (schema) => async (req, res, next) => {
-  const { body } = req;
   try {
+    const { body } = req;
     await schema.validate(body, {
       abortEarly: false,
     });
@@ -18,7 +18,7 @@ const validateSchema = (schema) => async (req, res, next) => {
 };
 
 module.exports = {
-  validateRegistration: validateSchema(REGISTRATION_VALIDATION_SCHEMA),
-  validateAuth: validateSchema(AUTH_VALIDATION_SCHEMA),
-  validateFavorites: validateSchema(FAVORITES_SCHEMA),
+  validateRegistration: validateSchema(REGISTRATION_VALIDATION_SCHEME),
+  validateAuth: validateSchema(AUTH_VALIDATION_SCHEME),
+  validateFavorites: validateSchema(FAVORITES_SCHEME),
 };

@@ -11,7 +11,6 @@ const CityAutocomplete = ({ onCitySelect }) => {
   const handleInputChange = async (event) => {
     const searchTerm = event.target.value;
     setQuery(searchTerm);
-
     if (searchTerm.length > 2) {
       try {
         const citySuggestions = await fetchCitySuggestions(searchTerm);

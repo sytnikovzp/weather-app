@@ -1,7 +1,7 @@
 import { Formik, Form, Field, ErrorMessage } from 'formik';
 // ==============================================================
 import { REGISTRATION_FORM_INITIAL } from '../../constants';
-import { REGISTRATION_VALIDATION_SCHEMA } from '../../utils/validationSchemes';
+import { REGISTRATION_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 
 const RegistrationForm = ({ onRegister }) => {
   const onFormSubmit = ({ fullName, email, password }) => {
@@ -59,7 +59,7 @@ const RegistrationForm = ({ onRegister }) => {
     <Formik
       initialValues={REGISTRATION_FORM_INITIAL}
       onSubmit={onFormSubmit}
-      validationSchema={REGISTRATION_VALIDATION_SCHEMA}
+      validationSchema={REGISTRATION_VALIDATION_SCHEME}
       validateOnMount={true}
     >
       {renderForm}
