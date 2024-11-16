@@ -1,4 +1,4 @@
-import { getWeatherForecast } from '../api';
+import { fetchForecast } from '../api';
 
 const processTemperatureData = (data) => {
   const hourlyData = data.list.slice(0, 8);
@@ -62,7 +62,7 @@ const processFiveDayTemperatureData = (data) => {
 
 export const fetchTemperatureData = async (selectedCity) => {
   try {
-    const data = await getWeatherForecast(selectedCity.lat, selectedCity.lon);
+    const data = await fetchForecast(selectedCity.lat, selectedCity.lon);
     const dayData = processTemperatureData(data);
     const fiveDayData = processFiveDayTemperatureData(data);
     return { dayData, fiveDayData };

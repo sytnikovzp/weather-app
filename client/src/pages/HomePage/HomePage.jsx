@@ -3,11 +3,11 @@ import { useNavigate } from 'react-router-dom';
 // ==============================================================
 import {
   fetchUserProfile,
-  fetchLocationByIP,
   logout,
   addCityToFavorites,
   removeCityFromFavorites,
-  getWeather,
+  fetchLocationByIP,
+  fetchWeather,
 } from '../../api';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
@@ -159,7 +159,7 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setError(null);
     try {
       const { latitude, longitude } = await fetchLocationByIP();
-      const weather = await getWeather(latitude, longitude);
+      const weather = await fetchWeather(latitude, longitude);
       setWeatherData(weather);
       setSelectedCity({
         cityName: weather.name,

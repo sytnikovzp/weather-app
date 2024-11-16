@@ -1,5 +1,5 @@
 import { format } from 'date-fns';
-import { getWeather, getWeatherForecast, getFavoriteCities } from '../api';
+import { fetchWeather, fetchForecast, fetchFavoriteCities } from '../api';
 
 export const formatDate = (timestamp, dateFormat) => {
   return format(new Date(timestamp * 1000), dateFormat);
@@ -74,11 +74,11 @@ export const getDayLabel = (index) => {
 export const fetchWeatherData = async (selectedCity) => {
   if (selectedCity.lat !== undefined && selectedCity.lon !== undefined) {
     try {
-      const currentWeather = await getWeather(
+      const currentWeather = await fetchWeather(
         selectedCity.lat,
         selectedCity.lon
       );
-      const fiveDayWeather = await getWeatherForecast(
+      const fiveDayWeather = await fetchForecast(
         selectedCity.lat,
         selectedCity.lon
       );
@@ -96,7 +96,7 @@ export const fetchWeatherData = async (selectedCity) => {
 
 export const fetchFavorites = async () => {
   try {
-    const data = await getFavoriteCities();
+    const data = await fetchFavoriteCities();
     return data;
   } catch (error) {
     console.log('Error loading list of favorite cities:', error.message);

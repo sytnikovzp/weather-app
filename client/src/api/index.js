@@ -18,15 +18,6 @@ const handleError = (error, customMessage = 'API Error') => {
 
 const getAccessToken = () => localStorage.getItem('accessToken');
 
-const fetchOpenWeatherData = async (url) => {
-  try {
-    const response = await axios.get(url);
-    return response.data;
-  } catch (error) {
-    return handleError(error, 'Failed to fetch OpenWeather data');
-  }
-};
-
 api.interceptors.request.use((config) => {
   const accessToken = getAccessToken();
   if (accessToken) {
@@ -82,25 +73,7 @@ export const logout = async () => {
   }
 };
 
-export const fetchCitySuggestions = async (searchTerm) => {
-  try {
-    const response = await axios.get(
-      `http://api.openweathermap.org/geo/1.0/direct`,
-      {
-        params: {
-          q: searchTerm,
-          limit: 10,
-          appid: WEATHER_API_KEY,
-        },
-      }
-    );
-    return response.data;
-  } catch (error) {
-    return handleError(error, 'Error fetching city suggestions');
-  }
-};
-
-export const getFavoriteCities = async () => {
+export const fetchFavoriteCities = async () => {
   try {
     const response = await api.get('/favorites');
     return response.data;
@@ -138,7 +111,7 @@ export const removeCityFromFavorites = async (latitude, longitude) => {
 
 export const fetchLocationByIP = async () => {
   try {
-    const response = await axios.get(`https://ipapi.co/json/`);
+    const response = await axios.get('https://ipapi.co/json');
     const { latitude, longitude } = response.data;
     return { latitude, longitude };
   } catch (error) {
@@ -146,14 +119,60 @@ export const fetchLocationByIP = async () => {
   }
 };
 
-export const getWeather = async (latitude, longitude) => {
-  const weatherUrl = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`;
-  return fetchOpenWeatherData(weatherUrl);
+export const fetchCitySuggestions = async (searchTerm) => {
+  try {
+    const response = await axios.get(
+      'http://api.openweathermap.org/geo/1.0/direct',
+      {
+        params: {
+          q: searchTerm,
+          limit: 10,
+          appid: WEATHER_API_KEY,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleError(error, 'Error fetching city suggestions');
+  }
 };
 
-export const getWeatherForecast = (latitude, longitude) => {
-  const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&units=metric&appid=${WEATHER_API_KEY}`;
-  return fetchOpenWeatherData(forecastUrl);
+export const fetchWeather = async (latitude, longitude) => {
+  try {
+    const response = await axios.get(
+      'https://api.openweathermap.org/data/2.5/weather',
+      {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          units: 'metric',
+          appid: WEATHER_API_KEY,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleError(error, 'Failed to fetch weather data');
+  }
+};
+
+export const fetchForecast = async (latitude, longitude) => {
+  try {
+    const response = await axios.get(
+      'https://api.openweathermap.org/data/2.5/forecast',
+      {
+        params: {
+          lat: latitude,
+          lon: longitude,
+          units: 'metric',
+          appid: WEATHER_API_KEY,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    return handleError(error, 'Failed to fetch forecast data');
+  }
 };
 
 export default api;
