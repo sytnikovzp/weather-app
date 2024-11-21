@@ -1,54 +1,58 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
-import api from '../../api';
+import { authRest } from '../../api/rest';
 // ==============================================================
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
-const AuthPage = ({ setIsAuthenticated }) => {
+function AuthPage({ setIsAuthenticated }) {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
 
-  const loginHandle = async (email, password) => {
-    try {
-      setErrorMessage('');
-      const { data } = await api.post('/auth/login', { email, password });
-      localStorage.setItem('accessToken', data.accessToken);
-      setIsAuthenticated(true);
-      navigate('/');
-    } catch (error) {
-      console.log('Авторизація неуспішна: ', error.message);
-      setErrorMessage('Авторизація неуспішна. Перевірте свої облікові данні.');
-    }
-  };
-
-  const registrationHandle = async (fullName, email, password) => {
-    try {
-      setErrorMessage('');
-      const { data } = await api.post('/auth/registration', {
-        fullName,
-        email,
-        password,
-      });
-      localStorage.setItem('accessToken', data.accessToken);
-      setIsAuthenticated(true);
-      navigate('/');
-    } catch (error) {
-      console.log('Реєстрація неуспішна: ', error.message);
-      setErrorMessage('Реєстрація неуспішна. Спробуйте знову.');
-    }
-  };
+  const handleAuth = useCallback(
+    async (action, ...args) => {
+      try {
+        setErrorMessage('');
+        if (action === 'login') {
+          await authRest.login(...args);
+        } else {
+          await authRest.registration(...args);
+        }
+        setIsAuthenticated(true);
+        navigate('/');
+      } catch (error) {
+        console.error(
+          `${action === 'login' ? 'Авторизація' : 'Реєстрація'} неуспішна:`,
+          error.message
+        );
+        setErrorMessage(
+          action === 'login'
+            ? 'Авторизація неуспішна. Перевірте облікові дані.'
+            : 'Реєстрація неуспішна. Спробуйте знову.'
+        );
+      }
+    },
+    [setIsAuthenticated, navigate]
+  );
 
   return (
     <div className='auth-container'>
       {errorMessage && <div className='error'>{errorMessage}</div>}
       {isLoginMode ? (
-        <LoginForm onLogin={loginHandle} />
+        <LoginForm
+          onSubmit={({ email, password }) =>
+            handleAuth('login', email, password)
+          }
+        />
       ) : (
-        <RegistrationForm onRegister={registrationHandle} />
+        <RegistrationForm
+          onSubmit={({ fullName, email, password }) =>
+            handleAuth('registration', fullName, email, password)
+          }
+        />
       )}
       <button
         id='switch-button'
@@ -62,6 +66,6 @@ const AuthPage = ({ setIsAuthenticated }) => {
       </button>
     </div>
   );
-};
+}
 
 export default AuthPage;

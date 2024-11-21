@@ -5,13 +5,7 @@ import Preloader from '../Preloader/Preloader';
 // ==============================================================
 import './TemperatureChart.css';
 
-const TemperatureChart = ({
-  cityName,
-  dayData,
-  fiveDayData,
-  loading,
-  error,
-}) => {
+function TemperatureChart({ cityName, dayData, fiveDayData, loading, error }) {
   const chartRef = useRef(null);
   const [mode, setMode] = useState('day');
   const data = mode === 'day' ? dayData : fiveDayData;
@@ -76,6 +70,6 @@ const TemperatureChart = ({
       <canvas ref={chartRef}></canvas>
     </div>
   );
-};
+}
 
 export default TemperatureChart;

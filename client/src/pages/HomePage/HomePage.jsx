@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
 import {
-  fetchUserProfile,
-  logout,
-  addCityToFavorites,
-  removeCityFromFavorites,
-  fetchLocationByIP,
-  fetchWeather,
-} from '../../api';
+  authRest,
+  usersRest,
+  favoritesRest,
+  locationsRest,
+  weatherRest,
+} from '../../api/rest';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
@@ -16,16 +15,14 @@ import TemperatureChart from '../../components/TemperatureChart/TemperatureChart
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 // ==============================================================
-import {
-  fetchFavorites,
-  fetchWeatherData,
-} from '../../services/weatherService';
+import { fetchWeatherData } from '../../services/weatherService';
+import { fetchFavorites } from '../../services/favoriteService';
 import { fetchTemperatureData } from '../../services/temperatureService';
 // ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
 
-const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
+function HomePage({ setIsAuthenticated, isAuthenticated }) {
   const [activeTab, setActiveTab] = useState('main');
   const [userProfile, setUserProfile] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
@@ -47,10 +44,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      await authRest.logout();
       setIsAuthenticated(false);
     } catch (error) {
-      console.log('Logout error:', error);
+      console.error('Помилка виходу із системи:', error.message);
     }
   };
 
@@ -97,7 +94,12 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       const latitude = weatherData.coord.lat;
       const longitude = weatherData.coord.lon;
       try {
-        await addCityToFavorites(cityName, country, latitude, longitude);
+        await favoritesRest.addCityToFavorites(
+          cityName,
+          country,
+          latitude,
+          longitude
+        );
         const { currentWeather, fiveDayWeather } = await fetchWeatherData(
           selectedCity
         );
@@ -114,19 +116,19 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
         ]);
         setIsFavButtonEnabled(false);
       } catch (error) {
-        console.log('Error adding to favorites:', error);
+        console.error('Помилка додавання до обраного:', error.message);
       }
     }
   };
 
   const handleRemoveFromFavorites = async (latitude, longitude) => {
     try {
-      await removeCityFromFavorites(latitude, longitude);
+      await favoritesRest.removeCityFromFavorites(latitude, longitude);
       setFavorites(
         favorites.filter((fav) => fav.lat !== latitude && fav.lon !== longitude)
       );
     } catch (error) {
-      console.log('Error removing from favorites:', error);
+      console.error('Помилка видалення з обраного:', error.message);
     }
   };
 
@@ -137,8 +139,8 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
 
   const fetchProfileAndFavorites = async () => {
     try {
-      const profileData = await fetchUserProfile();
-      setUserProfile(profileData);
+      const userProfile = await usersRest.fetchUserProfile();
+      setUserProfile(userProfile);
       const favoriteCities = await fetchFavorites();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
@@ -150,7 +152,10 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       );
       setFavorites(favoritesWithWeather);
     } catch (error) {
-      console.error('Error fetching user profile or favorites:', error);
+      console.error(
+        'Помилка завантаження профілю користувача або обраного:',
+        error.message
+      );
     }
   };
 
@@ -158,8 +163,8 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
     setLoading(true);
     setError(null);
     try {
-      const { latitude, longitude } = await fetchLocationByIP();
-      const weather = await fetchWeather(latitude, longitude);
+      const { latitude, longitude } = await locationsRest.fetchLocationByIP();
+      const weather = await weatherRest.fetchWeather(latitude, longitude);
       setWeatherData(weather);
       setSelectedCity({
         cityName: weather.name,
@@ -307,6 +312,6 @@ const HomePage = ({ setIsAuthenticated, isAuthenticated }) => {
       />
     </div>
   );
-};
+}
 
 export default HomePage;

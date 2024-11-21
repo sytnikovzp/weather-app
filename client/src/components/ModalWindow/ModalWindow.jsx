@@ -1,6 +1,6 @@
-import './ModalWindow.css'; 
+import './ModalWindow.css';
 
-const ModalWindow = ({ isOpen, onClose, title, message }) => {
+function ModalWindow({ isOpen, onClose, title, message }) {
   if (!isOpen) return null;
   return (
     <div className='modal'>
@@ -11,6 +11,6 @@ const ModalWindow = ({ isOpen, onClose, title, message }) => {
       </div>
     </div>
   );
-};
+}
 
 export default ModalWindow;

@@ -4,13 +4,13 @@ import {
   formatDate,
   getDayLabel,
   getWindDirection,
-} from '../../services/weatherService';
+} from '../../utils/sharedFunctions';
 // ==============================================================
 import Preloader from '../Preloader/Preloader';
 // ==============================================================
 import './WeatherCard.css';
 
-const WeatherCard = ({
+function WeatherCard({
   cityName,
   cityCountry,
   weatherData,
@@ -19,7 +19,7 @@ const WeatherCard = ({
   error,
   onRefresh,
   isFavorite,
-}) => {
+}) {
   const [viewMode, setViewMode] = useState('current');
   return (
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
@@ -130,6 +130,6 @@ const WeatherCard = ({
         )}
     </div>
   );
-};
+}
 
 export default WeatherCard;

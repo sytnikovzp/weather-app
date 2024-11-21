@@ -2,7 +2,7 @@ import WeatherCard from '../WeatherCard/WeatherCard';
 // ==============================================================
 import './FavoritesList.css';
 
-const FavoritesList = ({
+function FavoritesList({
   favorites,
   onRemoveFavorite,
   onRefresh,
@@ -10,7 +10,7 @@ const FavoritesList = ({
   onCityClick,
   loading,
   error,
-}) => {
+}) {
   return (
     <div className='favorites-list'>
       <h3>Обрані міста</h3>
@@ -49,6 +49,6 @@ const FavoritesList = ({
       )}
     </div>
   );
-};
+}
 
 export default FavoritesList;

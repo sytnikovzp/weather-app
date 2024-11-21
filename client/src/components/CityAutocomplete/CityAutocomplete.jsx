@@ -1,10 +1,10 @@
 import { useState } from 'react';
 // ==============================================================
-import { fetchCitySuggestions } from '../../api';
+import { weatherRest } from '../../api/rest';
 // ==============================================================
 import './CityAutocomplete.css';
 
-const CityAutocomplete = ({ onCitySelect }) => {
+function CityAutocomplete({ onCitySelect }) {
   const [query, setQuery] = useState('');
   const [suggestions, setSuggestions] = useState([]);
 
@@ -13,10 +13,12 @@ const CityAutocomplete = ({ onCitySelect }) => {
     setQuery(searchTerm);
     if (searchTerm.length > 2) {
       try {
-        const citySuggestions = await fetchCitySuggestions(searchTerm);
+        const citySuggestions = await weatherRest.fetchCitySuggestions(
+          searchTerm
+        );
         setSuggestions(citySuggestions);
       } catch (error) {
-        console.log('Error fetching city suggestions:', error);
+        console.error('Помилка отримання пропозицій міст:', error.message);
         setSuggestions([]);
       }
     } else {
@@ -54,6 +56,6 @@ const CityAutocomplete = ({ onCitySelect }) => {
       )}
     </div>
   );
-};
+}
 
 export default CityAutocomplete;
