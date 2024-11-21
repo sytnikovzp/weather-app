@@ -83,7 +83,8 @@ function WeatherCard({
           <div className='weather-details'>
             <div className='weather-column'>
               <p>
-                <strong>Видимість:</strong> {weatherData.visibility / 1000} км
+                <strong>Видимість:</strong>{' '}
+                {Math.round(weatherData.visibility / 1000)} км
               </p>
               <p>
                 <strong>Вологість:</strong> {weatherData.main.humidity}%
@@ -95,7 +96,7 @@ function WeatherCard({
             </div>
             <div className='weather-column'>
               <p>
-                <strong>Вітер:</strong> {weatherData.wind.speed} м/с{' '}
+                <strong>Вітер:</strong> {Math.round(weatherData.wind.speed)} м/с{' '}
                 {getWindDirection(weatherData.wind.deg)}
               </p>
               <p>

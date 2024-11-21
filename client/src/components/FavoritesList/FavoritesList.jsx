@@ -20,7 +20,7 @@ function FavoritesList({
         <div className='favorites-container'>
           {favorites.map((city) => (
             <div
-              key={city.cityName}
+              key={city.weather.sys.sunrise}
               className='favorite-card'
               onClick={() => onCityClick(city)}
             >
