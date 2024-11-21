@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
-import { authRest } from '../../api/rest';
+import restController from '../../api/rest/restController';
 // ==============================================================
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
@@ -17,9 +17,9 @@ function AuthPage({ setIsAuthenticated }) {
       try {
         setErrorMessage('');
         if (action === 'login') {
-          await authRest.login(...args);
+          await restController.login(...args);
         } else {
-          await authRest.registration(...args);
+          await restController.registration(...args);
         }
         setIsAuthenticated(true);
         navigate('/');

@@ -1,13 +1,32 @@
-import { favoritesRest } from '../api/rest';
+import api from '../api/interceptor';
 
-const fetchFavorites = async () => {
-  try {
-    const data = await favoritesRest.fetchFavoriteCities();
-    return data;
-  } catch (error) {
-    console.error('Помилка завантаження списку обраних міст:', error.message);
-    throw new Error('Помилка завантаження списку обраних міст');
-  }
+const getFavoriteCities = async () => {
+  const response = await api.get('/favorites');
+  return response.data;
 };
 
-export { fetchFavorites };
+const addCityToFavorites = async (cityName, country, latitude, longitude) => {
+  const response = await api.post('/favorites', {
+    cityName,
+    country,
+    latitude,
+    longitude,
+  });
+  return response.data;
+};
+
+const removeCityFromFavorites = async (latitude, longitude) => {
+  const response = await api.delete('/favorites', {
+    params: {
+      latitude,
+      longitude,
+    },
+  });
+  return response.data;
+};
+
+export default {
+  getFavoriteCities,
+  addCityToFavorites,
+  removeCityFromFavorites,
+};

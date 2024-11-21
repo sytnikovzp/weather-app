@@ -1,27 +1,49 @@
-import { weatherRest } from '../api/rest';
-import { formatFiveDayData } from '../utils/sharedFunctions';
+import axios from 'axios';
+// ==============================================================
+import { WEATHER_API_KEY } from '../constants';
 
-const fetchWeatherData = async (selectedCity) => {
-  if (selectedCity.lat !== undefined && selectedCity.lon !== undefined) {
-    try {
-      const currentWeather = await weatherRest.fetchWeather(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const fiveDayWeather = await weatherRest.fetchForecast(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
-      return {
-        currentWeather,
-        fiveDayWeather: formattedFiveDayData,
-      };
-    } catch (error) {
-      console.error('Помилка отримання даних про погоду:', error.message);
-      throw new Error('Помилка отримання даних про погоду');
+const getCitySuggestions = async (searchTerm) => {
+  const response = await axios.get(
+    'http://api.openweathermap.org/geo/1.0/direct',
+    {
+      params: {
+        q: searchTerm,
+        limit: 10,
+        appid: WEATHER_API_KEY,
+      },
     }
-  }
+  );
+  return response.data;
 };
 
-export { fetchWeatherData };
+const getWeather = async (latitude, longitude) => {
+  const response = await axios.get(
+    'https://api.openweathermap.org/data/2.5/weather',
+    {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        units: 'metric',
+        appid: WEATHER_API_KEY,
+      },
+    }
+  );
+  return response.data;
+};
+
+const getForecast = async (latitude, longitude) => {
+  const response = await axios.get(
+    'https://api.openweathermap.org/data/2.5/forecast',
+    {
+      params: {
+        lat: latitude,
+        lon: longitude,
+        units: 'metric',
+        appid: WEATHER_API_KEY,
+      },
+    }
+  );
+  return response.data;
+};
+
+export default { getCitySuggestions, getWeather, getForecast };

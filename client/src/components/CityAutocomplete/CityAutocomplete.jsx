@@ -1,6 +1,6 @@
 import { useState } from 'react';
 // ==============================================================
-import { weatherRest } from '../../api/rest';
+import restController from '../../api/rest/restController';
 // ==============================================================
 import './CityAutocomplete.css';
 
@@ -13,7 +13,7 @@ function CityAutocomplete({ onCitySelect }) {
     setQuery(searchTerm);
     if (searchTerm.length > 2) {
       try {
-        const citySuggestions = await weatherRest.fetchCitySuggestions(
+        const citySuggestions = await restController.fetchCitySuggestions(
           searchTerm
         );
         setSuggestions(citySuggestions);

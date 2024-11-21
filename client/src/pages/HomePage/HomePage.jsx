@@ -1,23 +1,20 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 // ==============================================================
+import restController from '../../api/rest/restController';
+// ==============================================================
+import { MAX_FAVORITES } from '../../constants';
 import {
-  authRest,
-  usersRest,
-  favoritesRest,
-  locationsRest,
-  weatherRest,
-} from '../../api/rest';
+  formatFiveDayData,
+  processFiveDayTemperatureData,
+  processTemperatureData,
+} from '../../utils/sharedFunctions';
 // ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
-// ==============================================================
-import { fetchWeatherData } from '../../services/weatherService';
-import { fetchFavorites } from '../../services/favoriteService';
-import { fetchTemperatureData } from '../../services/temperatureService';
 // ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
@@ -44,7 +41,7 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
 
   const handleLogout = async () => {
     try {
-      await authRest.logout();
+      await restController.logout();
       setIsAuthenticated(false);
     } catch (error) {
       console.error('Помилка виходу із системи:', error.message);
@@ -79,51 +76,42 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
   };
 
   const handleAddToFavorites = async () => {
-    if (favorites.length >= 5) {
+    if (favorites.length >= MAX_FAVORITES) {
       setIsModalOpen(true);
       return;
     }
-    if (
-      selectedCity &&
-      !favorites.some(
-        (fav) => fav.lat === selectedCity.lat && fav.lon === selectedCity.lon
-      )
-    ) {
-      const cityName = selectedCity.cityName;
-      const country = weatherData.sys.country;
-      const latitude = weatherData.coord.lat;
-      const longitude = weatherData.coord.lon;
-      try {
-        await favoritesRest.addCityToFavorites(
+    if (!selectedCity || !weatherData?.sys) {
+      console.error('Недійсні дані про місто або дані про погоду недоступні');
+      return;
+    }
+    const { cityName, lat, lon } = selectedCity;
+    const { country } = weatherData.sys;
+    if (favorites.some((fav) => fav.lat === lat && fav.lon === lon)) return;
+    try {
+      await restController.addCityToFavorites(cityName, country, lat, lon);
+      const { currentWeather, fiveDayWeather } = await fetchWeatherData(
+        selectedCity
+      );
+      setFavorites([
+        ...favorites,
+        {
           cityName,
           country,
-          latitude,
-          longitude
-        );
-        const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-          selectedCity
-        );
-        setFavorites([
-          ...favorites,
-          {
-            cityName,
-            country,
-            lat: latitude,
-            lon: longitude,
-            weather: currentWeather,
-            fiveDayWeather,
-          },
-        ]);
-        setIsFavButtonEnabled(false);
-      } catch (error) {
-        console.error('Помилка додавання до обраного:', error.message);
-      }
+          lat,
+          lon,
+          weather: currentWeather,
+          fiveDayWeather,
+        },
+      ]);
+      setIsFavButtonEnabled(false);
+    } catch (error) {
+      console.error('Помилка додавання до обраного:', error.message);
     }
   };
 
   const handleRemoveFromFavorites = async (latitude, longitude) => {
     try {
-      await favoritesRest.removeCityFromFavorites(latitude, longitude);
+      await restController.removeCityFromFavorites(latitude, longitude);
       setFavorites(
         favorites.filter((fav) => fav.lat !== latitude && fav.lon !== longitude)
       );
@@ -137,11 +125,42 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
     setActiveTab('main');
   };
 
-  const fetchProfileAndFavorites = async () => {
+  const fetchWeatherData = useCallback(async (selectedCity) => {
+    if (!selectedCity.lat || !selectedCity.lon) {
+      return { error: 'Координати недоступні' };
+    }
     try {
-      const userProfile = await usersRest.fetchUserProfile();
+      const currentWeather = await restController.fetchWeather(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const fiveDayWeather = await restController.fetchForecast(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
+      return { currentWeather, fiveDayWeather: formattedFiveDayData };
+    } catch (error) {
+      console.error('Помилка отримання даних про погоду:', error.message);
+      throw error;
+    }
+  }, []);
+
+  const fetchTemperatureData = async (selectedCity) => {
+    const data = await restController.fetchForecast(
+      selectedCity.lat,
+      selectedCity.lon
+    );
+    const dayData = processTemperatureData(data);
+    const fiveDayData = processFiveDayTemperatureData(data);
+    return { dayData, fiveDayData };
+  };
+
+  const fetchProfileAndFavorites = useCallback(async () => {
+    try {
+      const userProfile = await restController.fetchUserProfile();
       setUserProfile(userProfile);
-      const favoriteCities = await fetchFavorites();
+      const favoriteCities = await restController.fetchFavoriteCities();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
           const { currentWeather, fiveDayWeather } = await fetchWeatherData(
@@ -157,14 +176,14 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
         error.message
       );
     }
-  };
+  }, [fetchWeatherData]);
 
   const fetchWeatherForUserLocation = async () => {
     setLoading(true);
     setError(null);
     try {
-      const { latitude, longitude } = await locationsRest.fetchLocationByIP();
-      const weather = await weatherRest.fetchWeather(latitude, longitude);
+      const { latitude, longitude } = await restController.fetchLocationByIP();
+      const weather = await restController.fetchWeather(latitude, longitude);
       setWeatherData(weather);
       setSelectedCity({
         cityName: weather.name,
@@ -186,7 +205,7 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
     }
     fetchProfileAndFavorites();
     fetchWeatherForUserLocation();
-  }, [isAuthenticated, navigate]);
+  }, [isAuthenticated, navigate, fetchProfileAndFavorites]);
 
   useEffect(() => {
     if (selectedCity) {
@@ -223,7 +242,7 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
       };
       fetchWeather();
     }
-  }, [selectedCity]);
+  }, [fetchWeatherData, selectedCity]);
 
   return (
     <div className='app-container'>

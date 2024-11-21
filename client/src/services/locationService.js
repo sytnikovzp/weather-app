@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-export const fetchLocationByIP = async () => {
+export const getLocationByIP = async () => {
   try {
     let response = await axios.get('https://ipapi.co/json');
     const { latitude, longitude } = response.data;
@@ -23,4 +23,4 @@ export const fetchLocationByIP = async () => {
   }
 };
 
-export default { fetchLocationByIP };
+export default { getLocationByIP };
