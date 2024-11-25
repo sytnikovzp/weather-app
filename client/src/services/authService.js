@@ -1,4 +1,4 @@
-import api from '../api/interceptor';
+import api from '../api';
 // ==============================================================
 import { saveAccessToken, removeAccessToken } from '../utils/sharedFunctions';
 

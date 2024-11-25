@@ -67,7 +67,7 @@ function App() {
               isAuthenticated ? (
                 <Navigate to='/' replace />
               ) : (
-                <AuthPage setIsAuthenticated={setIsAuthenticated} />
+                <AuthPage checkAuthentication={checkAuthentication} />
               )
             }
           />

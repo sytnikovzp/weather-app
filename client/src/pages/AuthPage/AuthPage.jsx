@@ -6,7 +6,7 @@ import restController from '../../api/rest/restController';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
-function AuthPage({ setIsAuthenticated }) {
+function AuthPage({ checkAuthentication }) {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -21,7 +21,7 @@ function AuthPage({ setIsAuthenticated }) {
         } else {
           await restController.registration(...args);
         }
-        setIsAuthenticated(true);
+        checkAuthentication();
         navigate('/');
       } catch (error) {
         console.error(
@@ -35,7 +35,7 @@ function AuthPage({ setIsAuthenticated }) {
         );
       }
     },
-    [setIsAuthenticated, navigate]
+    [checkAuthentication, navigate]
   );
 
   return (
