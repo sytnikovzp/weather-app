@@ -1,9 +1,8 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useNavigate } from 'react-router-dom';
-// ==============================================================
-import restController from '../../api/rest/restController';
 // ==============================================================
 import { MAX_FAVORITES } from '../../constants';
+// ==============================================================
+import restController from '../../api/rest/restController';
 import {
   formatFiveDayData,
   processFiveDayTemperatureData,
@@ -19,9 +18,8 @@ import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
 
-function HomePage({ setIsAuthenticated, isAuthenticated }) {
+function HomePage({ setIsAuthenticated, userProfile }) {
   const [activeTab, setActiveTab] = useState('main');
-  const [userProfile, setUserProfile] = useState(null);
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
@@ -32,8 +30,6 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
-
-  const navigate = useNavigate();
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -156,10 +152,8 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
     return { dayData, fiveDayData };
   };
 
-  const fetchProfileAndFavorites = useCallback(async () => {
+  const fetchFavorites = useCallback(async () => {
     try {
-      const userProfile = await restController.fetchUserProfile();
-      setUserProfile(userProfile);
       const favoriteCities = await restController.fetchFavoriteCities();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
@@ -171,10 +165,7 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
       );
       setFavorites(favoritesWithWeather);
     } catch (error) {
-      console.error(
-        'Помилка завантаження профілю користувача або обраного:',
-        error.message
-      );
+      console.error('Помилка завантаження списку обраних міст:', error.message);
     }
   }, [fetchWeatherData]);
 
@@ -199,13 +190,9 @@ function HomePage({ setIsAuthenticated, isAuthenticated }) {
   };
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      navigate('/auth', { replace: true });
-      return;
-    }
-    fetchProfileAndFavorites();
+    fetchFavorites();
     fetchWeatherForUserLocation();
-  }, [isAuthenticated, navigate, fetchProfileAndFavorites]);
+  }, [fetchFavorites]);
 
   useEffect(() => {
     if (selectedCity) {

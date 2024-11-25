@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { useState, useEffect } from 'react';
 import {
   BrowserRouter as Router,
@@ -7,31 +6,48 @@ import {
   Navigate,
 } from 'react-router-dom';
 // ==============================================================
+import restController from './api/rest/restController';
+import { getAccessToken } from './utils/sharedFunctions';
+// ==============================================================
+import Preloader from './components/Preloader/Preloader';
 import Layout from './components/Layout/Layout';
+import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import HomePage from './pages/HomePage/HomePage';
 import AuthPage from './pages/AuthPage/AuthPage';
-import PrivateRoute from './components/PrivateRoute/PrivateRoute';
+// ==============================================================
 import './App.css';
 
-const App = () => {
+function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [userProfile, setUserProfile] = useState(null);
+
+  const checkAuthentication = async () => {
+    try {
+      const userProfile = await restController.fetchUserProfile();
+      setUserProfile(userProfile);
+      setIsAuthenticated(true);
+    } catch (error) {
+      console.error('Не вдалося завантажити дані користувача:', error.message);
+      setIsAuthenticated(false);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const token = localStorage.getItem('accessToken');
+    const token = getAccessToken();
     if (token) {
-      setIsAuthenticated(true);
+      checkAuthentication();
     } else {
-      setIsAuthenticated(false);
+      setIsLoading(false);
     }
   }, []);
 
+  if (isLoading) return <Preloader />;
+
   return (
-    <Router
-      future={{
-        v7_startTransition: true,
-        v7_relativeSplatPath: true,
-      }}
-    >
+    <Router>
       <Routes>
         <Route path='/' element={<Layout />}>
           <Route
@@ -40,12 +56,11 @@ const App = () => {
               <PrivateRoute isAuthenticated={isAuthenticated}>
                 <HomePage
                   setIsAuthenticated={setIsAuthenticated}
-                  isAuthenticated={isAuthenticated}
+                  userProfile={userProfile}
                 />
               </PrivateRoute>
             }
           />
-
           <Route
             path='auth/*'
             element={
@@ -61,6 +76,6 @@ const App = () => {
       </Routes>
     </Router>
   );
-};
+}
 
 export default App;
