@@ -6,32 +6,48 @@ const {
 } = require('../db/models');
 
 const AuthError = require('../errors/authErrors');
+const GeneralError = require('../errors/generalErrors');
+
+const formatError = (title, message) => ({
+  severity: 'error',
+  title,
+  message,
+});
 
 module.exports.authErrorHandler = (err, req, res, next) => {
   if (err instanceof AuthError) {
-    return res.status(err.status).send({
-      errors: [
-        { title: 'Auth Error', message: err.message, details: err.errors },
-      ],
-    });
+    return res
+      .status(err.status)
+      .send(formatError('Помилка авторизації', err.message, err.errors));
+  }
+  return next(err);
+};
+
+module.exports.generalErrorHandler = (err, req, res, next) => {
+  if (err instanceof GeneralError) {
+    return res
+      .status(err.status)
+      .send(formatError('Сталася помилка', err.message, err.errors));
   }
   return next(err);
 };
 
 module.exports.validationErrorHandler = (err, req, res, next) => {
   if (err instanceof ValidationError) {
-    return res.status(400).send({
-      errors: [{ title: 'Validation Error', details: err.errors }],
-    });
+    return res
+      .status(400)
+      .send(formatError('Помилка валідації', err.message, err.errors));
   }
   return next(err);
 };
 
 module.exports.sequelizeErrorHandler = (err, req, res, next) => {
   if (err instanceof BaseError) {
-    return res.status(406).send({
-      errors: [{ title: 'Sequelize Error', details: err.errors }],
-    });
+    return res
+      .status(406)
+      .send(
+        formatError('Помилка операції з базою даних', err.message, err.errors)
+      );
   }
   return next(err);
 };

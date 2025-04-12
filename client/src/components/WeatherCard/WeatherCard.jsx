@@ -1,12 +1,15 @@
 import { useState } from 'react';
+
 // ==============================================================
 import {
-  formatDate,
+  formatDateTime,
   getDayLabel,
   getWindDirection,
 } from '../../utils/sharedFunctions';
+
 // ==============================================================
 import Preloader from '../Preloader/Preloader';
+
 // ==============================================================
 import './WeatherCard.css';
 
@@ -25,20 +28,20 @@ function WeatherCard({
     <div className={`weather-card ${isFavorite ? 'favorite' : ''}`}>
       <div className='view-toggle'>
         <button
+          className={viewMode === 'current' ? 'active' : ''}
           onClick={(e) => {
             e.stopPropagation();
             setViewMode('current');
           }}
-          className={viewMode === 'current' ? 'active' : ''}
         >
           Зараз
         </button>
         <button
+          className={viewMode === 'forecast' ? 'active' : ''}
           onClick={(e) => {
             e.stopPropagation();
             setViewMode('forecast');
           }}
-          className={viewMode === 'forecast' ? 'active' : ''}
         >
           На 5 днів
         </button>
@@ -49,7 +52,7 @@ function WeatherCard({
         <div className='weather-content'>
           <div className='updated-info'>
             <p>
-              Оновлено: {formatDate(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
+              Оновлено: {formatDateTime(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
               <button
                 className='refresh-button'
                 onClick={(e) => {
@@ -68,9 +71,9 @@ function WeatherCard({
             <div className='weather-info'>
               <h2>{Math.round(weatherData.main.temp)}°C</h2>
               <img
+                alt='weather icon'
                 className='icon'
                 src={`http://openweathermap.org/img/wn/${weatherData.weather[0].icon}@2x.png`}
-                alt='weather icon'
               />
             </div>
           </div>
@@ -91,7 +94,7 @@ function WeatherCard({
               </p>
               <p>
                 <strong>Схід сонця:</strong>{' '}
-                {formatDate(weatherData.sys.sunrise, 'HH:mm')}
+                {formatDateTime(weatherData.sys.sunrise, 'HH:mm')}
               </p>
             </div>
             <div className='weather-column'>
@@ -104,7 +107,7 @@ function WeatherCard({
               </p>
               <p>
                 <strong>Захід сонця:</strong>{' '}
-                {formatDate(weatherData.sys.sunset, 'HH:mm')}
+                {formatDateTime(weatherData.sys.sunset, 'HH:mm')}
               </p>
             </div>
           </div>

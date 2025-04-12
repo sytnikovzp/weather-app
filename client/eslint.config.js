@@ -149,7 +149,7 @@ export default [
       'no-lonely-if': 'warn',
       'no-loop-func': 'error',
       'no-magic-numbers': [
-        'error',
+        'off',
         {
           detectObjects: false,
           enforceConst: true,

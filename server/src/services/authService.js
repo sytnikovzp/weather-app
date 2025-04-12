@@ -1,10 +1,12 @@
-const bcrypt = require('bcrypt');
-
 const { User } = require('../db/models');
 
 const { unAuthorizedError } = require('../errors/authErrors');
-const { badRequest } = require('../errors/customErrors');
-const { hashPassword, emailToLowerCase } = require('../utils/sharedFunctions');
+const { badRequest } = require('../errors/generalErrors');
+const {
+  hashPassword,
+  confirmPassword,
+  emailToLowerCase,
+} = require('../utils/sharedFunctions');
 
 const { generateTokens, validateRefreshToken } = require('./tokenService');
 
@@ -13,7 +15,7 @@ class AuthService {
     const emailToLower = emailToLowerCase(email);
     const person = await User.findOne({ where: { email: emailToLower } });
     if (person) {
-      throw badRequest('This user already exists');
+      throw badRequest('Цей користувач вже зареєстрований');
     }
     const hashedPassword = await hashPassword(password);
     const user = await User.create(
@@ -25,7 +27,7 @@ class AuthService {
       { transaction, returning: true }
     );
     if (!user) {
-      throw badRequest('User is not registered');
+      throw badRequest('Користувач не зареєстрований');
     }
     const tokens = generateTokens({ email });
     return {
@@ -44,7 +46,7 @@ class AuthService {
     if (!user) {
       throw unAuthorizedError();
     }
-    const isPassRight = await bcrypt.compare(password, user.password);
+    const isPassRight = await confirmPassword(password, user.password);
     if (!isPassRight) {
       throw unAuthorizedError();
     }
@@ -82,4 +84,4 @@ class AuthService {
   }
 }
 
-module.exports = new AuthService();
+module.exports = AuthService;

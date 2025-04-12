@@ -1,20 +1,13 @@
 import { format } from 'date-fns';
 
-const getAccessToken = () => {
-  return localStorage.getItem('accessToken');
-};
+const getAccessToken = () => localStorage.getItem('accessToken');
 
-const saveAccessToken = (token) => {
-  return localStorage.setItem('accessToken', token);
-};
+const saveAccessToken = (token) => localStorage.setItem('accessToken', token);
 
-const removeAccessToken = () => {
-  return localStorage.removeItem('accessToken');
-};
+const removeAccessToken = () => localStorage.removeItem('accessToken');
 
-const formatDate = (timestamp, dateFormat) => {
-  return format(new Date(timestamp * 1000), dateFormat);
-};
+const formatDateTime = (timestamp, dateFormat) =>
+  format(new Date(timestamp * 1000), dateFormat);
 
 const formatFiveDayData = (forecastData) => {
   const dailyData = forecastData.list.reduce((acc, data) => {
@@ -43,23 +36,29 @@ const formatFiveDayData = (forecastData) => {
 const getWindDirection = (deg) => {
   if ((deg >= 0 && deg <= 22.5) || (deg > 337.5 && deg <= 360)) {
     return 'Півн.';
-  } else if (deg > 22.5 && deg <= 67.5) {
-    return 'Пн-Сх.';
-  } else if (deg > 67.5 && deg <= 112.5) {
-    return 'Схід.';
-  } else if (deg > 112.5 && deg <= 157.5) {
-    return 'Пд-Сх';
-  } else if (deg > 157.5 && deg <= 202.5) {
-    return 'Півд.';
-  } else if (deg > 202.5 && deg <= 247.5) {
-    return 'Пд-Зх.';
-  } else if (deg > 247.5 && deg <= 292.5) {
-    return 'Зах.';
-  } else if (deg > 292.5 && deg <= 337.5) {
-    return 'Пн-Зх.';
-  } else {
-    return 'Invalid degree';
   }
+  if (deg > 22.5 && deg <= 67.5) {
+    return 'Пн-Сх.';
+  }
+  if (deg > 67.5 && deg <= 112.5) {
+    return 'Схід.';
+  }
+  if (deg > 112.5 && deg <= 157.5) {
+    return 'Пд-Сх';
+  }
+  if (deg > 157.5 && deg <= 202.5) {
+    return 'Півд.';
+  }
+  if (deg > 202.5 && deg <= 247.5) {
+    return 'Пд-Зх.';
+  }
+  if (deg > 247.5 && deg <= 292.5) {
+    return 'Зах.';
+  }
+  if (deg > 292.5 && deg <= 337.5) {
+    return 'Пн-Зх.';
+  }
+  return 'Invalid degree';
 };
 
 const getDayLabel = (index) => {
@@ -75,8 +74,12 @@ const getDayLabel = (index) => {
     'П’ятниця',
     'Субота',
   ];
-  if (index === 0) return 'Сьогодні';
-  if (index === 1) return 'Завтра';
+  if (index === 0) {
+    return 'Сьогодні';
+  }
+  if (index === 1) {
+    return 'Завтра';
+  }
   const dayOfWeek = new Date(today);
   dayOfWeek.setDate(today.getDate() + index);
   return dayNames[dayOfWeek.getDay()];
@@ -92,7 +95,7 @@ const processTemperatureData = (data) => {
   );
   const temperatures = hourlyData.map((item) => item.main.temp);
   return {
-    labels: labels,
+    labels,
     datasets: [
       {
         label: 'Температура на сьогодні (°C)',
@@ -112,14 +115,14 @@ const processFiveDayTemperatureData = (data) => {
       day: '2-digit',
       month: '2-digit',
     });
-    if (!acc[date]) {
+    if (acc[date]) {
+      acc[date].tempSum += current.main.temp;
+      acc[date].count += 1;
+    } else {
       acc[date] = {
         tempSum: current.main.temp,
         count: 1,
       };
-    } else {
-      acc[date].tempSum += current.main.temp;
-      acc[date].count += 1;
     }
     return acc;
   }, {});
@@ -128,7 +131,7 @@ const processFiveDayTemperatureData = (data) => {
     Math.round(day.tempSum / day.count)
   );
   return {
-    labels: labels,
+    labels,
     datasets: [
       {
         label: 'Середня температура на день (°C)',
@@ -143,13 +146,13 @@ const processFiveDayTemperatureData = (data) => {
 };
 
 export {
-  getAccessToken,
-  saveAccessToken,
-  removeAccessToken,
-  formatDate,
+  formatDateTime,
   formatFiveDayData,
-  getWindDirection,
+  getAccessToken,
   getDayLabel,
-  processTemperatureData,
+  getWindDirection,
   processFiveDayTemperatureData,
+  processTemperatureData,
+  removeAccessToken,
+  saveAccessToken,
 };

@@ -6,9 +6,9 @@ const {
   getCurrentUser,
   updateUser,
   deleteUser,
-} = require('../services/userService');
+} = require('../services/usersService');
 
-class UserController {
+class UsersController {
   static async getAllUsers(req, res, next) {
     try {
       const users = await getAllUsers();
@@ -33,7 +33,7 @@ class UserController {
         res.status(401);
       }
     } catch (error) {
-      console.error('Get user error: ', error.message);
+      console.error('Get user profile error: ', error.message);
       next(error);
     }
   }
@@ -48,7 +48,7 @@ class UserController {
         res.status(401);
       }
     } catch (error) {
-      console.error('Get current user error: ', error.message);
+      console.error('Get current user profile error: ', error.message);
       next(error);
     }
   }
@@ -88,4 +88,4 @@ class UserController {
   }
 }
 
-module.exports = new UserController();
+module.exports = UsersController;

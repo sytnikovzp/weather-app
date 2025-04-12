@@ -19,7 +19,7 @@ module.exports.authHandler = (req, res, next) => {
     req.user = userData;
     return next();
   } catch (error) {
-    console.log(error.message);
+    console.error('Authorization middleware error: ', error.message);
     return next(unAuthorizedError());
   }
 };

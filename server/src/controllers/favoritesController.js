@@ -1,16 +1,16 @@
 const { sequelize } = require('../db/models');
 
 const {
-  getFavorites,
+  getAllFavorites,
   addFavorite,
   removeFavorite,
-} = require('../services/favoriteService');
+} = require('../services/favoritesService');
 
-class FavoriteController {
-  static async getFavorites(req, res, next) {
+class FavoritesController {
+  static async getAllFavorites(req, res, next) {
     try {
       const { email } = req.user;
-      const favorites = await getFavorites(email);
+      const favorites = await getAllFavorites(email);
       res.status(200).json(favorites);
     } catch (error) {
       console.error('Get favorites error: ', error.message);
@@ -56,4 +56,4 @@ class FavoriteController {
   }
 }
 
-module.exports = FavoriteController;
+module.exports = FavoritesController;

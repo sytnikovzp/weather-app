@@ -11,20 +11,20 @@ const {
   getCurrentUserProfile,
   updateUser,
   deleteUser,
-} = require('../controllers/userController');
+} = require('../controllers/usersController');
 
-const userRouter = new Router();
+const usersRouter = new Router();
 
-userRouter
+usersRouter
   .route('/')
   .get(authHandler, getAllUsers)
   .put(authHandler, validateRegistration, updateUser);
 
-userRouter.route('/profile').get(authHandler, getCurrentUserProfile);
+usersRouter.route('/profile').get(authHandler, getCurrentUserProfile);
 
-userRouter
+usersRouter
   .route('/:userId')
   .get(authHandler, getUserById)
   .delete(authHandler, deleteUser);
 
-module.exports = userRouter;
+module.exports = usersRouter;

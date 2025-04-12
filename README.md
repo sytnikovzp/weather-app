@@ -270,7 +270,7 @@ CTRL + C
 
 **Метод**: POST
 
-**URL**: `/api/auth/register`
+**URL**: `/api/auth/registration`
 
 **Опис**: Створює нового користувача.
 

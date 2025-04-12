@@ -1,17 +1,17 @@
 const { User } = require('../db/models');
 
-const { badRequest, notFound } = require('../errors/customErrors');
+const { badRequest, notFound } = require('../errors/generalErrors');
 const {
   hashPassword,
   emailToLowerCase,
-  formatDate,
+  formatDateTime,
 } = require('../utils/sharedFunctions');
 
-class UserService {
+class UsersService {
   static async getAllUsers() {
     const users = await User.findAll();
     if (users.length === 0) {
-      throw notFound('Users not found');
+      throw notFound('Користувачів не знайдено');
     }
     const allUsers = await Promise.all(
       users.map((user) => ({
@@ -26,14 +26,14 @@ class UserService {
   static async getUserById(id) {
     const user = await User.findByPk(id);
     if (!user) {
-      throw notFound('User not found');
+      throw notFound('Користувача не знайдено');
     }
     return {
       id: user.id,
       fullName: user.fullName,
       email: user.email,
-      createdAt: formatDate(user.createdAt),
-      updatedAt: formatDate(user.updatedAt),
+      createdAt: formatDateTime(user.createdAt),
+      updatedAt: formatDateTime(user.updatedAt),
     };
   }
 
@@ -41,28 +41,28 @@ class UserService {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
     if (!user) {
-      throw notFound('User not found');
+      throw notFound('Користувача не знайдено');
     }
     return {
       id: user.id,
       fullName: user.fullName,
       email: user.email,
-      createdAt: formatDate(user.createdAt),
-      updatedAt: formatDate(user.updatedAt),
+      createdAt: formatDateTime(user.createdAt),
+      updatedAt: formatDateTime(user.updatedAt),
     };
   }
 
   static async updateUser(id, fullName, email, password, transaction) {
     const user = await User.findOne({ where: { id } });
     if (!user) {
-      throw notFound('User not found');
+      throw notFound('Користувача не знайдено');
     }
     const updateData = { fullName };
     if (email && email.toLowerCase() !== user.email.toLowerCase()) {
       const newEmail = emailToLowerCase(email);
       const person = await User.findOne({ where: { email: newEmail } });
       if (person) {
-        throw badRequest('This email is already used');
+        throw badRequest('Ця електронна адреса вже використовується');
       }
       updateData.email = newEmail;
     }
@@ -76,7 +76,7 @@ class UserService {
       transaction,
     });
     if (affectedRows === 0) {
-      throw badRequest('User is not updated');
+      throw badRequest('Дані цього користувача не оновлено');
     }
     return {
       user: {
@@ -90,14 +90,14 @@ class UserService {
   static async deleteUser(id, transaction) {
     const user = await User.findByPk(id);
     if (!user) {
-      throw notFound('User not found');
+      throw notFound('Користувача не знайдено');
     }
     const delUser = await User.destroy({ where: { id }, transaction });
     if (!delUser) {
-      throw badRequest('User is not deleted');
+      throw badRequest('Профіль цього користувача не видалено');
     }
     return delUser;
   }
 }
 
-module.exports = new UserService();
+module.exports = UsersService;

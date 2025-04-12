@@ -2,32 +2,46 @@ const { createServer } = require('http');
 
 const app = require('./src/app');
 const {
-  SERVER_CONFIG: { HOST, PORT },
-  DATABASE: { DB_NAME },
+  API_CONFIG: { SERVER_HOST, SERVER_PORT },
+  DB_CONFIG: { DB_NAME },
 } = require('./src/constants');
 const dbPostgres = require('./src/db/models');
 
-// =================== POSTGRES DB CONNECT =======================
-
-const postgresConnect = async () => {
+const connectPostgresDB = async () => {
   try {
     await dbPostgres.sequelize.authenticate();
-    console.log(`Connection to DB <<< ${DB_NAME} >>> is done!`);
+    console.log(
+      `Connection to PostgreSQL database <<< ${DB_NAME} >>> is done!`
+    );
   } catch (error) {
-    console.log(`Can not connect to DB ${DB_NAME}!`, error.message);
+    console.error(
+      `Can not connect to PostgreSQL database ${DB_NAME}!`,
+      error.message
+    );
   }
 };
 
-postgresConnect();
+// ========================= DATABASE CONNECT ==========================
+const connectDatabases = async () => {
+  try {
+    await connectPostgresDB();
+  } catch (error) {
+    console.error('Error connecting to databases: ', error.message);
+    process.exit(1);
+  }
+};
 
-// ================ Create server with HTTP module ===============
+// ===================== Create and Start Server =======================
+const startServer = async () => {
+  await connectDatabases();
 
-const server = createServer(app);
+  const server = createServer(app);
 
-// ================ Start server with HTTP module ================
-
-server.listen(PORT, HOST, () =>
-  console.log(`Server running at http://${HOST}:${PORT}/api`)
+  server.listen(SERVER_PORT, SERVER_HOST, () => {
+    console.log(`Server running at http://${SERVER_HOST}:${SERVER_PORT}/api`);
+  });
+};
+console.log(
+  '================== Server is started successfully! =================='
 );
-
-console.log('===== Server is started successfully! =====');
+startServer();

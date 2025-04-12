@@ -4,7 +4,7 @@ const express = require('express');
 const morgan = require('morgan');
 
 const {
-  CLIENT: { URL },
+  API_CONFIG: { CLIENT_URL },
 } = require('./constants');
 const {
   time: { getTime, showTime },
@@ -12,6 +12,7 @@ const {
 const {
   errorHandlers: {
     authErrorHandler,
+    generalErrorHandler,
     validationErrorHandler,
     sequelizeErrorHandler,
     errorHandler,
@@ -25,7 +26,7 @@ const app = express();
 app.use(
   cors({
     credentials: true,
-    origin: URL,
+    origin: CLIENT_URL,
   })
 );
 
@@ -41,6 +42,7 @@ app.use('/api', router);
 
 app.use(
   authErrorHandler,
+  generalErrorHandler,
   validationErrorHandler,
   sequelizeErrorHandler,
   errorHandler

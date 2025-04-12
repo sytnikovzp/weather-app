@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const {
-  AUTH: {
+  AUTH_CONFIG: {
     ACCESS_TOKEN_SECRET,
     REFRESH_TOKEN_SECRET,
     ACCESS_TOKEN_LIFETIME,
@@ -25,8 +25,8 @@ class TokenService {
 
   static validateAccessToken(token) {
     try {
-      const data = jwt.verify(token, ACCESS_TOKEN_SECRET);
-      return data;
+      const payload = jwt.verify(token, ACCESS_TOKEN_SECRET);
+      return payload;
     } catch (error) {
       console.error('Access token validation error: ', error.message);
       return null;
@@ -44,4 +44,4 @@ class TokenService {
   }
 }
 
-module.exports = new TokenService();
+module.exports = TokenService;
