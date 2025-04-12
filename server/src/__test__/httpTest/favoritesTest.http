@@ -1,12 +1,12 @@
 ### Get list of favorite cities
 GET http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDg4NzMzLCJleHAiOjE3NDQ0ODk2MzN9.ialxtivOg7rHSmj0bBZkp9Dw18N5tCIDYfGJyW6Tjvo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDk4MjUzLCJleHAiOjE3NDQ0OTkxNTN9.ddLPv2MDWCP3uHShbkiYL5l6jTRPbOf7ITuVDwM0pNo
 
 ### Add city to favorites
 POST http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDg4NzMzLCJleHAiOjE3NDQ0ODk2MzN9.ialxtivOg7rHSmj0bBZkp9Dw18N5tCIDYfGJyW6Tjvo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDk4MjUzLCJleHAiOjE3NDQ0OTkxNTN9.ddLPv2MDWCP3uHShbkiYL5l6jTRPbOf7ITuVDwM0pNo
 
 {
   "cityName": "Zaporizhia",
@@ -18,4 +18,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc
 ### Remove city from favorites
 DELETE http://localhost:5000/api/favorites?latitude=47.8167&longitude=35.1833 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDg4NzMzLCJleHAiOjE3NDQ0ODk2MzN9.ialxtivOg7rHSmj0bBZkp9Dw18N5tCIDYfGJyW6Tjvo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDk4MjUzLCJleHAiOjE3NDQ0OTkxNTN9.ddLPv2MDWCP3uHShbkiYL5l6jTRPbOf7ITuVDwM0pNo

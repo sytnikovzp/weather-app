@@ -4,6 +4,7 @@ module.exports = {
     await queryInterface.createTable('favorites', {
       user_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'users',
           key: 'id',
@@ -13,6 +14,7 @@ module.exports = {
       },
       city_id: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: {
           model: 'cities',
           key: 'id',

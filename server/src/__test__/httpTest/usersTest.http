@@ -1,7 +1,7 @@
 ### Get list all users
 GET http://localhost:5000/api/users HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDg4NzMzLCJleHAiOjE3NDQ0ODk2MzN9.ialxtivOg7rHSmj0bBZkp9Dw18N5tCIDYfGJyW6Tjvo
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6IldJTEwuc21pdGhAR01BSUwuY29tIiwiaWF0IjoxNzQ0NDk4MjUzLCJleHAiOjE3NDQ0OTkxNTN9.ddLPv2MDWCP3uHShbkiYL5l6jTRPbOf7ITuVDwM0pNo
 
 ### Get current user profile
 GET http://localhost:5000/api/users/profile HTTP/1.1
