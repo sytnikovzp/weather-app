@@ -7,7 +7,7 @@ export const getLocationByIP = async () => {
     return { latitude, longitude };
   } catch (error) {
     console.error(
-      'API ipwho.is не зміг надати дійсні дані про місцезнаходження:',
+      'API ipwho.is не зміг надати дійсні дані про місцезнаходження: ',
       error.message
     );
     throw new Error(

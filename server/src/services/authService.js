@@ -1,19 +1,20 @@
 const bcrypt = require('bcrypt');
-// ==============================================================
+
 const { User } = require('../db/models');
-// ==============================================================
-const { hashPassword, emailToLowerCase } = require('../utils/sharedFunctions');
-// ==============================================================
-const { generateTokens, validateRefreshToken } = require('./tokenService');
-// ==============================================================
+
 const { unAuthorizedError } = require('../errors/authErrors');
 const { badRequest } = require('../errors/customErrors');
+const { hashPassword, emailToLowerCase } = require('../utils/sharedFunctions');
+
+const { generateTokens, validateRefreshToken } = require('./tokenService');
 
 class AuthService {
-  async registration(fullName, email, password, transaction) {
+  static async registration(fullName, email, password, transaction) {
     const emailToLower = emailToLowerCase(email);
     const person = await User.findOne({ where: { email: emailToLower } });
-    if (person) throw badRequest('This user already exists');
+    if (person) {
+      throw badRequest('This user already exists');
+    }
     const hashedPassword = await hashPassword(password);
     const user = await User.create(
       {
@@ -23,7 +24,9 @@ class AuthService {
       },
       { transaction, returning: true }
     );
-    if (!user) throw badRequest('User is not registered');
+    if (!user) {
+      throw badRequest('User is not registered');
+    }
     const tokens = generateTokens({ email });
     return {
       ...tokens,
@@ -35,12 +38,16 @@ class AuthService {
     };
   }
 
-  async login(email, password) {
+  static async login(email, password) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) throw unAuthorizedError();
+    if (!user) {
+      throw unAuthorizedError();
+    }
     const isPassRight = await bcrypt.compare(password, user.password);
-    if (!isPassRight) throw unAuthorizedError();
+    if (!isPassRight) {
+      throw unAuthorizedError();
+    }
     const tokens = generateTokens({ email });
     return {
       ...tokens,
@@ -52,10 +59,14 @@ class AuthService {
     };
   }
 
-  async refresh(refreshToken) {
-    if (!refreshToken) throw unAuthorizedError();
+  static async refresh(refreshToken) {
+    if (!refreshToken) {
+      throw unAuthorizedError();
+    }
     const data = validateRefreshToken(refreshToken);
-    if (!data) throw unAuthorizedError();
+    if (!data) {
+      throw unAuthorizedError();
+    }
     const { email } = data;
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });

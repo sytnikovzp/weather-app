@@ -1,4 +1,5 @@
 const { unAuthorizedError } = require('../errors/authErrors');
+
 const { validateAccessToken } = require('../services/tokenService');
 
 module.exports.authHandler = (req, res, next) => {
@@ -7,7 +8,7 @@ module.exports.authHandler = (req, res, next) => {
     if (!authHeader) {
       return next(unAuthorizedError());
     }
-    const accessToken = authHeader.split(' ')[1];
+    const [, accessToken] = authHeader.split(' ');
     if (!accessToken) {
       return next(unAuthorizedError());
     }
@@ -16,7 +17,7 @@ module.exports.authHandler = (req, res, next) => {
       return next(unAuthorizedError());
     }
     req.user = userData;
-    next();
+    return next();
   } catch (error) {
     console.log(error.message);
     return next(unAuthorizedError());

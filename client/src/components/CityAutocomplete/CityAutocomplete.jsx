@@ -1,6 +1,8 @@
 import { useState } from 'react';
+
 // ==============================================================
 import restController from '../../api/rest/restController';
+
 // ==============================================================
 import './CityAutocomplete.css';
 
@@ -13,12 +15,11 @@ function CityAutocomplete({ onCitySelect }) {
     setQuery(searchTerm);
     if (searchTerm.length > 2) {
       try {
-        const citySuggestions = await restController.fetchCitySuggestions(
-          searchTerm
-        );
+        const citySuggestions =
+          await restController.fetchCitySuggestions(searchTerm);
         setSuggestions(citySuggestions);
       } catch (error) {
-        console.error('Помилка отримання пропозицій міст:', error.message);
+        console.error('Помилка отримання пропозицій міст: ', error.message);
         setSuggestions([]);
       }
     } else {
@@ -35,11 +36,11 @@ function CityAutocomplete({ onCitySelect }) {
   return (
     <div className='autocomplete-container'>
       <input
-        type='text'
         className='autocomplete-input'
+        placeholder='Вкажіть назву міста'
+        type='text'
         value={query}
         onChange={handleInputChange}
-        placeholder='Введіть назву міста'
       />
       {suggestions.length > 0 && (
         <ul className='autocomplete-list'>

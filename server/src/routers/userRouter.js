@@ -1,5 +1,10 @@
 const { Router } = require('express');
-// ==============================================================
+
+const {
+  auth: { authHandler },
+  validation: { validateRegistration },
+} = require('../middlewares');
+
 const {
   getAllUsers,
   getUserById,
@@ -7,10 +12,6 @@ const {
   updateUser,
   deleteUser,
 } = require('../controllers/userController');
-const {
-  auth: { authHandler },
-  validation: { validateRegistration },
-} = require('../middlewares');
 
 const userRouter = new Router();
 
@@ -19,9 +20,7 @@ userRouter
   .get(authHandler, getAllUsers)
   .put(authHandler, validateRegistration, updateUser);
 
-userRouter
-  .route('/profile')
-  .get(authHandler, getCurrentUserProfile);
+userRouter.route('/profile').get(authHandler, getCurrentUserProfile);
 
 userRouter
   .route('/:userId')

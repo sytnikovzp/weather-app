@@ -1,4 +1,5 @@
 const { sequelize } = require('../db/models');
+
 const {
   getFavorites,
   addFavorite,
@@ -12,7 +13,7 @@ class FavoriteController {
       const favorites = await getFavorites(email);
       res.status(200).json(favorites);
     } catch (error) {
-      console.log('Get favorites error: ', error.message);
+      console.error('Get favorites error: ', error.message);
       next(error);
     }
   }
@@ -34,7 +35,7 @@ class FavoriteController {
       res.status(201).json(favorite);
     } catch (error) {
       await transaction.rollback();
-      console.log('Add to favorites error: ', error.message);
+      console.error('Add to favorites error: ', error.message);
       next(error);
     }
   }
@@ -46,10 +47,10 @@ class FavoriteController {
       const { email } = req.user;
       await removeFavorite(email, latitude, longitude, transaction);
       await transaction.commit();
-      res.sendStatus(res.statusCode);
+      res.status(200).json('OK');
     } catch (error) {
       await transaction.rollback();
-      console.log('Delete from favorites error: ', error.message);
+      console.error('Delete from favorites error: ', error.message);
       next(error);
     }
   }

@@ -1,14 +1,15 @@
 const { Router } = require('express');
-// ==============================================================
+
+const {
+  auth: { authHandler },
+  validation: { validateFavorites },
+} = require('../middlewares');
+
 const {
   getFavorites,
   addFavorite,
   removeFavorite,
 } = require('../controllers/favoriteController');
-const {
-  auth: { authHandler },
-  validation: { validateFavorites },
-} = require('../middlewares');
 
 const favoriteRouter = new Router();
 

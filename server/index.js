@@ -1,12 +1,10 @@
-/* eslint-disable no-unused-vars */
 const { createServer } = require('http');
-// ==============================================================
+
+const app = require('./src/app');
 const {
   SERVER_CONFIG: { HOST, PORT },
   DATABASE: { DB_NAME },
 } = require('./src/constants');
-// ==============================================================
-const app = require('./src/app');
 const dbPostgres = require('./src/db/models');
 
 // =================== POSTGRES DB CONNECT =======================

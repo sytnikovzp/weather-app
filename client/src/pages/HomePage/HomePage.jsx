@@ -1,19 +1,22 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+
 // ==============================================================
 import { MAX_FAVORITES } from '../../constants';
-// ==============================================================
-import restController from '../../api/rest/restController';
 import {
   formatFiveDayData,
   processFiveDayTemperatureData,
   processTemperatureData,
 } from '../../utils/sharedFunctions';
 // ==============================================================
+import restController from '../../api/rest/restController';
+
+// ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
-import WeatherCard from '../../components/WeatherCard/WeatherCard';
-import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
+import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
+import WeatherCard from '../../components/WeatherCard/WeatherCard';
+
 // ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
@@ -40,7 +43,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       await restController.logout();
       setIsAuthenticated(false);
     } catch (error) {
-      console.error('Помилка виходу із системи:', error.message);
+      console.error('Помилка виходу із системи: ', error.message);
     }
   };
 
@@ -57,9 +60,8 @@ function HomePage({ setIsAuthenticated, userProfile }) {
     setLoading(true);
     setError(null);
     try {
-      const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-        selectedCity
-      );
+      const { currentWeather, fiveDayWeather } =
+        await fetchWeatherData(selectedCity);
       const { dayData, fiveDayData } = await fetchTemperatureData(selectedCity);
       setWeatherData(currentWeather);
       setFiveDayData(fiveDayWeather);
@@ -82,12 +84,13 @@ function HomePage({ setIsAuthenticated, userProfile }) {
     }
     const { cityName, lat, lon } = selectedCity;
     const { country } = weatherData.sys;
-    if (favorites.some((fav) => fav.lat === lat && fav.lon === lon)) return;
+    if (favorites.some((fav) => fav.lat === lat && fav.lon === lon)) {
+      return;
+    }
     try {
       await restController.addCityToFavorites(cityName, country, lat, lon);
-      const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-        selectedCity
-      );
+      const { currentWeather, fiveDayWeather } =
+        await fetchWeatherData(selectedCity);
       setFavorites([
         ...favorites,
         {
@@ -101,7 +104,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       ]);
       setIsFavButtonEnabled(false);
     } catch (error) {
-      console.error('Помилка додавання до обраного:', error.message);
+      console.error('Помилка додавання до обраного: ', error.message);
     }
   };
 
@@ -112,7 +115,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         favorites.filter((fav) => fav.lat !== latitude && fav.lon !== longitude)
       );
     } catch (error) {
-      console.error('Помилка видалення з обраного:', error.message);
+      console.error('Помилка видалення з обраного: ', error.message);
     }
   };
 
@@ -137,7 +140,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
       return { currentWeather, fiveDayWeather: formattedFiveDayData };
     } catch (error) {
-      console.error('Помилка отримання даних про погоду:', error.message);
+      console.error('Помилка отримання даних про погоду: ', error.message);
       throw error;
     }
   }, []);
@@ -157,15 +160,17 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       const favoriteCities = await restController.fetchFavoriteCities();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
-          const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-            city
-          );
+          const { currentWeather, fiveDayWeather } =
+            await fetchWeatherData(city);
           return { ...city, weather: currentWeather, fiveDayWeather };
         })
       );
       setFavorites(favoritesWithWeather);
     } catch (error) {
-      console.error('Помилка завантаження списку обраних міст:', error.message);
+      console.error(
+        'Помилка завантаження списку обраних міст: ',
+        error.message
+      );
     }
   }, [fetchWeatherData]);
 
@@ -212,12 +217,10 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         setLoading(true);
         setError(null);
         try {
-          const { currentWeather, fiveDayWeather } = await fetchWeatherData(
-            selectedCity
-          );
-          const { dayData, fiveDayData } = await fetchTemperatureData(
-            selectedCity
-          );
+          const { currentWeather, fiveDayWeather } =
+            await fetchWeatherData(selectedCity);
+          const { dayData, fiveDayData } =
+            await fetchTemperatureData(selectedCity);
           setWeatherData(currentWeather);
           setFiveDayData(fiveDayWeather);
           setTemperatureData({ dayData, fiveDayData });
@@ -234,7 +237,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   return (
     <div className='app-container'>
       <div className='logo-container'>
-        <img src={weatherLogo} className='logo' alt='Weather logo' />
+        <img alt='Weather logo' className='logo' src={weatherLogo} />
       </div>
       <div className='tabs-wrapper'>
         <div className='tabs-container'>
@@ -265,8 +268,8 @@ function HomePage({ setIsAuthenticated, userProfile }) {
               <CityAutocomplete onCitySelect={handleCitySelect} />
               <button
                 className='favorite-button'
-                onClick={handleAddToFavorites}
                 disabled={!isFavButtonEnabled}
+                onClick={handleAddToFavorites}
               >
                 В обране
               </button>
@@ -274,21 +277,21 @@ function HomePage({ setIsAuthenticated, userProfile }) {
             {selectedCity ? (
               <>
                 <WeatherCard
-                  cityName={selectedCity.cityName}
                   cityCountry={selectedCity.country}
-                  weatherData={weatherData}
+                  cityName={selectedCity.cityName}
+                  error={error}
                   fiveDayData={fiveDayData}
-                  onRefresh={handleRefresh}
                   isFavorite={isFavorite}
                   loading={loading}
-                  error={error}
+                  weatherData={weatherData}
+                  onRefresh={handleRefresh}
                 />
                 <TemperatureChart
                   cityName={selectedCity.cityName}
                   dayData={temperatureData?.dayData}
+                  error={error}
                   fiveDayData={temperatureData?.fiveDayData}
                   loading={loading}
-                  error={error}
                 />
               </>
             ) : (
@@ -298,13 +301,13 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         ) : (
           <div className='favorites-content'>
             <FavoritesList
-              favorites={favorites}
-              onRefresh={handleRefresh}
-              isFavorite={isFavorite}
-              onRemoveFavorite={handleRemoveFromFavorites}
-              onCityClick={handleFavoriteClick}
-              loading={loading}
               error={error}
+              favorites={favorites}
+              isFavorite={isFavorite}
+              loading={loading}
+              onCityClick={handleFavoriteClick}
+              onRefresh={handleRefresh}
+              onRemoveFavorite={handleRemoveFromFavorites}
             />
           </div>
         )}
@@ -312,9 +315,9 @@ function HomePage({ setIsAuthenticated, userProfile }) {
 
       <ModalWindow
         isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title='Максимум обраних міст'
         message='Для додавання нового видаліть існуюче місто з обраних. Максимум 5.'
+        title='Максимум обраних міст'
+        onClose={() => setIsModalOpen(false)}
       />
     </div>
   );

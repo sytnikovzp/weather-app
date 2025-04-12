@@ -10,7 +10,7 @@ const COORD_REQUIRED_SCHEME = yup
 
 const EMAIL_REQUIRED_SCHEME = yup
   .string('Це поле має бути рядком')
-  .email('Введіть коректний e-mail')
+  .email('Вкажіть коректний e-mail')
   .required('E-mail є обовʼязковим полем');
 
 const PASSWORD_REQUIRED_SCHEME = yup
@@ -18,8 +18,6 @@ const PASSWORD_REQUIRED_SCHEME = yup
   .min(8, 'Мінімальна довжина 8 символів')
   .max(20, 'Введені дані не можуть перевищувати 20 символів')
   .required('Пароль є обовʼязковим полем');
-
-// ====================================================
 
 const REGISTRATION_VALIDATION_SCHEME = yup.object().shape({
   fullName: TITLE_NAME_REQUIRED_SCHEME,

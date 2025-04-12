@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken');
-// ==============================================================
+
 const {
   AUTH: {
     ACCESS_TOKEN_SECRET,
@@ -10,7 +10,7 @@ const {
 } = require('../constants');
 
 class TokenService {
-  generateTokens(payload) {
+  static generateTokens(payload) {
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
       expiresIn: ACCESS_TOKEN_LIFETIME,
     });
@@ -23,22 +23,22 @@ class TokenService {
     };
   }
 
-  validateAccessToken(token) {
+  static validateAccessToken(token) {
     try {
       const data = jwt.verify(token, ACCESS_TOKEN_SECRET);
       return data;
     } catch (error) {
-      console.log('Access token validation error:', error.message);
+      console.error('Access token validation error: ', error.message);
       return null;
     }
   }
 
-  validateRefreshToken(token) {
+  static validateRefreshToken(token) {
     try {
       const data = jwt.verify(token, REFRESH_TOKEN_SECRET);
       return data;
     } catch (error) {
-      console.log('Refresh token validation error:', error.message);
+      console.error('Refresh token validation error: ', error.message);
       return null;
     }
   }

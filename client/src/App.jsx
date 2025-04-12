@@ -1,19 +1,23 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
-  Routes,
-  Route,
   Navigate,
+  Route,
+  Routes,
 } from 'react-router-dom';
-// ==============================================================
-import restController from './api/rest/restController';
+
 import { getAccessToken } from './utils/sharedFunctions';
 // ==============================================================
-import Preloader from './components/Preloader/Preloader';
+import restController from './api/rest/restController';
+
 import Layout from './components/Layout/Layout';
+// ==============================================================
+import Preloader from './components/Preloader/Preloader';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
-import HomePage from './pages/HomePage/HomePage';
+
 import AuthPage from './pages/AuthPage/AuthPage';
+import HomePage from './pages/HomePage/HomePage';
+
 // ==============================================================
 import './App.css';
 
@@ -28,7 +32,7 @@ function App() {
       setUserProfile(userProfile);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error('Не вдалося завантажити дані користувача:', error.message);
+      console.error('Не вдалося завантажити дані користувача: ', error.message);
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);
@@ -44,12 +48,14 @@ function App() {
     }
   }, []);
 
-  if (isLoading) return <Preloader />;
+  if (isLoading) {
+    return <Preloader />;
+  }
 
   return (
     <Router>
       <Routes>
-        <Route path='/' element={<Layout />}>
+        <Route element={<Layout />} path='/'>
           <Route
             index
             element={
@@ -62,16 +68,16 @@ function App() {
             }
           />
           <Route
-            path='auth/*'
             element={
               isAuthenticated ? (
-                <Navigate to='/' replace />
+                <Navigate replace to='/' />
               ) : (
                 <AuthPage checkAuthentication={checkAuthentication} />
               )
             }
+            path='auth/*'
           />
-          <Route path='*' element={<Navigate to='/' replace />} />
+          <Route element={<Navigate replace to='/' />} path='*' />
         </Route>
       </Routes>
     </Router>

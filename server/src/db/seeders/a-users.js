@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 const bcrypt = require('bcrypt');
-// ==============================================================
+
 const {
   HASH: { HASH_SALT_ROUNDS },
 } = require('../../constants');
@@ -18,7 +18,7 @@ const users = [
 module.exports = {
   async up(queryInterface) {
     for (const user of users) {
-      user.password = await bcrypt.hash(user.password, HASH_SALT_ROUNDS);
+      user.password = bcrypt.hash(user.password, HASH_SALT_ROUNDS);
     }
     await queryInterface.bulkInsert('users', users, {});
   },

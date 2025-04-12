@@ -10,7 +10,7 @@ const COORD_REQUIRED_SCHEME = yup
 
 const EMAIL_REQUIRED_SCHEME = yup
   .string('Це поле має бути рядком')
-  .email('Введіть коректний e-mail')
+  .email('Вкажіть коректний e-mail')
   .required('E-mail є обовʼязковим полем');
 
 const PASSWORD_REQUIRED_SCHEME = yup
@@ -40,7 +40,7 @@ const FAVORITES_SCHEME = yup.object().shape({
 });
 
 export {
-  REGISTRATION_VALIDATION_SCHEME,
   AUTH_VALIDATION_SCHEME,
   FAVORITES_SCHEME,
+  REGISTRATION_VALIDATION_SCHEME,
 };

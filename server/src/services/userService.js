@@ -1,32 +1,33 @@
 const { User } = require('../db/models');
-// ==============================================================
+
+const { badRequest, notFound } = require('../errors/customErrors');
 const {
   hashPassword,
   emailToLowerCase,
   formatDate,
 } = require('../utils/sharedFunctions');
-// ==============================================================
-const { badRequest, notFound } = require('../errors/customErrors');
 
 class UserService {
-  async getAllUsers() {
+  static async getAllUsers() {
     const users = await User.findAll();
-    if (users.length === 0) throw notFound('Users not found');
+    if (users.length === 0) {
+      throw notFound('Users not found');
+    }
     const allUsers = await Promise.all(
-      users.map(async (user) => {
-        return {
-          id: user.id,
-          fullName: user.fullName,
-          email: user.email,
-        };
-      })
+      users.map((user) => ({
+        id: user.id,
+        fullName: user.fullName,
+        email: user.email,
+      }))
     );
     return allUsers;
   }
 
-  async getUserById(id) {
+  static async getUserById(id) {
     const user = await User.findByPk(id);
-    if (!user) throw notFound('User not found');
+    if (!user) {
+      throw notFound('User not found');
+    }
     return {
       id: user.id,
       fullName: user.fullName,
@@ -36,10 +37,12 @@ class UserService {
     };
   }
 
-  async getCurrentUser(email) {
+  static async getCurrentUser(email) {
     const emailToLower = emailToLowerCase(email);
     const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) throw notFound('User not found');
+    if (!user) {
+      throw notFound('User not found');
+    }
     return {
       id: user.id,
       fullName: user.fullName,
@@ -49,14 +52,18 @@ class UserService {
     };
   }
 
-  async updateUser(id, fullName, email, password, transaction) {
+  static async updateUser(id, fullName, email, password, transaction) {
     const user = await User.findOne({ where: { id } });
-    if (!user) throw notFound('User not found');
+    if (!user) {
+      throw notFound('User not found');
+    }
     const updateData = { fullName };
     if (email && email.toLowerCase() !== user.email.toLowerCase()) {
       const newEmail = emailToLowerCase(email);
       const person = await User.findOne({ where: { email: newEmail } });
-      if (person) throw badRequest('This email is already used');
+      if (person) {
+        throw badRequest('This email is already used');
+      }
       updateData.email = newEmail;
     }
     if (password) {
@@ -68,7 +75,9 @@ class UserService {
       returning: true,
       transaction,
     });
-    if (affectedRows === 0) throw badRequest('User is not updated');
+    if (affectedRows === 0) {
+      throw badRequest('User is not updated');
+    }
     return {
       user: {
         id: updatedUser.id,
@@ -78,11 +87,15 @@ class UserService {
     };
   }
 
-  async deleteUser(id, transaction) {
+  static async deleteUser(id, transaction) {
     const user = await User.findByPk(id);
-    if (!user) throw notFound('User not found');
+    if (!user) {
+      throw notFound('User not found');
+    }
     const delUser = await User.destroy({ where: { id }, transaction });
-    if (!delUser) throw badRequest('User is not deleted');
+    if (!delUser) {
+      throw badRequest('User is not deleted');
+    }
     return delUser;
   }
 }

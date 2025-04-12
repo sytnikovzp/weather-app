@@ -1,4 +1,5 @@
 const { sequelize } = require('../db/models');
+
 const {
   getAllUsers,
   getUserById,
@@ -8,7 +9,7 @@ const {
 } = require('../services/userService');
 
 class UserController {
-  async getAllUsers(req, res, next) {
+  static async getAllUsers(req, res, next) {
     try {
       const users = await getAllUsers();
       if (users.length > 0) {
@@ -17,12 +18,12 @@ class UserController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Get all users error: ', error.message);
+      console.error('Get all users error: ', error.message);
       next(error);
     }
   }
 
-  async getUserById(req, res, next) {
+  static async getUserById(req, res, next) {
     try {
       const { userId } = req.params;
       const user = await getUserById(userId);
@@ -32,12 +33,12 @@ class UserController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Get user error: ', error.message);
+      console.error('Get user error: ', error.message);
       next(error);
     }
   }
 
-  async getCurrentUserProfile(req, res, next) {
+  static async getCurrentUserProfile(req, res, next) {
     try {
       const userEmail = req.user.email;
       const user = await getCurrentUser(userEmail);
@@ -47,12 +48,12 @@ class UserController {
         res.status(401);
       }
     } catch (error) {
-      console.log('Get user profile error: ', error.message);
+      console.error('Get current user error: ', error.message);
       next(error);
     }
   }
 
-  async updateUser(req, res, next) {
+  static async updateUser(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
       const { id, fullName, email, password } = req.body;
@@ -67,21 +68,21 @@ class UserController {
       res.status(201).json(userData);
     } catch (error) {
       await transaction.rollback();
-      console.log('Update user error: ', error.message);
+      console.error('Update user error: ', error.message);
       next(error);
     }
   }
 
-  async deleteUser(req, res, next) {
+  static async deleteUser(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
       const { userId } = req.params;
       await deleteUser(userId, transaction);
       await transaction.commit();
-      res.sendStatus(res.statusCode);
+      res.status(200).json('OK');
     } catch (error) {
       await transaction.rollback();
-      console.log('Delete user error: ', error.message);
+      console.error('Delete user error: ', error.message);
       next(error);
     }
   }
