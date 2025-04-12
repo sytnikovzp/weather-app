@@ -2,11 +2,11 @@
   <img src="./screenshots/OW-logo.png" alt="OpenWeather Logo">
 
 <p align="center">
-  <img src="https://img.shields.io/github/last-commit/sytnikovzp/weather" alt="Last Commit">
+  <img src="https://img.shields.io/github/last-commit/sytnikovzp/weather-app" alt="Last Commit">
 
-## Опис Додатку Weather
+## Опис Додатку Weather App
 
-Додаток Weather — це веб-додаток для отримання інформації про погоду в реальному часі. Основна мета цього додатку полягає в наданні користувачам можливості легко отримувати актуальні погодні дані для різних міст, здійснювати пошук за містами та зберігати улюблені місця для швидкого доступу.
+Додаток Weather App — це веб-додаток для отримання інформації про погоду в реальному часі. Основна мета цього додатку полягає в наданні користувачам можливості легко отримувати актуальні погодні дані для різних міст, здійснювати пошук за містами та зберігати улюблені місця для швидкого доступу.
 
 ## ↓ Скріншоти Додатку ↓
 
@@ -102,13 +102,13 @@
 1. Клонувати репозиторій:
 
 ```bash
-git clone git@github.com:sytnikovzp/weather.git
+git clone git@github.com:sytnikovzp/weather-app.git
 ```
 
 2. Перейти до каталогу проекту:
 
 ```bash
-cd weather
+cd weather-app
 ```
 
 3. Перейти до каталогу серверної частини:
@@ -152,27 +152,27 @@ cd ..
 Створіть в кореневому каталогу проєкту файл конфігурації `.env`
 
 ```yaml
-#For client
+# For client
 VITE_PORT=3000
-WEATHER_API_KEY='0a7384eacf0bf030169dafe3d90513f6'
+WEATHER_API_KEY='' // Enter your OpenWeather API key
 
-#For server
+# For server
+CLIENT_URL=http://localhost:3000
 WEATHER_SERVER_HOST=localhost
 WEATHER_SERVER_PORT=5000
 
-ACCESS_SECRET=access_secret
-REFRESH_SECRET=refresh_secret
-ACCESS_TOKEN_TIME=15m
-REFRESH_TOKEN_TIME=60d
+ACCESS_TOKEN_SECRET=access_secret
+REFRESH_TOKEN_SECRET=refresh_secret
+ACCESS_TOKEN_LIFETIME=15m
+REFRESH_TOKEN_LIFETIME=60d
+HASH_SALT_ROUNDS=9
 
-SALT_ROUNDS=9
-CLIENT_URL=http://localhost:3000
-
-#For database
+# For database
+DB_HOST=localhost
+DB_DIALECT=postgres
 DB_USER=postgres
 DB_PASS=root
-DB_NAME=weatherdb
-DB_DIALECT=postgres
+DB_NAME=weather_app
 ```
 
 <details>
@@ -180,27 +180,27 @@ DB_DIALECT=postgres
 
 ```bash
 cat <<EOL > .env
-#For client
+# For client
 VITE_PORT=3000
-WEATHER_API_KEY='0a7384eacf0bf030169dafe3d90513f6'
+WEATHER_API_KEY='' // Enter your OpenWeather API key
 
-#For server
+# For server
+CLIENT_URL=http://localhost:3000
 WEATHER_SERVER_HOST=localhost
 WEATHER_SERVER_PORT=5000
 
-ACCESS_SECRET=access_secret
-REFRESH_SECRET=refresh_secret
-ACCESS_TOKEN_TIME=15m
-REFRESH_TOKEN_TIME=60d
+ACCESS_TOKEN_SECRET=access_secret
+REFRESH_TOKEN_SECRET=refresh_secret
+ACCESS_TOKEN_LIFETIME=15m
+REFRESH_TOKEN_LIFETIME=60d
+HASH_SALT_ROUNDS=9
 
-SALT_ROUNDS=9
-CLIENT_URL=http://localhost:3000
-
-#For database
+# For database
+DB_HOST=localhost
+DB_DIALECT=postgres
 DB_USER=postgres
 DB_PASS=root
-DB_NAME=weatherdb
-DB_DIALECT=postgres
+DB_NAME=weather_app
 EOL
 ```
 

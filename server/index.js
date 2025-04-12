@@ -8,7 +8,6 @@ const {
 // ==============================================================
 const app = require('./src/app');
 const dbPostgres = require('./src/db/models');
-const { syncModel, syncAllModels } = require('./src/utils/syncModels');
 
 // =================== POSTGRES DB CONNECT =======================
 
@@ -22,11 +21,6 @@ const postgresConnect = async () => {
 };
 
 postgresConnect();
-
-// =================== Sync`s db model(s) ========================
-
-// syncModel(model_name);
-// syncAllModels();
 
 // ================ Create server with HTTP module ===============
 

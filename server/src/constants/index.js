@@ -2,13 +2,13 @@ require('dotenv').config({ path: '../.env' });
 
 module.exports = {
   AUTH: {
-    ACCESS_SECRET: process.env.ACCESS_SECRET,
-    REFRESH_SECRET: process.env.REFRESH_SECRET,
-    ACCESS_TOKEN_TIME: process.env.ACCESS_TOKEN_TIME,
-    REFRESH_TOKEN_TIME: process.env.REFRESH_TOKEN_TIME,
+    ACCESS_TOKEN_SECRET: process.env.ACCESS_TOKEN_SECRET,
+    REFRESH_TOKEN_SECRET: process.env.REFRESH_TOKEN_SECRET,
+    ACCESS_TOKEN_LIFETIME: process.env.ACCESS_TOKEN_LIFETIME,
+    REFRESH_TOKEN_LIFETIME: process.env.REFRESH_TOKEN_LIFETIME,
   },
   HASH: {
-    SALT_ROUNDS: parseInt(process.env.SALT_ROUNDS),
+    HASH_SALT_ROUNDS: parseInt(process.env.HASH_SALT_ROUNDS),
   },
   CLIENT: {
     URL: process.env.CLIENT_URL,
