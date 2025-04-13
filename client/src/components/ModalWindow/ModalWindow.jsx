@@ -1,7 +1,9 @@
 import './ModalWindow.css';
 
 function ModalWindow({ isOpen, onClose, title, message }) {
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
   return (
     <div className='modal'>
       <div className='modal-content'>

@@ -1,6 +1,5 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 
-// ==============================================================
 import { AUTH_FORM_INITIAL } from '../../constants';
 import { LOGIN_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 

@@ -11,7 +11,7 @@ const formatDateTime = (timestamp, dateFormat) =>
 
 const formatFiveDayData = (forecastData) => {
   const dailyData = forecastData.list.reduce((acc, data) => {
-    const date = data.dt_txt.split(' ')[0];
+    const [date] = data.dt_txt.split(' ');
     if (!acc[date]) {
       acc[date] = { sum: 0, count: 0 };
     }

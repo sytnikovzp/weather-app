@@ -7,18 +7,15 @@ import {
 } from 'react-router-dom';
 
 import { getAccessToken } from './utils/sharedFunctions';
-// ==============================================================
 import restController from './api/rest/restController';
 
 import Layout from './components/Layout/Layout';
-// ==============================================================
 import Preloader from './components/Preloader/Preloader';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 
 import AuthPage from './pages/AuthPage/AuthPage';
 import HomePage from './pages/HomePage/HomePage';
 
-// ==============================================================
 import './App.css';
 
 function App() {

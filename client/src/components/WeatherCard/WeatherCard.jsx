@@ -1,16 +1,13 @@
 import { useState } from 'react';
 
-// ==============================================================
 import {
   formatDateTime,
   getDayLabel,
   getWindDirection,
 } from '../../utils/sharedFunctions';
 
-// ==============================================================
 import Preloader from '../Preloader/Preloader';
 
-// ==============================================================
 import './WeatherCard.css';
 
 function WeatherCard({

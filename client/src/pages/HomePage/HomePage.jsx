@@ -1,23 +1,19 @@
 import { useCallback, useEffect, useState } from 'react';
 
-// ==============================================================
 import { MAX_FAVORITES } from '../../constants';
 import {
   formatFiveDayData,
   processFiveDayTemperatureData,
   processTemperatureData,
 } from '../../utils/sharedFunctions';
-// ==============================================================
 import restController from '../../api/rest/restController';
 
-// ==============================================================
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 
-// ==============================================================
 import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
 
@@ -54,6 +50,37 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       lat: city.lat,
       lon: city.lon,
     });
+  };
+
+  const fetchWeatherData = useCallback(async (selectedCity) => {
+    if (!selectedCity.lat || !selectedCity.lon) {
+      return { error: 'Координати недоступні' };
+    }
+    try {
+      const currentWeather = await restController.fetchWeather(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const fiveDayWeather = await restController.fetchForecast(
+        selectedCity.lat,
+        selectedCity.lon
+      );
+      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
+      return { currentWeather, fiveDayWeather: formattedFiveDayData };
+    } catch (error) {
+      console.error('Помилка отримання даних про погоду: ', error.message);
+      throw error;
+    }
+  }, []);
+
+  const fetchTemperatureData = async (selectedCity) => {
+    const data = await restController.fetchForecast(
+      selectedCity.lat,
+      selectedCity.lon
+    );
+    const dayData = processTemperatureData(data);
+    const fiveDayData = processFiveDayTemperatureData(data);
+    return { dayData, fiveDayData };
   };
 
   const handleRefresh = async () => {
@@ -122,37 +149,6 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   const handleFavoriteClick = (city) => {
     setSelectedCity(city);
     setActiveTab('main');
-  };
-
-  const fetchWeatherData = useCallback(async (selectedCity) => {
-    if (!selectedCity.lat || !selectedCity.lon) {
-      return { error: 'Координати недоступні' };
-    }
-    try {
-      const currentWeather = await restController.fetchWeather(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const fiveDayWeather = await restController.fetchForecast(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
-      return { currentWeather, fiveDayWeather: formattedFiveDayData };
-    } catch (error) {
-      console.error('Помилка отримання даних про погоду: ', error.message);
-      throw error;
-    }
-  }, []);
-
-  const fetchTemperatureData = async (selectedCity) => {
-    const data = await restController.fetchForecast(
-      selectedCity.lat,
-      selectedCity.lon
-    );
-    const dayData = processTemperatureData(data);
-    const fiveDayData = processFiveDayTemperatureData(data);
-    return { dayData, fiveDayData };
   };
 
   const fetchFavorites = useCallback(async () => {

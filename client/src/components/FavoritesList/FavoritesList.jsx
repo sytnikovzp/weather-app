@@ -1,5 +1,5 @@
 import WeatherCard from '../WeatherCard/WeatherCard';
-// ==============================================================
+
 import './FavoritesList.css';
 
 function FavoritesList({
@@ -25,14 +25,14 @@ function FavoritesList({
               onClick={() => onCityClick(city)}
             >
               <WeatherCard
-                cityName={city.cityName}
                 cityCountry={city.country}
-                weatherData={city.weather}
+                cityName={city.cityName}
+                error={error}
                 fiveDayData={city.fiveDayWeather}
                 isFavorite={isFavorite}
-                onRefresh={onRefresh}
                 loading={loading}
-                error={error}
+                weatherData={city.weather}
+                onRefresh={onRefresh}
               />
               <button
                 className='remove-favorite-button'

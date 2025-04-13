@@ -1,9 +1,7 @@
 import { useState } from 'react';
 
-// ==============================================================
 import restController from '../../api/rest/restController';
 
-// ==============================================================
 import './CityAutocomplete.css';
 
 function CityAutocomplete({ onCitySelect }) {

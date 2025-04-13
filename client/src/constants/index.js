@@ -5,7 +5,7 @@ const SERVER_CONFIG = {
 
 const BASE_URL = `http://${SERVER_CONFIG.HOST}:${SERVER_CONFIG.PORT}/api/`;
 
-const WEATHER_API_KEY = import.meta.env.WEATHER_API_KEY;
+const { WEATHER_API_KEY } = import.meta.env;
 
 const AUTH_FORM_INITIAL = {
   email: '',
@@ -21,9 +21,9 @@ const REGISTRATION_FORM_INITIAL = {
 const MAX_FAVORITES = 5;
 
 export {
-  BASE_URL,
-  WEATHER_API_KEY,
   AUTH_FORM_INITIAL,
-  REGISTRATION_FORM_INITIAL,
+  BASE_URL,
   MAX_FAVORITES,
+  REGISTRATION_FORM_INITIAL,
+  WEATHER_API_KEY,
 };

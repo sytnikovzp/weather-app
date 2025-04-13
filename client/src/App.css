@@ -9,6 +9,7 @@ body {
   height: 100vh;
   width: 100vw;
 }
+
 button {
   background-color: #007bff;
   color: #fff;
@@ -19,14 +20,17 @@ button {
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
+
 button:hover {
   background-color: #0056b3;
 }
+
 button:disabled {
   background-color: #cccccc;
   color: #666666;
   cursor: not-allowed;
 }
+
 #switch-button {
   width: 320px;
   margin-top: 15px;
@@ -35,10 +39,12 @@ button:disabled {
   color: #007bff;
   cursor: pointer;
 }
+
 label {
   margin-bottom: 5px;
   display: block;
 }
+
 input[type='text'],
 input[type='email'],
 input[type='password'] {
@@ -50,16 +56,19 @@ input[type='password'] {
   font-size: 16px;
   margin-bottom: 15px;
 }
+
 input[type='text']:focus,
 input[type='email']:focus,
 input[type='password']:focus {
   border-color: #007bff;
   outline: none;
 }
+
 input:focus {
   border-color: #007bff;
   outline: none;
 }
+
 h2,
 h3,
 h4 {
@@ -67,24 +76,29 @@ h4 {
   color: #333;
   margin-bottom: 20px;
 }
+
 .weather-card p,
 .temperature-chart p {
   font-size: 16px;
   color: #555;
   text-align: center;
 }
+
 .autocomplete-list {
   border: 1px solid #ccc;
   background-color: white;
   border-radius: 4px;
 }
+
 .autocomplete-item {
   padding: 10px;
   cursor: pointer;
 }
+
 .autocomplete-item:hover {
   background-color: #f0f0f0;
 }
+
 form {
   margin: 20px auto;
   max-width: 360px;
@@ -97,6 +111,7 @@ form {
   justify-content: center;
   padding: 20px;
 }
+
 .error {
   margin: 0px auto 15px auto;
   max-width: 250px;

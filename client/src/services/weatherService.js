@@ -1,5 +1,5 @@
 import axios from 'axios';
-// ==============================================================
+
 import { WEATHER_API_KEY } from '../constants';
 
 const getCitySuggestions = async (searchTerm) => {

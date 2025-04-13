@@ -1,11 +1,9 @@
-/* eslint-disable no-underscore-dangle */
 import axios from 'axios';
-// ==============================================================
+
 import { BASE_URL } from '../constants';
-// ==============================================================
-import restController from './rest/restController';
-// ==============================================================
 import { getAccessToken, removeAccessToken } from '../utils/sharedFunctions';
+
+import restController from './rest/restController';
 
 const api = axios.create({
   baseURL: BASE_URL,
@@ -22,14 +20,12 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (config) => {
-    return config;
-  },
+  (config) => config,
   async (error) => {
     const originalRequest = error.config;
     const token = getAccessToken();
     if (!token) {
-      return null;
+      return Promise.reject(error);
     }
     if (error.response?.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
@@ -42,6 +38,11 @@ api.interceptors.response.use(
           console.warn('Access token expired and refresh failed.');
           removeAccessToken();
         }
+        if (err.response?.status === 404) {
+          console.warn('User not found. Removing access token.');
+          removeAccessToken();
+        }
+        return Promise.reject(err);
       }
     }
     return Promise.reject(error);

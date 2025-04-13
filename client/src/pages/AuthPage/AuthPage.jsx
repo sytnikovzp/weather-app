@@ -1,8 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-// ==============================================================
+
 import restController from '../../api/rest/restController';
-// ==============================================================
+
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 

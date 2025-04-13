@@ -7,11 +7,13 @@
   margin: 15px;
   font-size: 14px;
 }
+
 .favorite {
   border-color: gold;
   background-color: #fff5e6;
   box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
 }
+
 .refresh-button {
   background: transparent;
   width: 24px;
@@ -22,55 +24,68 @@
   padding: 0;
   color: #000;
 }
+
 .refresh-button:hover {
   border-color: #888;
   background-color: #f0f0f0;
 }
+
 .weather-content {
   display: flex;
   flex-direction: column;
 }
+
 .city-info {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
+
 .city-info h2 {
   margin: 0;
   font-size: 24px;
 }
+
 .weather-info {
   display: flex;
   align-items: center;
 }
+
 .icon {
   max-height: 40px;
 }
+
 .weather-description {
   margin: 5px 0;
   color: #555;
 }
+
 .weather-details {
   display: flex;
   justify-content: space-between;
 }
+
 .weather-column {
   flex: 1;
   margin-right: 10px;
 }
+
 .weather-column:last-child {
   margin-right: 0;
 }
+
 .weather-details p {
   margin: 2px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
 .view-toggle {
   display: flex;
   width: 100%;
 }
+
 .view-toggle button {
   flex: 1;
   padding: 10px;
@@ -79,22 +94,27 @@
   border: none;
   transition: background-color 0.3s;
 }
+
 .view-toggle button.active {
   background-color: #007bff;
   color: white;
 }
+
 .five-day-forecast {
   display: flex;
   flex-direction: column;
 }
+
 .five-day-item {
   display: flex;
   justify-content: space-between;
   margin-top: 10px;
 }
+
 .day-label {
   font-weight: bold;
 }
+
 .temperature {
   font-size: 1.2em;
 }
