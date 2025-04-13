@@ -2,12 +2,12 @@ const { Router } = require('express');
 
 const {
   auth: { authHandler },
-  validation: { validateRegistration },
+  validation: { validateUser },
 } = require('../middlewares');
 
 const {
   getAllUsers,
-  getUserById,
+  getUserByUuid,
   getCurrentUserProfile,
   updateUser,
   deleteUser,
@@ -15,16 +15,16 @@ const {
 
 const usersRouter = new Router();
 
-usersRouter
-  .route('/')
-  .get(authHandler, getAllUsers)
-  .put(authHandler, validateRegistration, updateUser);
+usersRouter.use(authHandler);
 
-usersRouter.route('/profile').get(authHandler, getCurrentUserProfile);
+usersRouter.route('/').get(getAllUsers);
+
+usersRouter.route('/profile').get(getCurrentUserProfile);
 
 usersRouter
-  .route('/:userId')
-  .get(authHandler, getUserById)
-  .delete(authHandler, deleteUser);
+  .route('/:userUuid')
+  .get(getUserByUuid)
+  .patch(validateUser, updateUser)
+  .delete(deleteUser);
 
 module.exports = usersRouter;

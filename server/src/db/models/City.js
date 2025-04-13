@@ -1,24 +1,36 @@
-const { Model } = require('sequelize');
+const { Model, Sequelize } = require('sequelize');
 
 module.exports = (sequelize, DataTypes) => {
   class City extends Model {
     static associate(models) {
       City.belongsToMany(models.User, {
         through: models.Favorite,
-        foreignKey: 'cityId',
-        otherKey: 'userId',
+        foreignKey: 'cityUuid',
+        otherKey: 'userUuid',
       });
     }
   }
   City.init(
     {
+      uuid: {
+        type: DataTypes.UUID,
+        defaultValue: Sequelize.literal('uuid_generate_v4()'),
+        allowNull: false,
+        primaryKey: true,
+      },
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: [1, 100],
+        },
       },
       country: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: [1, 100],
+        },
       },
       latitude: {
         type: DataTypes.FLOAT,

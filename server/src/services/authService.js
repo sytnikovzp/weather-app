@@ -18,7 +18,7 @@ class AuthService {
       throw badRequest('Цей користувач вже зареєстрований');
     }
     const hashedPassword = await hashPassword(password);
-    const user = await User.create(
+    const newUser = await User.create(
       {
         fullName,
         email: emailToLower,
@@ -26,37 +26,35 @@ class AuthService {
       },
       { transaction, returning: true }
     );
-    if (!user) {
+    if (!newUser) {
       throw badRequest('Користувач не зареєстрований');
     }
-    const tokens = generateTokens({ email });
+    const tokens = generateTokens(newUser);
     return {
       ...tokens,
       user: {
-        id: user.id,
-        fullName: user.fullName,
-        email: emailToLower,
+        uuid: newUser.uuid,
+        fullName: newUser.fullName,
       },
     };
   }
 
   static async login(email, password) {
     const emailToLower = emailToLowerCase(email);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
+    const foundUser = await User.findOne({ where: { email: emailToLower } });
+    if (!foundUser) {
       throw unAuthorizedError();
     }
-    const isPassRight = await confirmPassword(password, user.password);
+    const isPassRight = await confirmPassword(password, foundUser.password);
     if (!isPassRight) {
       throw unAuthorizedError();
     }
-    const tokens = generateTokens({ email });
+    const tokens = generateTokens(foundUser);
     return {
       ...tokens,
       user: {
-        id: user.id,
-        fullName: user.fullName,
-        email: emailToLower,
+        uuid: foundUser.uuid,
+        fullName: foundUser.fullName,
       },
     };
   }
@@ -69,16 +67,14 @@ class AuthService {
     if (!data) {
       throw unAuthorizedError();
     }
-    const { email } = data;
-    const emailToLower = emailToLowerCase(email);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    const tokens = generateTokens({ email });
+    const { uuid } = data;
+    const foundUser = await User.findByPk(uuid);
+    const tokens = generateTokens(foundUser);
     return {
       ...tokens,
       user: {
-        id: user.id,
-        fullName: user.fullName,
-        email: emailToLower,
+        uuid: foundUser.uuid,
+        fullName: foundUser.fullName,
       },
     };
   }

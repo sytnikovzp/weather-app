@@ -21,6 +21,11 @@ const setRefreshTokenCookie = function (res, refreshToken) {
   });
 };
 
+const isValidUUID = function (uuid) {
+  const regex = /^[\da-f]{8}(?:-[\da-f]{4}){3}-[\da-f]{12}$/i;
+  return regex.test(uuid);
+};
+
 const formatDateTime = function (date) {
   return format(new Date(date), 'dd MMMM yyyy, HH:mm', { locale: uk });
 };
@@ -32,6 +37,7 @@ const emailToLowerCase = function (email) {
 module.exports = {
   emailToLowerCase,
   formatDateTime,
+  isValidUUID,
   hashPassword,
   confirmPassword,
   setRefreshTokenCookie,

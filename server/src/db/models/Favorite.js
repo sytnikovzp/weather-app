@@ -4,12 +4,12 @@ module.exports = (sequelize, DataTypes) => {
   class Favorite extends Model {
     static associate(models) {
       Favorite.belongsTo(models.User, {
-        foreignKey: 'userId',
+        foreignKey: 'userUuid',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
       Favorite.belongsTo(models.City, {
-        foreignKey: 'cityId',
+        foreignKey: 'cityUuid',
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       });
@@ -17,20 +17,20 @@ module.exports = (sequelize, DataTypes) => {
   }
   Favorite.init(
     {
-      userId: {
-        type: DataTypes.INTEGER,
+      userUuid: {
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
+          key: 'uuid',
         },
       },
-      cityId: {
-        type: DataTypes.INTEGER,
+      cityUuid: {
+        type: DataTypes.UUID,
         allowNull: false,
         references: {
           model: 'cities',
-          key: 'id',
+          key: 'uuid',
         },
       },
     },

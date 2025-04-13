@@ -2,8 +2,7 @@ const { sequelize } = require('../db/models');
 
 const {
   getAllUsers,
-  getUserById,
-  getCurrentUser,
+  getUserByUuid,
   updateUser,
   deleteUser,
 } = require('../services/usersService');
@@ -11,9 +10,9 @@ const {
 class UsersController {
   static async getAllUsers(req, res, next) {
     try {
-      const users = await getAllUsers();
-      if (users.length > 0) {
-        res.status(200).json(users);
+      const allUsers = await getAllUsers();
+      if (allUsers.length > 0) {
+        res.status(200).json(allUsers);
       } else {
         res.status(401);
       }
@@ -23,10 +22,10 @@ class UsersController {
     }
   }
 
-  static async getUserById(req, res, next) {
+  static async getUserByUuid(req, res, next) {
     try {
-      const { userId } = req.params;
-      const user = await getUserById(userId);
+      const { userUuid } = req.params;
+      const user = await getUserByUuid(userUuid);
       if (user) {
         res.status(200).json(user);
       } else {
@@ -40,10 +39,9 @@ class UsersController {
 
   static async getCurrentUserProfile(req, res, next) {
     try {
-      const userEmail = req.user.email;
-      const user = await getCurrentUser(userEmail);
-      if (user) {
-        res.status(200).json(user);
+      const currentUser = await getUserByUuid(req.user.uuid);
+      if (currentUser) {
+        res.status(200).json(currentUser);
       } else {
         res.status(401);
       }
@@ -56,16 +54,20 @@ class UsersController {
   static async updateUser(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { id, fullName, email, password } = req.body;
-      const userData = await updateUser(
-        id,
+      const { userUuid } = req.params;
+      const { fullName, email } = req.body;
+      const updatedUser = await updateUser(
+        userUuid,
         fullName,
         email,
-        password,
         transaction
       );
-      await transaction.commit();
-      res.status(201).json(userData);
+      if (updatedUser) {
+        await transaction.commit();
+        res.status(200).json(updatedUser);
+      } else {
+        res.status(401);
+      }
     } catch (error) {
       await transaction.rollback();
       console.error('Update user error: ', error.message);
@@ -76,10 +78,14 @@ class UsersController {
   static async deleteUser(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { userId } = req.params;
-      await deleteUser(userId, transaction);
-      await transaction.commit();
-      res.status(200).json('OK');
+      const { userUuid } = req.params;
+      const deletedUser = await deleteUser(userUuid, transaction);
+      if (deletedUser) {
+        await transaction.commit();
+        res.status(200).json('OK');
+      } else {
+        res.status(401);
+      }
     } catch (error) {
       await transaction.rollback();
       console.error('Delete user error: ', error.message);

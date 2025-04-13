@@ -2,76 +2,67 @@ const { User } = require('../db/models');
 
 const { badRequest, notFound } = require('../errors/generalErrors');
 const {
-  hashPassword,
   emailToLowerCase,
   formatDateTime,
+  isValidUUID,
 } = require('../utils/sharedFunctions');
 
 class UsersService {
   static async getAllUsers() {
-    const users = await User.findAll();
-    if (users.length === 0) {
+    const foundUsers = await User.findAll();
+    if (foundUsers.length === 0) {
       throw notFound('Користувачів не знайдено');
     }
-    const allUsers = await Promise.all(
-      users.map((user) => ({
-        id: user.id,
-        fullName: user.fullName,
-        email: user.email,
-      }))
-    );
+    const allUsers = foundUsers.map((user) => ({
+      uuid: user.uuid,
+      fullName: user.fullName,
+    }));
     return allUsers;
   }
 
-  static async getUserById(id) {
-    const user = await User.findByPk(id);
-    if (!user) {
+  static async getUserByUuid(uuid) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
     return {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      createdAt: formatDateTime(user.createdAt),
-      updatedAt: formatDateTime(user.updatedAt),
+      uuid: foundUser.uuid,
+      fullName: foundUser.fullName,
+      email: foundUser.email,
+      createdAt: formatDateTime(foundUser.createdAt),
+      updatedAt: formatDateTime(foundUser.updatedAt),
     };
   }
 
-  static async getCurrentUser(email) {
-    const emailToLower = emailToLowerCase(email);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
+  static async updateUser(uuid, fullName, email, transaction) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
-    return {
-      id: user.id,
-      fullName: user.fullName,
-      email: user.email,
-      createdAt: formatDateTime(user.createdAt),
-      updatedAt: formatDateTime(user.updatedAt),
-    };
-  }
-
-  static async updateUser(id, fullName, email, password, transaction) {
-    const user = await User.findOne({ where: { id } });
-    if (!user) {
-      throw notFound('Користувача не знайдено');
+    const updateData = {};
+    if (fullName) {
+      updateData.fullName = fullName;
     }
-    const updateData = { fullName };
-    if (email && email.toLowerCase() !== user.email.toLowerCase()) {
+    if (
+      email &&
+      emailToLowerCase(email) !== emailToLowerCase(foundUser.email)
+    ) {
       const newEmail = emailToLowerCase(email);
-      const person = await User.findOne({ where: { email: newEmail } });
-      if (person) {
+      const existingEmail = await User.findOne({ where: { email: newEmail } });
+      if (existingEmail) {
         throw badRequest('Ця електронна адреса вже використовується');
       }
       updateData.email = newEmail;
-    }
-    if (password) {
-      const hashedPassword = await hashPassword(password);
-      updateData.password = hashedPassword;
+      updateData.tokenVersion = foundUser.tokenVersion + 1;
     }
     const [affectedRows, [updatedUser]] = await User.update(updateData, {
-      where: { id },
+      where: { uuid },
       returning: true,
       transaction,
     });
@@ -80,23 +71,25 @@ class UsersService {
     }
     return {
       user: {
-        id: updatedUser.id,
+        uuid: updatedUser.uuid,
         fullName: updatedUser.fullName,
-        email: updatedUser.email,
       },
     };
   }
 
-  static async deleteUser(id, transaction) {
-    const user = await User.findByPk(id);
-    if (!user) {
+  static async deleteUser(uuid, transaction) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
-    const delUser = await User.destroy({ where: { id }, transaction });
-    if (!delUser) {
+    const deletedUser = await User.destroy({ where: { uuid }, transaction });
+    if (!deletedUser) {
       throw badRequest('Профіль цього користувача не видалено');
     }
-    return delUser;
+    return deletedUser;
   }
 }
 

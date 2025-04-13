@@ -1,43 +1,49 @@
 /* eslint-disable camelcase */
 module.exports = {
   async up(queryInterface, Sequelize) {
+    await queryInterface.sequelize.query(
+      'CREATE EXTENSION IF NOT EXISTS "uuid-ossp";'
+    );
     await queryInterface.createTable('favorites', {
-      user_id: {
-        type: Sequelize.INTEGER,
+      user_uuid: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'users',
-          key: 'id',
+          key: 'uuid',
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
-      city_id: {
-        type: Sequelize.INTEGER,
+      city_uuid: {
+        type: Sequelize.UUID,
         allowNull: false,
         references: {
           model: 'cities',
-          key: 'id',
+          key: 'uuid',
         },
         onDelete: 'CASCADE',
         onUpdate: 'CASCADE',
       },
       created_at: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
       },
       updated_at: {
-        allowNull: false,
         type: Sequelize.DATE,
+        allowNull: false,
       },
     });
     await queryInterface.addConstraint('favorites', {
-      fields: ['user_id', 'city_id'],
+      fields: ['user_uuid', 'city_uuid'],
       type: 'primary key',
       name: 'favorites_pkey',
     });
   },
   async down(queryInterface) {
+    await queryInterface.sequelize.query(
+      'DROP EXTENSION IF EXISTS "uuid-ossp";'
+    );
     await queryInterface.dropTable('favorites');
   },
 };

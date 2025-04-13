@@ -1,7 +1,7 @@
 const { Router } = require('express');
 
 const {
-  validation: { validateRegistration, validateAuth },
+  validation: { validateRegistration, validateLogin },
 } = require('../middlewares');
 
 const {
@@ -14,7 +14,7 @@ const {
 const authRouter = new Router();
 
 authRouter.post('/registration', validateRegistration, registration);
-authRouter.post('/login', validateAuth, login);
+authRouter.post('/login', validateLogin, login);
 authRouter.get('/logout', logout);
 authRouter.get('/refresh', refresh);
 

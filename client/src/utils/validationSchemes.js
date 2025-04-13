@@ -1,46 +1,54 @@
 import * as yup from 'yup';
 
-const TITLE_NAME_REQUIRED_SCHEME = yup
-  .string('Це поле має бути рядком')
-  .required('Це поле є обовʼязкове!');
+const STRING_SCHEME = yup
+  .string('Це має бути рядком')
+  .trim('Введені дані не можуть містити пробіли на початку або в кінці')
+  .max(100, 'Введені дані не можуть перевищувати 100 символів');
 
 const COORD_REQUIRED_SCHEME = yup
-  .number('Це поле має бути числом')
-  .required('Це поле є обовʼязкове');
+  .number('Це має бути числом')
+  .required('Будь ласка, введіть координати');
 
-const EMAIL_REQUIRED_SCHEME = yup
-  .string('Це поле має бути рядком')
-  .email('Вкажіть коректний e-mail')
-  .required('E-mail є обовʼязковим полем');
+const EMAIL_SCHEME = yup
+  .string('Це має бути рядком')
+  .email('Введіть коректний e-mail');
 
 const PASSWORD_REQUIRED_SCHEME = yup
-  .string('Це поле має бути рядком')
-  .min(8, 'Мінімальна довжина 8 символів')
+  .string('Це має бути рядком')
+  .trim('Введені дані не можуть містити пробіли на початку або в кінці')
+  .min(8, 'Введені дані мають бути не менше 8 символів')
   .max(20, 'Введені дані не можуть перевищувати 20 символів')
-  .required('Пароль є обовʼязковим полем');
-
-// ==============================================================
+  .matches(/[a-z]/, 'Пароль повинен містити хоча б одну маленьку літеру')
+  .matches(/[A-Z]/, 'Пароль повинен містити хоча б одну велику літеру')
+  .matches(/\d/, 'Пароль повинен містити хоча б одну цифру')
+  .required('Будь ласка, введіть пароль');
 
 const REGISTRATION_VALIDATION_SCHEME = yup.object().shape({
-  fullName: TITLE_NAME_REQUIRED_SCHEME,
-  email: EMAIL_REQUIRED_SCHEME,
+  fullName: STRING_SCHEME.required('Будь ласка, введіть повне ім`я'),
+  email: EMAIL_SCHEME.required('Будь ласка, введіть email'),
   password: PASSWORD_REQUIRED_SCHEME,
 });
 
-const AUTH_VALIDATION_SCHEME = yup.object().shape({
-  email: EMAIL_REQUIRED_SCHEME,
+const LOGIN_VALIDATION_SCHEME = yup.object().shape({
+  email: EMAIL_SCHEME.required('Будь ласка, введіть email'),
   password: PASSWORD_REQUIRED_SCHEME,
 });
 
-const FAVORITES_SCHEME = yup.object().shape({
-  cityName: TITLE_NAME_REQUIRED_SCHEME,
-  country: TITLE_NAME_REQUIRED_SCHEME,
+const FAVORITE_VALIDATION_SCHEME = yup.object().shape({
+  cityName: STRING_SCHEME.required('Будь ласка, введіть назву міста'),
+  country: STRING_SCHEME.required('Будь ласка, введіть назву країни'),
   latitude: COORD_REQUIRED_SCHEME,
   longitude: COORD_REQUIRED_SCHEME,
 });
 
+const USER_VALIDATION_SCHEME = yup.object().shape({
+  fullName: STRING_SCHEME.required('Будь ласка, введіть повне ім`я'),
+  email: EMAIL_SCHEME.nullable(),
+});
+
 export {
-  AUTH_VALIDATION_SCHEME,
-  FAVORITES_SCHEME,
+  FAVORITE_VALIDATION_SCHEME,
+  LOGIN_VALIDATION_SCHEME,
   REGISTRATION_VALIDATION_SCHEME,
+  USER_VALIDATION_SCHEME,
 };

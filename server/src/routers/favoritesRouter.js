@@ -2,7 +2,7 @@ const { Router } = require('express');
 
 const {
   auth: { authHandler },
-  validation: { validateFavorites },
+  validation: { validateFavorite },
 } = require('../middlewares');
 
 const {
@@ -13,8 +13,10 @@ const {
 
 const favoritesRouter = new Router();
 
-favoritesRouter.get('/', authHandler, getAllFavorites);
-favoritesRouter.post('/', authHandler, validateFavorites, addFavorite);
-favoritesRouter.delete('/', authHandler, removeFavorite);
+favoritesRouter.use(authHandler);
+
+favoritesRouter.get('/', getAllFavorites);
+favoritesRouter.post('/', validateFavorite, addFavorite);
+favoritesRouter.delete('/', removeFavorite);
 
 module.exports = favoritesRouter;

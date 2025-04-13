@@ -10,7 +10,11 @@ const {
 } = require('../constants');
 
 class TokenService {
-  static generateTokens(payload) {
+  static generateTokens(user) {
+    const payload = {
+      tokenVersion: user.tokenVersion,
+      uuid: user.uuid,
+    };
     const accessToken = jwt.sign(payload, ACCESS_TOKEN_SECRET, {
       expiresIn: ACCESS_TOKEN_LIFETIME,
     });
@@ -35,8 +39,8 @@ class TokenService {
 
   static validateRefreshToken(token) {
     try {
-      const data = jwt.verify(token, REFRESH_TOKEN_SECRET);
-      return data;
+      const payload = jwt.verify(token, REFRESH_TOKEN_SECRET);
+      return payload;
     } catch (error) {
       console.error('Refresh token validation error: ', error.message);
       return null;

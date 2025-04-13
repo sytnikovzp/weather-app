@@ -1,17 +1,19 @@
 const { Favorite, City, User } = require('../db/models');
 
 const { badRequest, notFound } = require('../errors/generalErrors');
-const { emailToLowerCase } = require('../utils/sharedFunctions');
+const { isValidUUID } = require('../utils/sharedFunctions');
 
 class FavoritesService {
-  static async getAllFavorites(email) {
-    const emailToLower = emailToLowerCase(email);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
+  static async getAllFavorites(uuid) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
-    const favorites = await Favorite.findAll({
-      where: { userId: user.id },
+    const foundFavorites = await Favorite.findAll({
+      where: { userUuid: foundUser.uuid },
       include: [
         {
           model: City,
@@ -20,29 +22,36 @@ class FavoritesService {
       ],
       order: [['created_at', 'ASC']],
     });
-    const formattedFavorites = favorites.map((favorite) => ({
+    if (foundFavorites.length === 0) {
+      throw notFound('Список улюблених пустий');
+    }
+    const allFavorites = foundFavorites.map((favorite) => ({
       cityName: favorite.City.title,
       country: favorite.City.country,
       lat: favorite.City.latitude,
       lon: favorite.City.longitude,
     }));
-    return formattedFavorites;
+    return allFavorites;
   }
 
   static async addFavorite(
-    userEmail,
+    uuid,
     cityName,
     country,
     latitude,
     longitude,
     transaction
   ) {
-    const emailToLower = emailToLowerCase(userEmail);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
-    const favoriteCount = await Favorite.count({ where: { userId: user.id } });
+    const favoriteCount = await Favorite.count({
+      where: { userUuid: foundUser.uuid },
+    });
     if (favoriteCount >= 5) {
       throw badRequest('Не можна додати більше 5 улюблених міст');
     }
@@ -59,46 +68,53 @@ class FavoritesService {
       );
     }
     const existingFavorite = await Favorite.findOne({
-      where: { userId: user.id, cityId: city.id },
+      where: { userUuid: foundUser.uuid, cityUuid: city.uuid },
     });
     if (existingFavorite) {
       throw badRequest('Це місто вже є у списку улюблених');
     }
     await Favorite.create(
       {
-        userId: user.id,
-        cityId: city.id,
+        userUuid: foundUser.uuid,
+        cityUuid: city.uuid,
       },
       { transaction }
     );
-    return {
+    const newFavorite = {
       cityName: city.title,
       country: city.country,
       lat: city.latitude,
       lon: city.longitude,
     };
+    return newFavorite;
   }
 
-  static async removeFavorite(userEmail, latitude, longitude, transaction) {
-    const emailToLower = emailToLowerCase(userEmail);
-    const user = await User.findOne({ where: { email: emailToLower } });
-    if (!user) {
+  static async removeFavorite(uuid, latitude, longitude, transaction) {
+    if (!isValidUUID(uuid)) {
+      throw badRequest('Невірний формат UUID');
+    }
+    const foundUser = await User.findByPk(uuid);
+    if (!foundUser) {
       throw notFound('Користувача не знайдено');
     }
-    const city = await City.findOne({ where: { latitude, longitude } });
-    if (!city) {
+    const foundCity = await City.findOne({ where: { latitude, longitude } });
+    if (!foundCity) {
       throw notFound('Місто не знайдено');
     }
-    const favorite = await Favorite.findOne({
-      where: { userId: user.id, cityId: city.id },
+    const foundFavorite = await Favorite.findOne({
+      where: { userUuid: foundUser.uuid, cityUuid: foundCity.uuid },
     });
-    if (!favorite) {
-      throw notFound('Це улюблене місто не знайдено');
+    if (!foundFavorite) {
+      throw notFound('Це місто відсутнє у списку улюблених');
     }
-    await Favorite.destroy({
-      where: { userId: user.id, cityId: city.id },
+    const deletedFavorite = await Favorite.destroy({
+      where: { userUuid: foundUser.uuid, cityUuid: foundCity.uuid },
       transaction,
     });
+    if (!deletedFavorite) {
+      throw badRequest('Це місто не видалено зі списку улюблених');
+    }
+    return deletedFavorite;
   }
 }
 
