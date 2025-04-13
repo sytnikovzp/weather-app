@@ -1,0 +1,19 @@
+### Get user profile
+GET http://localhost:5000/api/profile HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJiYjM3M2IwNi1hZGQwLTRmYWUtYjJlYy1iODI3NWVjMTA3YjAiLCJpYXQiOjE3NDQ1NjE3MDcsImV4cCI6MTc0NDU2MjYwN30.Z9WATB-jVIrcETaIy5YndBCH99uwINoGKGnt32FdETg
+
+### Update user profile
+PATCH http://localhost:5000/api/profile HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjEsInV1aWQiOiJiYjM3M2IwNi1hZGQwLTRmYWUtYjJlYy1iODI3NWVjMTA3YjAiLCJpYXQiOjE3NDQ1NjE3NTAsImV4cCI6MTc0NDU2MjY1MH0.bRM1EShpN2g9DvzZeJcpQJaFh1QkdOJGN9ArFH0wL24
+
+{
+  "fullName": "Updated User",
+  "email": "Update1d.User@GMAIL.com"
+}
+
+### Delete user profile
+DELETE http://localhost:5000/api/profile HTTP/1.1
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjEsInV1aWQiOiJiYjM3M2IwNi1hZGQwLTRmYWUtYjJlYy1iODI3NWVjMTA3YjAiLCJpYXQiOjE3NDQ1NjE3NTAsImV4cCI6MTc0NDU2MjY1MH0.bRM1EShpN2g9DvzZeJcpQJaFh1QkdOJGN9ArFH0wL24

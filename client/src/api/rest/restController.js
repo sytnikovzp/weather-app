@@ -1,8 +1,8 @@
 import {
   authService,
-  userService,
   favoriteService,
   locationService,
+  userService,
   weatherService,
 } from '../../services';
 
@@ -19,8 +19,8 @@ const restController = {
   fetchAllUsers: () => userService.getAllUsers(),
   fetchUserProfile: () => userService.getUserProfile(),
   fetchUserById: (userId) => userService.getUserById(userId),
-  updateUserData: (userData) => userService.updateUser(userData),
-  deleteUser: (userId) => userService.deleteUserById(userId),
+  updateUserData: (userData) => userService.updateUserProfile(userData),
+  deleteUserProfile: (userId) => userService.deleteUserById(userId),
 
   // Favorites
   fetchFavoriteCities: () => favoriteService.getFavoriteCities(),

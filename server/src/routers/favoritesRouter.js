@@ -15,8 +15,10 @@ const favoritesRouter = new Router();
 
 favoritesRouter.use(authHandler);
 
-favoritesRouter.get('/', getAllFavorites);
-favoritesRouter.post('/', validateFavorite, addFavorite);
-favoritesRouter.delete('/', removeFavorite);
+favoritesRouter
+  .route('/')
+  .get(getAllFavorites)
+  .post(validateFavorite, addFavorite)
+  .delete(removeFavorite);
 
 module.exports = favoritesRouter;

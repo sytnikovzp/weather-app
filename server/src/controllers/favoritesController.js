@@ -25,8 +25,10 @@ class FavoritesController {
   static async addFavorite(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { cityName, country, latitude, longitude } = req.body;
-      const { uuid } = req.user;
+      const {
+        body: { cityName, country, latitude, longitude },
+        user: { uuid },
+      } = req;
       const newFavorite = await addFavorite(
         uuid,
         cityName,
@@ -51,8 +53,10 @@ class FavoritesController {
   static async removeFavorite(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { latitude, longitude } = req.query;
-      const { uuid } = req.user;
+      const {
+        query: { latitude, longitude },
+        user: { uuid },
+      } = req;
       const deletedFavorite = await removeFavorite(
         uuid,
         latitude,

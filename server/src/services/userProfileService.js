@@ -7,20 +7,10 @@ const {
   isValidUUID,
 } = require('../utils/sharedFunctions');
 
-class UsersService {
-  static async getAllUsers() {
-    const foundUsers = await User.findAll();
-    if (foundUsers.length === 0) {
-      throw notFound('Користувачів не знайдено');
-    }
-    const allUsers = foundUsers.map((user) => ({
-      uuid: user.uuid,
-      fullName: user.fullName,
-    }));
-    return allUsers;
-  }
+const { generateTokens } = require('./tokenService');
 
-  static async getUserByUuid(uuid) {
+class UsersService {
+  static async getUserProfile(uuid) {
     if (!isValidUUID(uuid)) {
       throw badRequest('Невірний формат UUID');
     }
@@ -37,7 +27,7 @@ class UsersService {
     };
   }
 
-  static async updateUser(uuid, fullName, email, transaction) {
+  static async updateUserProfile(uuid, fullName, email, transaction) {
     if (!isValidUUID(uuid)) {
       throw badRequest('Невірний формат UUID');
     }
@@ -69,7 +59,9 @@ class UsersService {
     if (affectedRows === 0) {
       throw badRequest('Дані цього користувача не оновлено');
     }
+    const tokens = generateTokens(updatedUser);
     return {
+      ...tokens,
       user: {
         uuid: updatedUser.uuid,
         fullName: updatedUser.fullName,
@@ -77,7 +69,7 @@ class UsersService {
     };
   }
 
-  static async deleteUser(uuid, transaction) {
+  static async deleteUserProfile(uuid, transaction) {
     if (!isValidUUID(uuid)) {
       throw badRequest('Невірний формат UUID');
     }

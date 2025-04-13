@@ -23,7 +23,7 @@ class FavoritesService {
       order: [['created_at', 'ASC']],
     });
     if (foundFavorites.length === 0) {
-      throw notFound('Список улюблених пустий');
+      throw notFound('Список улюблених міст порожній');
     }
     const allFavorites = foundFavorites.map((favorite) => ({
       cityName: favorite.City.title,

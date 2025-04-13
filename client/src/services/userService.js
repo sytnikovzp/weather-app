@@ -15,7 +15,7 @@ const getUserById = async (userId) => {
   return response.data;
 };
 
-const updateUser = async (userData) => {
+const updateUserProfile = async (userData) => {
   const response = await api.put('/users', userData);
   return response.data;
 };
@@ -29,6 +29,6 @@ export default {
   getAllUsers,
   getUserProfile,
   getUserById,
-  updateUser,
+  updateUserProfile,
   deleteUserById,
 };
