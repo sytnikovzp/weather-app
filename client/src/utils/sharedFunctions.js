@@ -1,10 +1,17 @@
 import { format } from 'date-fns';
 
-const getAccessToken = () => localStorage.getItem('accessToken');
+const getAccessToken = () => {
+  const token = localStorage.getItem('weatherAppToken');
+  if (token === 'undefined') {
+    localStorage.removeItem('weatherAppToken');
+    return null;
+  }
+  return token;
+};
+const saveAccessToken = (token) =>
+  localStorage.setItem('weatherAppToken', token);
 
-const saveAccessToken = (token) => localStorage.setItem('accessToken', token);
-
-const removeAccessToken = () => localStorage.removeItem('accessToken');
+const removeAccessToken = () => localStorage.removeItem('weatherAppToken');
 
 const formatDateTime = (timestamp, dateFormat) =>
   format(new Date(timestamp * 1000), dateFormat);

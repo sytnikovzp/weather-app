@@ -6,6 +6,8 @@ import restController from '../../api/rest/restController';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
+import './AuthPage.css';
+
 function AuthPage({ checkAuthentication }) {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
@@ -31,7 +33,7 @@ function AuthPage({ checkAuthentication }) {
         setErrorMessage(
           action === 'login'
             ? 'Авторизація неуспішна. Перевірте облікові дані.'
-            : 'Реєстрація неуспішна. Спробуйте знову.'
+            : 'Цей користувач вже зареєстрований.'
         );
       }
     },

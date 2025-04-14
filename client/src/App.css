@@ -5,9 +5,7 @@ body {
   color: #333;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 100vh;
-  width: 100vw;
+  align-items: flex-start;
 }
 
 button {
@@ -100,8 +98,9 @@ h4 {
 }
 
 form {
-  margin: 20px auto;
-  max-width: 360px;
+  /* margin: 20px auto; */
+  /* max-width: 360px; */
+  width: 100%;
   min-height: 300px;
   background-color: white;
   border-radius: 8px;
@@ -109,7 +108,7 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 20px;
+  /* padding: 20px; */
 }
 
 .error {

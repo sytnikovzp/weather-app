@@ -1,7 +1,11 @@
 import { ErrorMessage, Field, Form, Formik } from 'formik';
 
-import { AUTH_FORM_INITIAL } from '../../constants';
 import { LOGIN_VALIDATION_SCHEME } from '../../utils/validationSchemes';
+
+const initialValues = {
+  email: '',
+  password: '',
+};
 
 function LoginForm({ onSubmit }) {
   const renderForm = ({ isValid }) => (
@@ -39,7 +43,7 @@ function LoginForm({ onSubmit }) {
   return (
     <Formik
       validateOnMount
-      initialValues={AUTH_FORM_INITIAL}
+      initialValues={initialValues}
       validationSchema={LOGIN_VALIDATION_SCHEME}
       onSubmit={onSubmit}
     >

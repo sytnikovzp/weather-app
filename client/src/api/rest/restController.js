@@ -11,16 +11,14 @@ const restController = {
   registration: (fullName, email, password) =>
     authService.registration(fullName, email, password),
   login: (email, password) => authService.login(email, password),
-  logout: () => authService.logout(),
   refreshAccessToken: (originalRequest) =>
     authService.refreshAccessToken(originalRequest),
+  logout: () => authService.logout(),
 
   // Users
-  fetchAllUsers: () => userService.getAllUsers(),
   fetchUserProfile: () => userService.getUserProfile(),
-  fetchUserById: (userId) => userService.getUserById(userId),
   updateUserData: (userData) => userService.updateUserProfile(userData),
-  deleteUserProfile: (userId) => userService.deleteUserById(userId),
+  deleteUserProfile: () => userService.deleteUserProfile(),
 
   // Favorites
   fetchFavoriteCities: () => favoriteService.getFavoriteCities(),

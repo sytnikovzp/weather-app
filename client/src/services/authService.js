@@ -17,14 +17,15 @@ const login = async (email, password) => {
   return data;
 };
 
-const logout = async () => {
-  await api.get('/auth/logout');
-  removeAccessToken();
-};
-
 const refreshAccessToken = async () => {
   const { data } = await api.get('/auth/refresh');
   saveAccessToken(data.accessToken);
+  return data;
+};
+
+const logout = async () => {
+  const { data } = await api.get('/auth/logout');
+  removeAccessToken();
   return data;
 };
 

@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import { BASE_URL } from '../constants';
+import { API_CONFIG } from '../constants';
 import { getAccessToken, removeAccessToken } from '../utils/sharedFunctions';
 
 import restController from './rest/restController';
 
 const api = axios.create({
-  baseURL: BASE_URL,
+  baseURL: API_CONFIG.BASE_URL,
   headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });

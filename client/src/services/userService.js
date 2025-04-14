@@ -1,34 +1,22 @@
 import api from '../api';
 
-const getAllUsers = async () => {
-  const response = await api.get('/users');
-  return response.data;
-};
-
 const getUserProfile = async () => {
-  const response = await api.get('/users/profile');
-  return response.data;
-};
-
-const getUserById = async (userId) => {
-  const response = await api.get(`/users/${userId}`);
-  return response.data;
+  const { data } = await api.get('/profile');
+  return data;
 };
 
 const updateUserProfile = async (userData) => {
-  const response = await api.put('/users', userData);
-  return response.data;
+  const { data } = await api.patch('/profile', userData);
+  return data;
 };
 
-const deleteUserById = async (userId) => {
-  const response = await api.delete(`/users/${userId}`);
-  return response.data;
+const deleteUserProfile = async () => {
+  const { data } = await api.delete(`/profile`);
+  return data;
 };
 
 export default {
-  getAllUsers,
   getUserProfile,
-  getUserById,
   updateUserProfile,
-  deleteUserById,
+  deleteUserProfile,
 };

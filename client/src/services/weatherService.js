@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import { WEATHER_API_KEY } from '../constants';
+import { APP_SETTINGS } from '../constants';
 
 const getCitySuggestions = async (searchTerm) => {
   const response = await axios.get(
@@ -9,7 +9,7 @@ const getCitySuggestions = async (searchTerm) => {
       params: {
         q: searchTerm,
         limit: 10,
-        appid: WEATHER_API_KEY,
+        appid: APP_SETTINGS.WEATHER_API_KEY,
       },
     }
   );
@@ -24,7 +24,7 @@ const getWeather = async (latitude, longitude) => {
         lat: latitude,
         lon: longitude,
         units: 'metric',
-        appid: WEATHER_API_KEY,
+        appid: APP_SETTINGS.WEATHER_API_KEY,
       },
     }
   );
@@ -39,7 +39,7 @@ const getForecast = async (latitude, longitude) => {
         lat: latitude,
         lon: longitude,
         units: 'metric',
-        appid: WEATHER_API_KEY,
+        appid: APP_SETTINGS.WEATHER_API_KEY,
       },
     }
   );

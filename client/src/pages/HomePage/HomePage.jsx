@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { MAX_FAVORITES } from '../../constants';
+import { APP_SETTINGS } from '../../constants';
 import {
   formatFiveDayData,
   processFiveDayTemperatureData,
@@ -101,7 +101,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   };
 
   const handleAddToFavorites = async () => {
-    if (favorites.length >= MAX_FAVORITES) {
+    if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
       setIsModalOpen(true);
       return;
     }
@@ -232,9 +232,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
 
   return (
     <div className='app-container'>
-      <div className='logo-container'>
-        <img alt='Weather logo' className='logo' src={weatherLogo} />
-      </div>
+      <img alt='Weather logo' className='logo' src={weatherLogo} />
       <div className='tabs-wrapper'>
         <div className='tabs-container'>
           <div
