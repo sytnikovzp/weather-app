@@ -1,20 +1,21 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import { APP_SETTINGS } from '../../constants';
 import {
-  formatFiveDayData,
-  processFiveDayTemperatureData,
+  formatWeeklyData,
   processTemperatureData,
+  processWeeklyTemperatureData,
 } from '../../utils/sharedFunctions';
 import restController from '../../api/rest/restController';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
+import Footer from '../../components/Footer/Footer';
+import Logo from '../../components/Logo/Logo';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
+import Welcome from '../../components/Welcome/Welcome';
 
-import weatherLogo from '../../assets/openweather.svg';
 import './HomePage.css';
 
 function HomePage({ setIsAuthenticated, userProfile }) {
@@ -22,25 +23,15 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
-  const [fiveDayData, setFiveDayData] = useState(null);
+  const [weeklyData, setWeeklyData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
-  const [isFavButtonEnabled, setIsFavButtonEnabled] = useState(false);
   const [isFavorite, setIsFavorite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
-  };
-
-  const handleLogout = async () => {
-    try {
-      await restController.logout();
-      setIsAuthenticated(false);
-    } catch (error) {
-      console.error('Помилка виходу із системи: ', error.message);
-    }
   };
 
   const handleCitySelect = (city) => {
@@ -61,14 +52,14 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         selectedCity.lat,
         selectedCity.lon
       );
-      const fiveDayWeather = await restController.fetchForecast(
+      const weeklyWeather = await restController.fetchForecast(
         selectedCity.lat,
         selectedCity.lon
       );
-      const formattedFiveDayData = formatFiveDayData(fiveDayWeather);
-      return { currentWeather, fiveDayWeather: formattedFiveDayData };
+      const formattedWeeklyData = formatWeeklyData(weeklyWeather);
+      return { currentWeather, weeklyWeather: formattedWeeklyData };
     } catch (error) {
-      console.error('Помилка отримання даних про погоду: ', error.message);
+      console.error(error.message);
       throw error;
     }
   }, []);
@@ -79,74 +70,28 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       selectedCity.lon
     );
     const dayData = processTemperatureData(data);
-    const fiveDayData = processFiveDayTemperatureData(data);
-    return { dayData, fiveDayData };
+    const weeklyData = processWeeklyTemperatureData(data);
+    return { dayData, weeklyData };
   };
 
   const handleRefresh = async () => {
-    setLoading(true);
-    setError(null);
+    setIsLoading(true);
+    setErrorMessage('');
     try {
-      const { currentWeather, fiveDayWeather } =
+      const { currentWeather, weeklyWeather } =
         await fetchWeatherData(selectedCity);
-      const { dayData, fiveDayData } = await fetchTemperatureData(selectedCity);
+      const { dayData, weeklyData } = await fetchTemperatureData(selectedCity);
       setWeatherData(currentWeather);
-      setFiveDayData(fiveDayWeather);
-      setTemperatureData({ dayData, fiveDayData });
-    } catch (err) {
-      setError(err);
+      setWeeklyData(weeklyWeather);
+      setTemperatureData({ dayData, weeklyData });
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
-  const handleAddToFavorites = async () => {
-    if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
-      setIsModalOpen(true);
-      return;
-    }
-    if (!selectedCity || !weatherData?.sys) {
-      console.error('Недійсні дані про місто або дані про погоду недоступні');
-      return;
-    }
-    const { cityName, lat, lon } = selectedCity;
-    const { country } = weatherData.sys;
-    if (favorites.some((fav) => fav.lat === lat && fav.lon === lon)) {
-      return;
-    }
-    try {
-      await restController.addCityToFavorites(cityName, country, lat, lon);
-      const { currentWeather, fiveDayWeather } =
-        await fetchWeatherData(selectedCity);
-      setFavorites([
-        ...favorites,
-        {
-          cityName,
-          country,
-          lat,
-          lon,
-          weather: currentWeather,
-          fiveDayWeather,
-        },
-      ]);
-      setIsFavButtonEnabled(false);
-    } catch (error) {
-      console.error('Помилка додавання до обраного: ', error.message);
-    }
-  };
-
-  const handleRemoveFromFavorites = async (latitude, longitude) => {
-    try {
-      await restController.removeCityFromFavorites(latitude, longitude);
-      setFavorites(
-        favorites.filter((fav) => fav.lat !== latitude && fav.lon !== longitude)
-      );
-    } catch (error) {
-      console.error('Помилка видалення з обраного: ', error.message);
-    }
-  };
-
-  const handleFavoriteClick = (city) => {
+  const handleSelectCity = (city) => {
     setSelectedCity(city);
     setActiveTab('main');
   };
@@ -156,23 +101,20 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       const favoriteCities = await restController.fetchFavoriteCities();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
-          const { currentWeather, fiveDayWeather } =
+          const { currentWeather, weeklyWeather } =
             await fetchWeatherData(city);
-          return { ...city, weather: currentWeather, fiveDayWeather };
+          return { ...city, weather: currentWeather, weeklyWeather };
         })
       );
       setFavorites(favoritesWithWeather);
     } catch (error) {
-      console.error(
-        'Помилка завантаження списку обраних міст: ',
-        error.message
-      );
+      console.error(error.message);
     }
   }, [fetchWeatherData]);
 
   const fetchWeatherForUserLocation = async () => {
-    setLoading(true);
-    setError(null);
+    setIsLoading(true);
+    setErrorMessage('');
     try {
       const { latitude, longitude } = await restController.fetchLocationByIP();
       const weather = await restController.fetchWeather(latitude, longitude);
@@ -184,9 +126,9 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         lon: longitude,
       });
     } catch (error) {
-      setError(error);
+      setErrorMessage(error.response?.data?.message);
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
@@ -201,29 +143,26 @@ function HomePage({ setIsAuthenticated, userProfile }) {
         (fav) => fav.cityName === selectedCity.cityName
       );
       setIsFavorite(cityExistsInFavorites);
-      setIsFavButtonEnabled(!cityExistsInFavorites);
-    } else {
-      setIsFavButtonEnabled(false);
     }
   }, [selectedCity, favorites]);
 
   useEffect(() => {
     if (selectedCity) {
       const fetchWeather = async () => {
-        setLoading(true);
-        setError(null);
+        setIsLoading(true);
+        setErrorMessage('');
         try {
-          const { currentWeather, fiveDayWeather } =
+          const { currentWeather, weeklyWeather } =
             await fetchWeatherData(selectedCity);
-          const { dayData, fiveDayData } =
+          const { dayData, weeklyData } =
             await fetchTemperatureData(selectedCity);
           setWeatherData(currentWeather);
-          setFiveDayData(fiveDayWeather);
-          setTemperatureData({ dayData, fiveDayData });
-        } catch (err) {
-          setError(err);
+          setWeeklyData(weeklyWeather);
+          setTemperatureData({ dayData, weeklyData });
+        } catch (error) {
+          setErrorMessage(error.response?.data?.message);
         } finally {
-          setLoading(false);
+          setIsLoading(false);
         }
       };
       fetchWeather();
@@ -231,10 +170,10 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   }, [fetchWeatherData, selectedCity]);
 
   return (
-    <div className='app-container'>
-      <img alt='Weather logo' className='logo' src={weatherLogo} />
-      <div className='tabs-wrapper'>
-        <div className='tabs-container'>
+    <div id='app-container'>
+      <Logo />
+      <div id='header'>
+        <div id='tabs-container'>
           <div
             className={`tab ${activeTab === 'main' ? 'active' : ''}`}
             onClick={() => handleTabClick('main')}
@@ -248,69 +187,60 @@ function HomePage({ setIsAuthenticated, userProfile }) {
             Обране
           </div>
         </div>
-        <div className='user-container'>
-          {userProfile && <p id='welcome'>Привіт, {userProfile.fullName}!</p>}
-          <button id='logout' onClick={handleLogout}>
-            Вихід
-          </button>
+        <Welcome
+          setIsAuthenticated={setIsAuthenticated}
+          userProfile={userProfile}
+        />
+      </div>
+      {activeTab === 'main' ? (
+        <div className='content'>
+          <CityAutocomplete onCitySelect={handleCitySelect} />
+
+          {selectedCity && (
+            <>
+              <WeatherCard
+                cityCountry={selectedCity.country}
+                cityName={selectedCity.cityName}
+                errorMessage={errorMessage}
+                favorites={favorites}
+                fetchFavorites={fetchFavorites}
+                isFavorite={isFavorite}
+                isLoading={isLoading}
+                latitude={selectedCity.lat}
+                longitude={selectedCity.lon}
+                setIsModalOpen={setIsModalOpen}
+                weatherData={weatherData}
+                weeklyData={weeklyData}
+                onRefresh={handleRefresh}
+              />
+
+              <TemperatureChart
+                cityName={selectedCity.cityName}
+                dayData={temperatureData?.dayData}
+                weeklyData={temperatureData?.weeklyData}
+              />
+            </>
+          )}
         </div>
-      </div>
-      <div className='weather-container'>
-        {activeTab === 'main' ? (
-          <div className='main-content'>
-            <div className='autocomplete-header'>
-              <CityAutocomplete onCitySelect={handleCitySelect} />
-              <button
-                className='favorite-button'
-                disabled={!isFavButtonEnabled}
-                onClick={handleAddToFavorites}
-              >
-                В обране
-              </button>
-            </div>
-            {selectedCity ? (
-              <>
-                <WeatherCard
-                  cityCountry={selectedCity.country}
-                  cityName={selectedCity.cityName}
-                  error={error}
-                  fiveDayData={fiveDayData}
-                  isFavorite={isFavorite}
-                  loading={loading}
-                  weatherData={weatherData}
-                  onRefresh={handleRefresh}
-                />
-                <TemperatureChart
-                  cityName={selectedCity.cityName}
-                  dayData={temperatureData?.dayData}
-                  error={error}
-                  fiveDayData={temperatureData?.fiveDayData}
-                  loading={loading}
-                />
-              </>
-            ) : (
-              <p id='info'>Для перегляду погоди треба обрати місто</p>
-            )}
-          </div>
-        ) : (
-          <div className='favorites-content'>
-            <FavoritesList
-              error={error}
-              favorites={favorites}
-              isFavorite={isFavorite}
-              loading={loading}
-              onCityClick={handleFavoriteClick}
-              onRefresh={handleRefresh}
-              onRemoveFavorite={handleRemoveFromFavorites}
-            />
-          </div>
-        )}
-      </div>
+      ) : (
+        <div className='content'>
+          <FavoritesList
+            errorMessage={errorMessage}
+            favorites={favorites}
+            isFavorite={isFavorite}
+            isLoading={isLoading}
+            onRefresh={handleRefresh}
+            onSelectClick={handleSelectCity}
+          />
+        </div>
+      )}
+
+      <Footer />
 
       <ModalWindow
         isOpen={isModalOpen}
-        message='Для додавання нового видаліть існуюче місто з обраних. Максимум 5.'
-        title='Максимум обраних міст'
+        message='Щоб зберегти нове місто, спершу видаліть одне з наявних (максимум — 5).'
+        title='Увага'
         onClose={() => setIsModalOpen(false)}
       />
     </div>

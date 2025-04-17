@@ -17,7 +17,7 @@ function CityAutocomplete({ onCitySelect }) {
           await restController.fetchCitySuggestions(searchTerm);
         setSuggestions(citySuggestions);
       } catch (error) {
-        console.error('Помилка отримання пропозицій міст: ', error.message);
+        console.error(error.message);
         setSuggestions([]);
       }
     } else {
@@ -32,10 +32,9 @@ function CityAutocomplete({ onCitySelect }) {
   };
 
   return (
-    <div className='autocomplete-container'>
+    <div id='autocomplete-container'>
       <input
-        className='autocomplete-input'
-        placeholder='Вкажіть назву міста'
+        placeholder='Вкажіть назву міста...'
         type='text'
         value={query}
         onChange={handleInputChange}

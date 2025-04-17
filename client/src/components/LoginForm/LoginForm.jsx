@@ -11,31 +11,31 @@ function LoginForm({ onSubmit }) {
   const renderForm = ({ isValid }) => (
     <Form id='auth-form'>
       <h2>Авторизація</h2>
-      <div className='inputField'>
-        <Field
-          required
-          id='email'
-          name='email'
-          placeholder='E-mail'
-          type='email'
-        />
+      <Field
+        required
+        id='email'
+        name='email'
+        placeholder='E-mail'
+        type='email'
+      />
+      <div className='error-small-container'>
+        <ErrorMessage name='email'>
+          {(msg) => <div className='error'>{msg}</div>}
+        </ErrorMessage>
       </div>
-      <ErrorMessage name='email'>
-        {(msg) => <div className='error'>{msg}</div>}
-      </ErrorMessage>
-      <div className='inputField'>
-        <Field
-          required
-          id='password'
-          name='password'
-          placeholder='Пароль'
-          type='password'
-        />
+      <Field
+        required
+        id='password'
+        name='password'
+        placeholder='Пароль'
+        type='password'
+      />
+      <div className='error-small-container'>
+        <ErrorMessage name='password'>
+          {(msg) => <div className='error'>{msg}</div>}
+        </ErrorMessage>
       </div>
-      <ErrorMessage name='password'>
-        {(msg) => <div className='error'>{msg}</div>}
-      </ErrorMessage>
-      <button className='submitButton' disabled={!isValid} type='submit'>
+      <button disabled={!isValid} type='submit'>
         Увійти
       </button>
     </Form>

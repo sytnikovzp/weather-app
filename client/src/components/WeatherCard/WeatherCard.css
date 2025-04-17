@@ -1,35 +1,3 @@
-.weather-card {
-  background-color: #f9f9f9;
-  border: 1px solid #e1e1e1;
-  border-radius: 8px;
-  padding: 15px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin: 15px;
-  font-size: 14px;
-}
-
-.favorite {
-  border-color: gold;
-  background-color: #fff5e6;
-  box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
-}
-
-.refresh-button {
-  background: transparent;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  font-size: 20px;
-  margin-left: 5px;
-  padding: 0;
-  color: #000;
-}
-
-.refresh-button:hover {
-  border-color: #888;
-  background-color: #f0f0f0;
-}
-
 .weather-content {
   display: flex;
   flex-direction: column;
@@ -37,26 +5,15 @@
 
 .city-info {
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-}
-
-.city-info h2 {
-  margin: 0;
-  font-size: 24px;
-}
-
-.weather-info {
-  display: flex;
-  align-items: center;
-}
-
-.icon {
-  max-height: 40px;
+  flex-wrap: nowrap;
 }
 
 .weather-description {
-  margin: 5px 0;
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
   color: #555;
 }
 
@@ -65,56 +22,39 @@
   justify-content: space-between;
 }
 
-.weather-column {
-  flex: 1;
-  margin-right: 10px;
-}
-
-.weather-column:last-child {
-  margin-right: 0;
-}
-
 .weather-details p {
-  margin: 2px 0;
+  margin: 10px 0;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 
-.view-toggle {
-  display: flex;
-  width: 100%;
-}
-
-.view-toggle button {
-  flex: 1;
-  padding: 10px;
-  cursor: pointer;
-  margin: 5px;
-  border: none;
-  transition: background-color 0.3s;
-}
-
-.view-toggle button.active {
-  background-color: #007bff;
-  color: white;
-}
-
-.five-day-forecast {
+.weekly-forecast {
   display: flex;
   flex-direction: column;
+  margin: 5px;
 }
 
-.five-day-item {
+.weekly-item {
   display: flex;
   justify-content: space-between;
-  margin-top: 10px;
+  margin: 5px;
 }
 
 .day-label {
   font-weight: bold;
 }
 
-.temperature {
-  font-size: 1.2em;
+.favorite-button {
+  background: transparent;
+  cursor: pointer;
+  font-size: 28px;
+  padding: 0;
+  margin: 0;
+  color: red;
+}
+
+.favorite-button:hover {
+  color: rgba(255, 0, 0, 0.7);
+  background-color: #f0f0f0;
 }

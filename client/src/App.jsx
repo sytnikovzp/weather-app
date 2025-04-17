@@ -29,7 +29,7 @@ function App() {
       setUserProfile(userProfile);
       setIsAuthenticated(true);
     } catch (error) {
-      console.error('Не вдалося завантажити дані користувача: ', error.message);
+      console.error(error.message);
       setIsAuthenticated(false);
     } finally {
       setIsLoading(false);

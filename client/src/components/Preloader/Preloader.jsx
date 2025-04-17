@@ -1,12 +1,7 @@
 import './Preloader.css';
 
-function Preloader({ message = 'Завантаження...' }) {
-  return (
-    <div className='loader'>
-      <div className='horizontal-loader' />
-      <p>{message}</p>
-    </div>
-  );
+function Preloader() {
+  return <div className='horizontal-loader' />;
 }
 
 export default Preloader;

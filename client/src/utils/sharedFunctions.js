@@ -8,6 +8,7 @@ const getAccessToken = () => {
   }
   return token;
 };
+
 const saveAccessToken = (token) =>
   localStorage.setItem('weatherAppToken', token);
 
@@ -16,7 +17,7 @@ const removeAccessToken = () => localStorage.removeItem('weatherAppToken');
 const formatDateTime = (timestamp, dateFormat) =>
   format(new Date(timestamp * 1000), dateFormat);
 
-const formatFiveDayData = (forecastData) => {
+const formatWeeklyData = (forecastData) => {
   const dailyData = forecastData.list.reduce((acc, data) => {
     const [date] = data.dt_txt.split(' ');
     if (!acc[date]) {
@@ -26,7 +27,7 @@ const formatFiveDayData = (forecastData) => {
     acc[date].count += 1;
     return acc;
   }, {});
-  const labels = Object.keys(dailyData).slice(0, 5);
+  const labels = Object.keys(dailyData);
   const data = labels.map((date) =>
     Math.round(dailyData[date].sum / dailyData[date].count)
   );
@@ -116,7 +117,7 @@ const processTemperatureData = (data) => {
   };
 };
 
-const processFiveDayTemperatureData = (data) => {
+const processWeeklyTemperatureData = (data) => {
   const dailyData = data.list.reduce((acc, current) => {
     const date = new Date(current.dt * 1000).toLocaleDateString([], {
       day: '2-digit',
@@ -154,12 +155,12 @@ const processFiveDayTemperatureData = (data) => {
 
 export {
   formatDateTime,
-  formatFiveDayData,
+  formatWeeklyData,
   getAccessToken,
   getDayLabel,
   getWindDirection,
-  processFiveDayTemperatureData,
   processTemperatureData,
+  processWeeklyTemperatureData,
   removeAccessToken,
   saveAccessToken,
 };

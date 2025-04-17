@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 
 import restController from '../../api/rest/restController';
 
+import Footer from '../../components/Footer/Footer';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
 
@@ -26,23 +27,18 @@ function AuthPage({ checkAuthentication }) {
         checkAuthentication();
         navigate('/');
       } catch (error) {
-        console.error(
-          `${action === 'login' ? 'Авторизація' : 'Реєстрація'} неуспішна:`,
-          error.message
-        );
-        setErrorMessage(
-          action === 'login'
-            ? 'Авторизація неуспішна. Перевірте облікові дані.'
-            : 'Цей користувач вже зареєстрований.'
-        );
+        setErrorMessage(error.response?.data?.message);
       }
     },
     [checkAuthentication, navigate]
   );
 
   return (
-    <div className='auth-container'>
-      {errorMessage && <div className='error'>{errorMessage}</div>}
+    <div id='auth-container'>
+      <div className='error-big-container'>
+        {errorMessage && <div className='error'>{errorMessage}</div>}
+      </div>
+
       {isLoginMode ? (
         <LoginForm
           onSubmit={({ email, password }) =>
@@ -56,16 +52,20 @@ function AuthPage({ checkAuthentication }) {
           }
         />
       )}
+
       <button
-        id='switch-button'
+        id='auth-switch-button'
         onClick={() => {
           setIsLoginMode(!isLoginMode);
           setErrorMessage('');
         }}
       >
         Перейти до
-        {isLoginMode ? ' реєстрації користувача' : ' авторизації користувача'}
+        {isLoginMode ? ' реєстрації ' : ' авторизації '}
+        користувача
       </button>
+
+      <Footer />
     </div>
   );
 }

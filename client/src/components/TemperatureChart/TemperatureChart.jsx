@@ -2,14 +2,12 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 
-import Preloader from '../Preloader/Preloader';
-
 import './TemperatureChart.css';
 
-function TemperatureChart({ cityName, dayData, fiveDayData, loading, error }) {
-  const chartRef = useRef(null);
+function TemperatureChart({ cityName, dayData, weeklyData }) {
   const [mode, setMode] = useState('day');
-  const data = mode === 'day' ? dayData : fiveDayData;
+  const chartRef = useRef(null);
+  const data = mode === 'day' ? dayData : weeklyData;
 
   useEffect(() => {
     const ctx = chartRef.current?.getContext('2d');
@@ -21,6 +19,7 @@ function TemperatureChart({ cityName, dayData, fiveDayData, loading, error }) {
       data,
       options: {
         responsive: true,
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: false,
@@ -39,24 +38,23 @@ function TemperatureChart({ cityName, dayData, fiveDayData, loading, error }) {
   }, [data, cityName, mode]);
 
   return (
-    <div className='temperature-chart'>
-      <div className='view-toggle'>
+    <div className='card'>
+      <div className='weather-view-toggle'>
         <button
           className={mode === 'day' ? 'active' : ''}
           onClick={() => setMode('day')}
         >
-          Сьогодні
+          На сьогодні
         </button>
+
         <button
-          className={mode === '5days' ? 'active' : ''}
-          onClick={() => setMode('5days')}
+          className={mode === 'weekly' ? 'active' : ''}
+          onClick={() => setMode('weekly')}
         >
-          На 5 днів
+          На тиждень
         </button>
       </div>
-      {loading && <Preloader message='Завантаження даних про температуру...' />}
-      {error && <p>{error}</p>}
-      <canvas ref={chartRef} />
+      <canvas ref={chartRef} className='chart-canvas' />
     </div>
   );
 }
