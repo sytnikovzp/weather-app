@@ -19,7 +19,6 @@ const login = async (email, password) => {
 
 const refreshAccessToken = async () => {
   const { data } = await api.get('/auth/refresh');
-  saveAccessToken(data.accessToken);
   return data;
 };
 

@@ -1,7 +1,11 @@
 import axios from 'axios';
 
 import { API_CONFIG } from '../constants';
-import { getAccessToken, removeAccessToken } from '../utils/sharedFunctions';
+import {
+  getAccessToken,
+  removeAccessToken,
+  saveAccessToken,
+} from '../utils/sharedFunctions';
 
 import restController from './rest/restController';
 
@@ -12,37 +16,47 @@ const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const accessToken = getAccessToken();
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const token = getAccessToken();
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
   return config;
 });
 
 api.interceptors.response.use(
-  (config) => config,
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    const token = getAccessToken();
-    if (!token) {
-      return Promise.reject(error);
-    }
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    if (status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
+      const token = getAccessToken();
+      if (!token) {
+        return Promise.reject(error);
+      }
+      console.warn('Access token expired. Trying to refresh...');
       try {
-        const { accessToken } = await restController.refreshAccessToken();
-        originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-        return api.request(originalRequest);
-      } catch (err) {
-        if (err.response?.status === 401) {
-          console.warn('Access token expired and refresh failed.');
-          removeAccessToken();
+        const refreshResult = await restController.refreshAccessToken();
+        if (refreshResult?.accessToken) {
+          const newToken = refreshResult.accessToken;
+          saveAccessToken(newToken);
+          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+          return api.request(originalRequest);
         }
-        if (err.response?.status === 404) {
-          console.warn('User not found. Removing access token.');
-          removeAccessToken();
+        console.warn('Token refresh failed. Logging out...');
+        removeAccessToken();
+        return Promise.reject(error);
+      } catch (refreshError) {
+        const refreshStatus = refreshError.response?.status;
+        if (refreshStatus === 401) {
+          console.warn('Token refresh failed. Logging out...');
+        } else if (refreshStatus === 404) {
+          console.warn('User not found. Logging out...');
+        } else {
+          console.warn('Unexpected error during token refresh.');
         }
-        return Promise.reject(err);
+        removeAccessToken();
+        return Promise.reject(refreshError);
       }
     }
     return Promise.reject(error);
