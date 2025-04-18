@@ -1,9 +1,4 @@
-import {
-  BrowserRouter as Router,
-  Navigate,
-  Route,
-  Routes,
-} from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
 import useAuthUser from './hooks/useAuthUser';
 
@@ -14,6 +9,7 @@ import PublicRoute from './components/PublicRoute/PublicRoute';
 
 import AuthPage from './pages/AuthPage/AuthPage';
 import HomePage from './pages/HomePage/HomePage';
+import NotFoundPage from './pages/NotFound/NotFoundPage';
 
 import './App.css';
 
@@ -53,7 +49,7 @@ function App() {
               path={path}
             />
           ))}
-          <Route element={<Navigate replace to='/' />} path='*' />
+          <Route element={<NotFoundPage />} path='*' />
         </Route>
       </Routes>
     </Router>
