@@ -1,13 +1,13 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import restController from '../../api/rest/restController';
+import { authService } from '../../services';
 
 import './Welcome.css';
 
 function Welcome({ userProfile, setIsAuthenticated }) {
   const handleLogout = async () => {
-    await restController.logout();
+    await authService.logout();
     setIsAuthenticated(false);
   };
 

@@ -11,7 +11,8 @@ import {
   getDayLabel,
   getWindDirection,
 } from '../../utils/sharedFunctions';
-import restController from '../../api/rest/restController';
+
+import { favoritesService } from '../../services';
 
 import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
@@ -49,7 +50,7 @@ function WeatherCard({
       return;
     }
     try {
-      await restController.addCityToFavorites(
+      await favoritesService.addCityToFavorites(
         cityName,
         country,
         latitude,
@@ -62,7 +63,7 @@ function WeatherCard({
 
   const handleRemoveFromFavorites = async () => {
     try {
-      await restController.removeCityFromFavorites(latitude, longitude);
+      await favoritesService.removeCityFromFavorites(latitude, longitude);
     } catch (error) {
       console.error(error.message);
     }
@@ -117,11 +118,10 @@ function WeatherCard({
             <h3>{Math.round(weatherData.main.temp)}°C</h3>
           </div>
           <div className='weather-description'>
-            <p>Відчувається як {Math.round(weatherData.main.feels_like)}°C.</p>
+            <p>Відчувається як {Math.round(weatherData.main.feels_like)}°C</p>
             <p>
               {weatherData.weather[0].description.charAt(0).toUpperCase() +
                 weatherData.weather[0].description.slice(1)}
-              .
             </p>
           </div>
 

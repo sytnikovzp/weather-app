@@ -7,7 +7,8 @@ import {
 } from 'react-router-dom';
 
 import { getAccessToken } from './utils/sharedFunctions';
-import restController from './api/rest/restController';
+
+import { userProfileService } from './services';
 
 import Layout from './components/Layout/Layout';
 import Preloader from './components/Preloader/Preloader';
@@ -25,7 +26,7 @@ function App() {
 
   const checkAuthentication = async () => {
     try {
-      const userProfile = await restController.fetchUserProfile();
+      const userProfile = await userProfileService.getUserProfile();
       setUserProfile(userProfile);
       setIsAuthenticated(true);
     } catch (error) {

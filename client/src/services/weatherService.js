@@ -46,4 +46,4 @@ const getForecast = async (latitude, longitude) => {
   return response.data;
 };
 
-export default { getCitySuggestions, getWeather, getForecast };
+export { getCitySuggestions, getForecast, getWeather };

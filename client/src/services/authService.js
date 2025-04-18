@@ -28,4 +28,4 @@ const logout = async () => {
   return data;
 };
 
-export default { registration, login, logout, refreshAccessToken };
+export { login, logout, refreshAccessToken, registration };

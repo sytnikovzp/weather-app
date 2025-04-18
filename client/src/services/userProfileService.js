@@ -15,8 +15,4 @@ const deleteUserProfile = async () => {
   return data;
 };
 
-export default {
-  getUserProfile,
-  updateUserProfile,
-  deleteUserProfile,
-};
+export { deleteUserProfile, getUserProfile, updateUserProfile };

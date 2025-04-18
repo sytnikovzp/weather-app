@@ -5,7 +5,12 @@ import {
   processTemperatureData,
   processWeeklyTemperatureData,
 } from '../../utils/sharedFunctions';
-import restController from '../../api/rest/restController';
+
+import {
+  favoritesService,
+  locationService,
+  weatherService,
+} from '../../services';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
@@ -48,11 +53,11 @@ function HomePage({ setIsAuthenticated, userProfile }) {
       return { error: 'Координати недоступні' };
     }
     try {
-      const currentWeather = await restController.fetchWeather(
+      const currentWeather = await weatherService.getWeather(
         selectedCity.lat,
         selectedCity.lon
       );
-      const weeklyWeather = await restController.fetchForecast(
+      const weeklyWeather = await weatherService.getForecast(
         selectedCity.lat,
         selectedCity.lon
       );
@@ -65,7 +70,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
   }, []);
 
   const fetchTemperatureData = async (selectedCity) => {
-    const data = await restController.fetchForecast(
+    const data = await weatherService.getForecast(
       selectedCity.lat,
       selectedCity.lon
     );
@@ -98,7 +103,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
 
   const fetchFavorites = useCallback(async () => {
     try {
-      const favoriteCities = await restController.fetchFavoriteCities();
+      const favoriteCities = await favoritesService.getAllFavorites();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
           const { currentWeather, weeklyWeather } =
@@ -116,8 +121,8 @@ function HomePage({ setIsAuthenticated, userProfile }) {
     setIsLoading(true);
     setErrorMessage('');
     try {
-      const { latitude, longitude } = await restController.fetchLocationByIP();
-      const weather = await restController.fetchWeather(latitude, longitude);
+      const { latitude, longitude } = await locationService.getLocationByIP();
+      const weather = await weatherService.getWeather(latitude, longitude);
       setWeatherData(weather);
       setSelectedCity({
         cityName: weather.name,
@@ -148,7 +153,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
 
   useEffect(() => {
     if (selectedCity) {
-      const fetchWeather = async () => {
+      const getWeather = async () => {
         setIsLoading(true);
         setErrorMessage('');
         try {
@@ -165,7 +170,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
           setIsLoading(false);
         }
       };
-      fetchWeather();
+      getWeather();
     }
   }, [fetchWeatherData, selectedCity]);
 

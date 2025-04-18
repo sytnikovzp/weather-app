@@ -7,7 +7,7 @@ import {
   saveAccessToken,
 } from '../utils/sharedFunctions';
 
-import restController from './rest/restController';
+import { authService } from '../services';
 
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -36,7 +36,7 @@ api.interceptors.response.use(
       }
       console.warn('Access token expired. Trying to refresh...');
       try {
-        const refreshResult = await restController.refreshAccessToken();
+        const refreshResult = await authService.refreshAccessToken();
         if (refreshResult?.accessToken) {
           const newToken = refreshResult.accessToken;
           saveAccessToken(newToken);

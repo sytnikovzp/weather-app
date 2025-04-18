@@ -1,7 +1,7 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-import restController from '../../api/rest/restController';
+import { authService } from '../../services';
 
 import Footer from '../../components/Footer/Footer';
 import LoginForm from '../../components/LoginForm/LoginForm';
@@ -20,9 +20,9 @@ function AuthPage({ checkAuthentication }) {
       try {
         setErrorMessage('');
         if (action === 'login') {
-          await restController.login(...args);
+          await authService.login(...args);
         } else {
-          await restController.registration(...args);
+          await authService.registration(...args);
         }
         checkAuthentication();
         navigate('/');

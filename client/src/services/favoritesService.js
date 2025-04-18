@@ -1,6 +1,6 @@
 import api from '../api';
 
-const getFavoriteCities = async () => {
+const getAllFavorites = async () => {
   const { data } = await api.get('/favorites');
   return data;
 };
@@ -25,8 +25,4 @@ const removeCityFromFavorites = async (latitude, longitude) => {
   return data;
 };
 
-export default {
-  getFavoriteCities,
-  addCityToFavorites,
-  removeCityFromFavorites,
-};
+export { addCityToFavorites, getAllFavorites, removeCityFromFavorites };
