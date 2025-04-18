@@ -23,7 +23,7 @@ import Welcome from '../../components/Welcome/Welcome';
 
 import './HomePage.css';
 
-function HomePage({ setIsAuthenticated, userProfile }) {
+function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
   const [selectedCity, setSelectedCity] = useState(null);
   const [favorites, setFavorites] = useState([]);
@@ -192,10 +192,7 @@ function HomePage({ setIsAuthenticated, userProfile }) {
             Обране
           </div>
         </div>
-        <Welcome
-          setIsAuthenticated={setIsAuthenticated}
-          userProfile={userProfile}
-        />
+        <Welcome />
       </div>
       {activeTab === 'main' ? (
         <div className='content'>

@@ -1,7 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
 function PrivateRoute({ children, isAuthenticated }) {
-  return isAuthenticated ? children : <Navigate replace to='/auth' />;
+  if (!isAuthenticated) {
+    return <Navigate replace to='/auth' />;
+  }
+
+  return children;
 }
 
 export default PrivateRoute;

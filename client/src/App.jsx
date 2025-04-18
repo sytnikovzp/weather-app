@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import {
   BrowserRouter as Router,
   Navigate,
@@ -6,9 +5,7 @@ import {
   Routes,
 } from 'react-router-dom';
 
-import { getAccessToken } from './utils/sharedFunctions';
-
-import { userProfileService } from './services';
+import useAuthUser from './hooks/useAuthUser';
 
 import Layout from './components/Layout/Layout';
 import Preloader from './components/Preloader/Preloader';
@@ -20,33 +17,9 @@ import HomePage from './pages/HomePage/HomePage';
 import './App.css';
 
 function App() {
-  const [isLoading, setIsLoading] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [userProfile, setUserProfile] = useState(null);
+  const { isFetchingUser, isAuthenticated } = useAuthUser();
 
-  const checkAuthentication = async () => {
-    try {
-      const userProfile = await userProfileService.getUserProfile();
-      setUserProfile(userProfile);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error(error.message);
-      setIsAuthenticated(false);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    const token = getAccessToken();
-    if (token) {
-      checkAuthentication();
-    } else {
-      setIsLoading(false);
-    }
-  }, []);
-
-  if (isLoading) {
+  if (isFetchingUser) {
     return <Preloader />;
   }
 
@@ -57,21 +30,17 @@ function App() {
           <Route
             index
             element={
-              <PrivateRoute isAuthenticated={isAuthenticated}>
-                <HomePage
-                  setIsAuthenticated={setIsAuthenticated}
-                  userProfile={userProfile}
-                />
+              <PrivateRoute
+                isAuthenticated={isAuthenticated}
+                isFetchingUser={isFetchingUser}
+              >
+                <HomePage />
               </PrivateRoute>
             }
           />
           <Route
             element={
-              isAuthenticated ? (
-                <Navigate replace to='/' />
-              ) : (
-                <AuthPage checkAuthentication={checkAuthentication} />
-              )
+              isAuthenticated ? <Navigate replace to='/' /> : <AuthPage />
             }
             path='auth/*'
           />

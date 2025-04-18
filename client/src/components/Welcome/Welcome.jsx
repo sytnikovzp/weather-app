@@ -1,11 +1,15 @@
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import useAuthUser from '../../hooks/useAuthUser';
+
 import { authService } from '../../services';
 
 import './Welcome.css';
 
-function Welcome({ userProfile, setIsAuthenticated }) {
+function Welcome() {
+  const { authenticatedUser, setIsAuthenticated } = useAuthUser();
+
   const handleLogout = async () => {
     await authService.logout();
     setIsAuthenticated(false);
@@ -13,7 +17,7 @@ function Welcome({ userProfile, setIsAuthenticated }) {
 
   return (
     <div id='welcome'>
-      {userProfile && <p>Привіт, {userProfile.fullName}!</p>}
+      {authenticatedUser && <p>Привіт, {authenticatedUser.fullName}!</p>}
       <button onClick={handleLogout}>
         <FontAwesomeIcon icon={faRightFromBracket} />
       </button>

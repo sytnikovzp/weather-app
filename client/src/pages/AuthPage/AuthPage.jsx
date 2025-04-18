@@ -1,6 +1,8 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+import useAuthUser from '../../hooks/useAuthUser';
+
 import { authService } from '../../services';
 
 import Footer from '../../components/Footer/Footer';
@@ -9,11 +11,12 @@ import RegistrationForm from '../../components/RegistrationForm/RegistrationForm
 
 import './AuthPage.css';
 
-function AuthPage({ checkAuthentication }) {
+function AuthPage() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
   const navigate = useNavigate();
+  const { fetchAuthenticatedUser } = useAuthUser();
 
   const handleAuth = useCallback(
     async (action, ...args) => {
@@ -24,13 +27,13 @@ function AuthPage({ checkAuthentication }) {
         } else {
           await authService.registration(...args);
         }
-        checkAuthentication();
+        fetchAuthenticatedUser();
         navigate('/');
       } catch (error) {
         setErrorMessage(error.response?.data?.message);
       }
     },
-    [checkAuthentication, navigate]
+    [fetchAuthenticatedUser, navigate]
   );
 
   return (

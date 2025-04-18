@@ -141,14 +141,14 @@ function WeatherCard({
             </div>
             <div>
               <p>
-                <strong>Вітер:</strong> {Math.round(weatherData.wind.speed)} м/с{' '}
+                <strong>Вітер:</strong> {Math.round(weatherData.wind.speed)} м/с
                 {getWindDirection(weatherData.wind.deg)}
               </p>
               <p>
                 <strong>Облачність:</strong> {weatherData.clouds.all}%
               </p>
               <p>
-                <strong>Захід сонця:</strong>{' '}
+                <strong>Захід сонця:</strong>
                 {formatDateTime(weatherData.sys.sunset, 'HH:mm')}
               </p>
             </div>
