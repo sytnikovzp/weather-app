@@ -8,7 +8,7 @@ const getCitySuggestions = async (searchTerm) => {
     {
       params: {
         q: searchTerm,
-        limit: 10,
+        limit: 5,
         appid: APP_SETTINGS.WEATHER_API_KEY,
       },
     }

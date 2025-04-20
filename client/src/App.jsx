@@ -17,7 +17,7 @@ const publicRoutes = [{ path: 'auth', element: AuthPage }];
 const privateRoutes = [{ path: '/', element: HomePage }];
 
 function App() {
-  const { isFetchingUser, isAuthenticated } = useAuthUser();
+  const { isFetchingUser } = useAuthUser();
 
   if (isFetchingUser) {
     return <Preloader />;
@@ -31,7 +31,7 @@ function App() {
             <Route
               key={path}
               element={
-                <PublicRoute isAuthenticated={isAuthenticated}>
+                <PublicRoute>
                   <Component />
                 </PublicRoute>
               }
@@ -42,7 +42,7 @@ function App() {
             <Route
               key={path}
               element={
-                <PrivateRoute isAuthenticated={isAuthenticated}>
+                <PrivateRoute>
                   <Component />
                 </PrivateRoute>
               }

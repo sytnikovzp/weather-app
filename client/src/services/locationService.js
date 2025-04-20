@@ -2,7 +2,7 @@ import axios from 'axios';
 
 const getLocationByIP = async () => {
   try {
-    const response = await axios.get('http://ipwho.is');
+    const response = await axios.get('https://ipwho.is');
     const { latitude, longitude } = response.data;
     return { latitude, longitude };
   } catch (error) {

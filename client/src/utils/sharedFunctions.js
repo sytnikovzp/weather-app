@@ -153,6 +153,16 @@ const processWeeklyTemperatureData = (data) => {
   };
 };
 
+const setErrorState = (state, { payload }) => {
+  state.isLoading = false;
+  state.error = payload;
+};
+
+const setLoadingState = (state) => {
+  state.isLoading = true;
+  state.error = null;
+};
+
 export {
   formatDateTime,
   formatWeeklyData,
@@ -163,4 +173,6 @@ export {
   processWeeklyTemperatureData,
   removeAccessToken,
   saveAccessToken,
+  setErrorState,
+  setLoadingState,
 };

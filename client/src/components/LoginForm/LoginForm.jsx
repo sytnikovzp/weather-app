@@ -7,10 +7,11 @@ const initialValues = {
   password: '',
 };
 
-function LoginForm({ onSubmit }) {
+function LoginForm({ onSubmit, isSubmitting }) {
   const renderForm = ({ isValid }) => (
     <Form id='auth-form'>
       <h2>Авторизація</h2>
+
       <Field
         required
         id='email'
@@ -23,6 +24,7 @@ function LoginForm({ onSubmit }) {
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
       </div>
+
       <Field
         required
         id='password'
@@ -35,11 +37,13 @@ function LoginForm({ onSubmit }) {
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
       </div>
-      <button disabled={!isValid} type='submit'>
-        Увійти
+
+      <button disabled={!isValid || isSubmitting} type='submit'>
+        {isSubmitting ? 'Вхід...' : 'Увійти'}
       </button>
     </Form>
   );
+
   return (
     <Formik
       validateOnMount

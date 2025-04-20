@@ -8,10 +8,11 @@ const initialValues = {
   password: '',
 };
 
-function RegistrationForm({ onSubmit }) {
+function RegistrationForm({ onSubmit, isSubmitting }) {
   const renderForm = ({ isValid }) => (
     <Form id='registration-form'>
       <h2>Реєстрація</h2>
+
       <Field
         required
         id='fullName'
@@ -24,6 +25,7 @@ function RegistrationForm({ onSubmit }) {
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
       </div>
+
       <Field
         required
         id='email'
@@ -36,6 +38,7 @@ function RegistrationForm({ onSubmit }) {
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
       </div>
+
       <Field
         required
         id='password'
@@ -48,8 +51,9 @@ function RegistrationForm({ onSubmit }) {
           {(msg) => <div className='error'>{msg}</div>}
         </ErrorMessage>
       </div>
-      <button disabled={!isValid} type='submit'>
-        Зареєструватися та увійти
+
+      <button disabled={!isValid || isSubmitting} type='submit'>
+        {isSubmitting ? 'Реєстрація...' : 'Зареєструватися та увійти'}
       </button>
     </Form>
   );

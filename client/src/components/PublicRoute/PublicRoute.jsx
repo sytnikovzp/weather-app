@@ -1,7 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
-function PublicRoute({ children, isAuthenticated }) {
-  if (isAuthenticated) {
+import useAuthUser from '../../hooks/useAuthUser';
+
+function PublicRoute({ children }) {
+  const { authenticatedUser } = useAuthUser();
+
+  if (authenticatedUser) {
     return <Navigate replace to='/' />;
   }
 

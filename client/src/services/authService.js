@@ -1,4 +1,4 @@
-import { removeAccessToken, saveAccessToken } from '../utils/sharedFunctions';
+import { saveAccessToken } from '../utils/sharedFunctions';
 import api from '../api';
 
 const registration = async (fullName, email, password) => {
@@ -12,7 +12,10 @@ const registration = async (fullName, email, password) => {
 };
 
 const login = async (email, password) => {
-  const { data } = await api.post('/auth/login', { email, password });
+  const { data } = await api.post('/auth/login', {
+    email,
+    password,
+  });
   saveAccessToken(data.accessToken);
   return data;
 };
@@ -24,7 +27,6 @@ const refreshAccessToken = async () => {
 
 const logout = async () => {
   const { data } = await api.get('/auth/logout');
-  removeAccessToken();
   return data;
 };
 

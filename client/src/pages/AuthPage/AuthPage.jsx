@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
 
-import useAuthUser from '../../hooks/useAuthUser';
-
-import { authService } from '../../services';
+import { selectAuthIsLoading } from '../../store/selectors/authSelectors';
+import { loginThunk, registrationThunk } from '../../store/thunks/authThunks';
 
 import Footer from '../../components/Footer/Footer';
 import LoginForm from '../../components/LoginForm/LoginForm';
@@ -15,25 +15,26 @@ function AuthPage() {
   const [isLoginMode, setIsLoginMode] = useState(true);
   const [errorMessage, setErrorMessage] = useState('');
 
+  const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { fetchAuthenticatedUser } = useAuthUser();
+
+  const authIsLoading = useSelector(selectAuthIsLoading);
 
   const handleAuth = useCallback(
-    async (action, ...args) => {
+    async (action, payload) => {
+      setErrorMessage('');
       try {
-        setErrorMessage('');
         if (action === 'login') {
-          await authService.login(...args);
+          await dispatch(loginThunk(payload)).unwrap();
         } else {
-          await authService.registration(...args);
+          await dispatch(registrationThunk(payload)).unwrap();
         }
-        fetchAuthenticatedUser();
         navigate('/');
       } catch (error) {
-        setErrorMessage(error.response?.data?.message);
+        setErrorMessage(error?.message);
       }
     },
-    [fetchAuthenticatedUser, navigate]
+    [dispatch, navigate]
   );
 
   return (
@@ -44,14 +45,16 @@ function AuthPage() {
 
       {isLoginMode ? (
         <LoginForm
+          isSubmitting={authIsLoading}
           onSubmit={({ email, password }) =>
-            handleAuth('login', email, password)
+            handleAuth('login', { email, password })
           }
         />
       ) : (
         <RegistrationForm
+          isSubmitting={authIsLoading}
           onSubmit={({ fullName, email, password }) =>
-            handleAuth('registration', fullName, email, password)
+            handleAuth('registration', { fullName, email, password })
           }
         />
       )}

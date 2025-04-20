@@ -1,43 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 
 import { getAccessToken } from '../utils/sharedFunctions';
 
-import { userProfileService } from '../services';
+import { selectIsAuthenticated } from '../store/selectors/authSelectors';
+import {
+  selectUserProfile,
+  selectUserProfileIsLoading,
+} from '../store/selectors/userProfileSelectors';
+import { getUserProfile } from '../store/thunks/userProfileThunks';
 
 function useAuthUser() {
-  const [isFetchingUser, setIsFetchingUser] = useState(true);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [authenticatedUser, setAuthenticatedUser] = useState(null);
+  const dispatch = useDispatch();
 
-  const fetchAuthenticatedUser = async () => {
-    try {
-      const user = await userProfileService.getUserProfile();
-      setAuthenticatedUser(user);
-      setIsAuthenticated(true);
-    } catch (error) {
-      console.error(error.message);
-      setIsAuthenticated(false);
-    } finally {
-      setIsFetchingUser(false);
-    }
-  };
+  const isAuthenticated = useSelector(selectIsAuthenticated);
+  const isFetchingUser = useSelector(selectUserProfileIsLoading);
+  const authenticatedUser = useSelector(selectUserProfile);
 
   useEffect(() => {
     const token = getAccessToken();
-    if (token) {
-      fetchAuthenticatedUser();
-    } else {
-      setIsFetchingUser(false);
+    if (token && !authenticatedUser && !isFetchingUser) {
+      dispatch(getUserProfile());
     }
-  }, []);
+  }, [dispatch, authenticatedUser, isFetchingUser]);
 
-  return {
-    isFetchingUser,
-    isAuthenticated,
-    authenticatedUser,
-    setIsAuthenticated,
-    fetchAuthenticatedUser,
-  };
+  return { isAuthenticated, isFetchingUser, authenticatedUser };
 }
 
 export default useAuthUser;

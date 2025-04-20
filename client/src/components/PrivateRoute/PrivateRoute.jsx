@@ -1,7 +1,11 @@
 import { Navigate } from 'react-router-dom';
 
-function PrivateRoute({ children, isAuthenticated }) {
-  if (!isAuthenticated) {
+import useAuthUser from '../../hooks/useAuthUser';
+
+function PrivateRoute({ children }) {
+  const { authenticatedUser } = useAuthUser();
+
+  if (!authenticatedUser) {
     return <Navigate replace to='/auth' />;
   }
 

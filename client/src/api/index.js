@@ -7,7 +7,11 @@ import {
   saveAccessToken,
 } from '../utils/sharedFunctions';
 
-import { authService } from '../services';
+import store from '../store';
+import {
+  logoutThunk,
+  refreshAccessTokenThunk,
+} from '../store/thunks/authThunks';
 
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -36,26 +40,23 @@ api.interceptors.response.use(
       }
       console.warn('Access token expired. Trying to refresh...');
       try {
-        const refreshResult = await authService.refreshAccessToken();
-        if (refreshResult?.accessToken) {
-          const newToken = refreshResult.accessToken;
-          saveAccessToken(newToken);
-          originalRequest.headers['Authorization'] = `Bearer ${newToken}`;
+        const actionResult = await store
+          .dispatch(refreshAccessTokenThunk())
+          .unwrap();
+        if (refreshAccessTokenThunk.fulfilled.match(actionResult)) {
+          const { accessToken } = actionResult.payload;
+          saveAccessToken(accessToken);
+          originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
           return api.request(originalRequest);
         }
         console.warn('Token refresh failed. Logging out...');
         removeAccessToken();
+        store.dispatch(logoutThunk()).unwrap();
         return Promise.reject(error);
       } catch (refreshError) {
-        const refreshStatus = refreshError.response?.status;
-        if (refreshStatus === 401) {
-          console.warn('Token refresh failed. Logging out...');
-        } else if (refreshStatus === 404) {
-          console.warn('User not found. Logging out...');
-        } else {
-          console.warn('Unexpected error during token refresh.');
-        }
+        console.warn('Error during token refresh: ', refreshError);
         removeAccessToken();
+        store.dispatch(logoutThunk()).unwrap();
         return Promise.reject(refreshError);
       }
     }
