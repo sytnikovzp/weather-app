@@ -2,32 +2,32 @@ import { saveAccessToken } from '../utils/sharedFunctions';
 import api from '../api';
 
 const registration = async (fullName, email, password) => {
-  const { data } = await api.post('/auth/registration', {
+  const response = await api.post('/auth/registration', {
     fullName,
     email,
     password,
   });
-  saveAccessToken(data.accessToken);
-  return data;
+  saveAccessToken(response.data.accessToken);
+  return response;
 };
 
 const login = async (email, password) => {
-  const { data } = await api.post('/auth/login', {
+  const response = await api.post('/auth/login', {
     email,
     password,
   });
-  saveAccessToken(data.accessToken);
-  return data;
+  saveAccessToken(response.data.accessToken);
+  return response;
 };
 
 const refreshAccessToken = async () => {
-  const { data } = await api.get('/auth/refresh');
-  return data;
+  const response = await api.get('/auth/refresh');
+  return response;
 };
 
 const logout = async () => {
-  const { data } = await api.get('/auth/logout');
-  return data;
+  const response = await api.get('/auth/logout');
+  return response;
 };
 
 export { login, logout, refreshAccessToken, registration };

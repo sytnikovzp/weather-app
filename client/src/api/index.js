@@ -28,22 +28,10 @@ const processQueue = (error, token = null) => {
   failedQueue = [];
 };
 
-const waitForAccessToken = () =>
+const waitForToken = () =>
   new Promise((resolve, reject) => {
     failedQueue.push({ resolve, reject });
   });
-
-const refreshAccessToken = async () => {
-  console.warn('Access token expired. Trying to refresh...');
-  const result = await store.dispatch(refreshAccessTokenThunk());
-  const token = result.payload?.accessToken;
-  if (!token) {
-    throw new Error('Token refresh failed');
-  }
-  saveAccessToken(token);
-  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-  return token;
-};
 
 api.interceptors.request.use((config) => {
   const token = getAccessToken();
@@ -54,40 +42,53 @@ api.interceptors.request.use((config) => {
 });
 
 api.interceptors.response.use(
-  (res) => res,
+  (response) => response,
   async (error) => {
     const originalRequest = error.config;
-    if (
-      error.response?.status === 401 &&
-      !originalRequest._retry &&
-      !originalRequest.url.includes('/auth/refresh')
-    ) {
+    const is401 = error.response?.status === 401;
+    const isNotRetry = !originalRequest._retry;
+    const isNotRefreshRequest = !originalRequest.url.includes('/auth/refresh');
+    if (is401 && isNotRetry && isNotRefreshRequest) {
       originalRequest._retry = true;
       if (refreshingPromise) {
-        const token = await waitForAccessToken();
-        originalRequest.headers['Authorization'] = `Bearer ${token}`;
-        return api(originalRequest);
+        try {
+          const token = await waitForToken();
+          originalRequest.headers['Authorization'] = `Bearer ${token}`;
+          return api(originalRequest);
+        } catch (err) {
+          return Promise.reject(err);
+        }
       }
       refreshingPromise = (async () => {
         try {
-          const token = await refreshAccessToken();
+          console.warn('Access token expired. Trying to refresh...');
+          const result = await store.dispatch(refreshAccessTokenThunk());
+          const token = result.payload?.accessToken;
+          if (!token) {
+            throw error;
+          }
+          saveAccessToken(token);
           processQueue(null, token);
           return token;
-        } catch (err) {
+        } catch (refreshError) {
           console.warn('Token refresh failed. Logging out...');
-          processQueue(err);
+          processQueue(refreshError);
           removeAccessToken();
           await store.dispatch(logoutThunk());
-          throw err;
+          return Promise.reject(refreshError);
         } finally {
           refreshingPromise = null;
         }
       })();
-      const token = await refreshingPromise;
-      originalRequest.headers['Authorization'] = `Bearer ${token}`;
-      return api(originalRequest);
+      try {
+        const token = await refreshingPromise;
+        originalRequest.headers['Authorization'] = `Bearer ${token}`;
+        return api(originalRequest);
+      } catch (err) {
+        return Promise.reject(err);
+      }
     }
-    throw error;
+    return Promise.reject(error);
   }
 );
 

@@ -3,7 +3,7 @@ import axios from 'axios';
 import { APP_SETTINGS } from '../constants';
 
 const getCitySuggestions = async (searchTerm) => {
-  const response = await axios.get(
+  const { data } = await axios.get(
     'http://api.openweathermap.org/geo/1.0/direct',
     {
       params: {
@@ -13,11 +13,11 @@ const getCitySuggestions = async (searchTerm) => {
       },
     }
   );
-  return response.data;
+  return data;
 };
 
 const getWeather = async (latitude, longitude) => {
-  const response = await axios.get(
+  const { data } = await axios.get(
     'https://api.openweathermap.org/data/2.5/weather',
     {
       params: {
@@ -28,11 +28,11 @@ const getWeather = async (latitude, longitude) => {
       },
     }
   );
-  return response.data;
+  return data;
 };
 
 const getForecast = async (latitude, longitude) => {
-  const response = await axios.get(
+  const { data } = await axios.get(
     'https://api.openweathermap.org/data/2.5/forecast',
     {
       params: {
@@ -43,7 +43,7 @@ const getForecast = async (latitude, longitude) => {
       },
     }
   );
-  return response.data;
+  return data;
 };
 
 export { getCitySuggestions, getForecast, getWeather };

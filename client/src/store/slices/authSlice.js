@@ -11,7 +11,7 @@ import {
 } from '../thunks/authThunks';
 
 const initialState = {
-  user: null,
+  authenticatedUser: null,
   isAuthenticated: false,
   isLoading: false,
   error: null,
@@ -28,25 +28,25 @@ const authSlice = createSlice({
       .addCase(registrationThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
-        state.user = payload.user;
+        state.authenticatedUser = payload.authenticatedUser;
         state.isAuthenticated = true;
       })
       .addCase(loginThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
-        state.user = payload.user;
+        state.authenticatedUser = payload.authenticatedUser;
         state.isAuthenticated = true;
       })
       .addCase(logoutThunk.fulfilled, (state) => {
         state.isLoading = false;
         state.error = null;
-        state.user = null;
+        state.authenticatedUser = null;
         state.isAuthenticated = false;
       })
       .addCase(refreshAccessTokenThunk.fulfilled, (state, { payload }) => {
         state.isLoading = false;
         state.error = null;
-        state.user = payload.user;
+        state.authenticatedUser = payload.authenticatedUser;
         state.isAuthenticated = true;
       })
 

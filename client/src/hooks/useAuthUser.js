@@ -8,7 +8,6 @@ import {
   selectUserProfile,
   selectUserProfileIsLoading,
 } from '../store/selectors/userProfileSelectors';
-import { logoutThunk } from '../store/thunks/authThunks';
 import { getUserProfile } from '../store/thunks/userProfileThunks';
 
 function useAuthUser() {
@@ -22,7 +21,6 @@ function useAuthUser() {
     const token = getAccessToken();
 
     if (!token) {
-      dispatch(logoutThunk());
       return;
     }
 

@@ -11,7 +11,11 @@ export const registrationThunk = createAsyncThunk(
   `${SLICE_NAMES.AUTH_SLICE_NAME}/registration`,
   async ({ fullName, email, password }, { rejectWithValue }) => {
     try {
-      const data = await authService.registration(fullName, email, password);
+      const { data } = await authService.registration(
+        fullName,
+        email,
+        password
+      );
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -23,7 +27,7 @@ export const loginThunk = createAsyncThunk(
   `${SLICE_NAMES.AUTH_SLICE_NAME}/login`,
   async ({ email, password }, { rejectWithValue }) => {
     try {
-      const data = await authService.login(email, password);
+      const { data } = await authService.login(email, password);
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -48,7 +52,7 @@ export const refreshAccessTokenThunk = createAsyncThunk(
   `${SLICE_NAMES.AUTH_SLICE_NAME}/refresh`,
   async (_, { rejectWithValue }) => {
     try {
-      const data = await authService.refreshAccessToken();
+      const { data } = await authService.refreshAccessToken();
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);
