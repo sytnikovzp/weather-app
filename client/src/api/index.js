@@ -34,12 +34,12 @@ const waitForAccessToken = () =>
   });
 
 const refreshAccessToken = async () => {
+  console.warn('Access token expired. Trying to refresh...');
   const result = await store.dispatch(refreshAccessTokenThunk());
   const token = result.payload?.accessToken;
   if (!token) {
     throw new Error('Token refresh failed');
   }
-
   saveAccessToken(token);
   api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
   return token;
@@ -57,26 +57,24 @@ api.interceptors.response.use(
   (res) => res,
   async (error) => {
     const originalRequest = error.config;
-
     if (
       error.response?.status === 401 &&
       !originalRequest._retry &&
       !originalRequest.url.includes('/auth/refresh')
     ) {
       originalRequest._retry = true;
-
       if (refreshingPromise) {
         const token = await waitForAccessToken();
         originalRequest.headers['Authorization'] = `Bearer ${token}`;
         return api(originalRequest);
       }
-
       refreshingPromise = (async () => {
         try {
           const token = await refreshAccessToken();
           processQueue(null, token);
           return token;
         } catch (err) {
+          console.warn('Token refresh failed. Logging out...');
           processQueue(err);
           removeAccessToken();
           await store.dispatch(logoutThunk());
@@ -85,12 +83,10 @@ api.interceptors.response.use(
           refreshingPromise = null;
         }
       })();
-
       const token = await refreshingPromise;
       originalRequest.headers['Authorization'] = `Bearer ${token}`;
       return api(originalRequest);
     }
-
     throw error;
   }
 );

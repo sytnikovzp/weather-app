@@ -8,6 +8,7 @@ import {
   selectUserProfile,
   selectUserProfileIsLoading,
 } from '../store/selectors/userProfileSelectors';
+import { logoutThunk } from '../store/thunks/authThunks';
 import { getUserProfile } from '../store/thunks/userProfileThunks';
 
 function useAuthUser() {
@@ -19,7 +20,13 @@ function useAuthUser() {
 
   useEffect(() => {
     const token = getAccessToken();
-    if (token && !authenticatedUser && !isFetchingUser) {
+
+    if (!token) {
+      dispatch(logoutThunk());
+      return;
+    }
+
+    if (!authenticatedUser && !isFetchingUser) {
       dispatch(getUserProfile());
     }
   }, [dispatch, authenticatedUser, isFetchingUser]);

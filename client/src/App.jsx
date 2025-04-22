@@ -1,14 +1,11 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
-import useAuthUser from './hooks/useAuthUser';
-
 import Layout from './components/Layout/Layout';
-import Preloader from './components/Preloader/Preloader';
 import PrivateRoute from './components/PrivateRoute/PrivateRoute';
 import PublicRoute from './components/PublicRoute/PublicRoute';
 
-import AuthPage from './pages/AuthPage/AuthPage';
-import HomePage from './pages/HomePage/HomePage';
+import AuthPage from './pages/Auth/AuthPage';
+import HomePage from './pages/Home/HomePage';
 import NotFoundPage from './pages/NotFound/NotFoundPage';
 
 import './App.css';
@@ -17,12 +14,6 @@ const publicRoutes = [{ path: 'auth', element: AuthPage }];
 const privateRoutes = [{ path: '/', element: HomePage }];
 
 function App() {
-  const { isFetchingUser } = useAuthUser();
-
-  if (isFetchingUser) {
-    return <Preloader />;
-  }
-
   return (
     <Router>
       <Routes>
