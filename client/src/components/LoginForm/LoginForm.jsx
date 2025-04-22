@@ -39,7 +39,7 @@ function LoginForm({ onSubmit, isSubmitting }) {
       </div>
 
       <button disabled={!isValid || isSubmitting} type='submit'>
-        {isSubmitting ? 'Вхід...' : 'Увійти'}
+        {isSubmitting ? 'Вхід...' : 'УВІЙТИ'}
       </button>
     </Form>
   );

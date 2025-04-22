@@ -53,7 +53,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       </div>
 
       <button disabled={!isValid || isSubmitting} type='submit'>
-        {isSubmitting ? 'Реєстрація...' : 'Зареєструватися та увійти'}
+        {isSubmitting ? 'Реєстрація...' : 'ЗАРЕЄСТРУВАТИСЯ ТА УВІЙТИ'}
       </button>
     </Form>
   );

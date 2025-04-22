@@ -3,6 +3,9 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SLICE_NAMES } from '../../constants';
 
 import { authService } from '../../services';
+import { clearUserProfileStore } from '../slices/userProfileSlice';
+
+import store from '..';
 
 export const registrationThunk = createAsyncThunk(
   `${SLICE_NAMES.AUTH_SLICE_NAME}/registration`,
@@ -33,6 +36,7 @@ export const logoutThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
+      store.dispatch(clearUserProfileStore());
       return null;
     } catch (error) {
       return rejectWithValue(error.response.data);

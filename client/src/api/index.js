@@ -15,52 +15,83 @@ import {
 
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
-  headers: { 'Content-Type': 'application/json' },
   withCredentials: true,
 });
+
+let refreshingPromise = null;
+let failedQueue = [];
+
+const processQueue = (error, token = null) => {
+  for (const { resolve, reject } of failedQueue) {
+    error ? reject(error) : resolve(token);
+  }
+  failedQueue = [];
+};
+
+const waitForAccessToken = () =>
+  new Promise((resolve, reject) => {
+    failedQueue.push({ resolve, reject });
+  });
+
+const refreshAccessToken = async () => {
+  const result = await store.dispatch(refreshAccessTokenThunk());
+  const token = result.payload?.accessToken;
+  if (!token) {
+    throw new Error('Token refresh failed');
+  }
+
+  saveAccessToken(token);
+  api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+  return token;
+};
 
 api.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+    config.headers['Authorization'] = `Bearer ${token}`;
   }
   return config;
 });
 
 api.interceptors.response.use(
-  (response) => response,
+  (res) => res,
   async (error) => {
     const originalRequest = error.config;
-    const status = error.response?.status;
-    if (status === 401 && !originalRequest._retry) {
+
+    if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes('/auth/refresh')
+    ) {
       originalRequest._retry = true;
-      const token = getAccessToken();
-      if (!token) {
-        return Promise.reject(error);
+
+      if (refreshingPromise) {
+        const token = await waitForAccessToken();
+        originalRequest.headers['Authorization'] = `Bearer ${token}`;
+        return api(originalRequest);
       }
-      console.warn('Access token expired. Trying to refresh...');
-      try {
-        const actionResult = await store
-          .dispatch(refreshAccessTokenThunk())
-          .unwrap();
-        if (refreshAccessTokenThunk.fulfilled.match(actionResult)) {
-          const { accessToken } = actionResult.payload;
-          saveAccessToken(accessToken);
-          originalRequest.headers['Authorization'] = `Bearer ${accessToken}`;
-          return api.request(originalRequest);
+
+      refreshingPromise = (async () => {
+        try {
+          const token = await refreshAccessToken();
+          processQueue(null, token);
+          return token;
+        } catch (err) {
+          processQueue(err);
+          removeAccessToken();
+          await store.dispatch(logoutThunk());
+          throw err;
+        } finally {
+          refreshingPromise = null;
         }
-        console.warn('Token refresh failed. Logging out...');
-        removeAccessToken();
-        store.dispatch(logoutThunk()).unwrap();
-        return Promise.reject(error);
-      } catch (refreshError) {
-        console.warn('Error during token refresh: ', refreshError);
-        removeAccessToken();
-        store.dispatch(logoutThunk()).unwrap();
-        return Promise.reject(refreshError);
-      }
+      })();
+
+      const token = await refreshingPromise;
+      originalRequest.headers['Authorization'] = `Bearer ${token}`;
+      return api(originalRequest);
     }
-    return Promise.reject(error);
+
+    throw error;
   }
 );
 

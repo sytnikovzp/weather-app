@@ -18,7 +18,12 @@ const initialState = {
 const userProfileSlice = createSlice({
   name: SLICE_NAMES.USER_PROFILE_SLICE_NAME,
   initialState,
-  reducers: {},
+  reducers: {
+    clearUserProfileStore: (state) => {
+      state.error = null;
+      state.data = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fulfilled
@@ -49,5 +54,8 @@ const userProfileSlice = createSlice({
       .addCase(deleteUserProfile.rejected, setErrorState);
   },
 });
+const { actions, reducer } = userProfileSlice;
 
-export default userProfileSlice.reducer;
+export const { clearUserProfileStore } = actions;
+
+export default reducer;
