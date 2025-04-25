@@ -4,7 +4,7 @@ import { SLICE_NAMES } from '../../constants';
 
 import { userProfileService } from '../../services';
 
-export const getUserProfile = createAsyncThunk(
+export const fetchUserProfile = createAsyncThunk(
   `${SLICE_NAMES.USER_PROFILE_SLICE_NAME}/fetch`,
   async (_, { rejectWithValue }) => {
     try {

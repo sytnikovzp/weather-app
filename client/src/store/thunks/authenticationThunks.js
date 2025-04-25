@@ -8,7 +8,7 @@ import { clearUserProfileStore } from '../slices/userProfileSlice';
 import store from '..';
 
 export const registrationThunk = createAsyncThunk(
-  `${SLICE_NAMES.AUTH_SLICE_NAME}/registration`,
+  `${SLICE_NAMES.AUTHENTICATION_SLICE_NAME}/registration`,
   async ({ fullName, email, password }, { rejectWithValue }) => {
     try {
       const { data } = await authService.registration(
@@ -24,7 +24,7 @@ export const registrationThunk = createAsyncThunk(
 );
 
 export const loginThunk = createAsyncThunk(
-  `${SLICE_NAMES.AUTH_SLICE_NAME}/login`,
+  `${SLICE_NAMES.AUTHENTICATION_SLICE_NAME}/login`,
   async ({ email, password }, { rejectWithValue }) => {
     try {
       const { data } = await authService.login(email, password);
@@ -36,7 +36,7 @@ export const loginThunk = createAsyncThunk(
 );
 
 export const logoutThunk = createAsyncThunk(
-  `${SLICE_NAMES.AUTH_SLICE_NAME}/logout`,
+  `${SLICE_NAMES.AUTHENTICATION_SLICE_NAME}/logout`,
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
@@ -49,7 +49,7 @@ export const logoutThunk = createAsyncThunk(
 );
 
 export const refreshAccessTokenThunk = createAsyncThunk(
-  `${SLICE_NAMES.AUTH_SLICE_NAME}/refresh`,
+  `${SLICE_NAMES.AUTHENTICATION_SLICE_NAME}/refresh`,
   async (_, { rejectWithValue }) => {
     try {
       const { data } = await authService.refreshAccessToken();

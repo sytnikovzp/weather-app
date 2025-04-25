@@ -1,4 +1,4 @@
 export const SLICE_NAMES = {
-  AUTH_SLICE_NAME: 'auth',
+  AUTHENTICATION_SLICE_NAME: 'authentication',
   USER_PROFILE_SLICE_NAME: 'userProfile',
 };

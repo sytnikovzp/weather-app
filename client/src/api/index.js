@@ -11,7 +11,7 @@ import store from '../store';
 import {
   logoutThunk,
   refreshAccessTokenThunk,
-} from '../store/thunks/authThunks';
+} from '../store/thunks/authenticationThunks';
 
 const api = axios.create({
   baseURL: API_CONFIG.BASE_URL,
@@ -33,6 +33,11 @@ const waitForToken = () =>
     failedQueue.push({ resolve, reject });
   });
 
+const isAuthEndpoint = (url) =>
+  ['/auth/login', '/auth/registration', '/auth/refresh', '/auth/logout'].some(
+    (endpoint) => url.includes(endpoint)
+  );
+
 api.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
@@ -47,7 +52,7 @@ api.interceptors.response.use(
     const originalRequest = error.config;
     const is401 = error.response?.status === 401;
     const isNotRetry = !originalRequest._retry;
-    const isNotRefreshRequest = !originalRequest.url.includes('/auth/refresh');
+    const isNotRefreshRequest = !isAuthEndpoint(originalRequest.url);
     if (is401 && isNotRetry && isNotRefreshRequest) {
       originalRequest._retry = true;
       if (refreshingPromise) {

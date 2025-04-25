@@ -3,7 +3,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { formatDateTime } from '../../utils/sharedFunctions';
 
-import Preloader from '../Preloader/Preloader';
+import BarLoader from '../BarLoader/BarLoader';
 
 import './WhenUpdated.css';
 
@@ -17,7 +17,7 @@ function WhenUpdated({ isLoading, onRefresh, weatherData }) {
     <div className='updated-info'>
       <div className='updated-text'>
         {isLoading ? (
-          <Preloader />
+          <BarLoader />
         ) : (
           <p>
             Оновлено: {formatDateTime(weatherData.dt, 'dd MMMM yyyy, HH:mm')}

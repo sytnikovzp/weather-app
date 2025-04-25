@@ -2,8 +2,15 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { selectAuthIsLoading } from '../../store/selectors/authSelectors';
-import { loginThunk, registrationThunk } from '../../store/thunks/authThunks';
+import {
+  selectAuthenticationError,
+  selectAuthenticationIsFetching,
+} from '../../store/selectors/authenticationSelectors';
+import { clearAuthenticationStore } from '../../store/slices/authenticationSlice';
+import {
+  loginThunk,
+  registrationThunk,
+} from '../../store/thunks/authenticationThunks';
 
 import Footer from '../../components/Footer/Footer';
 import LoginForm from '../../components/LoginForm/LoginForm';
@@ -13,26 +20,21 @@ import './AuthPage.css';
 
 function AuthPage() {
   const [isLoginMode, setIsLoginMode] = useState(true);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const authIsLoading = useSelector(selectAuthIsLoading);
+  const authenticationIsFetching = useSelector(selectAuthenticationIsFetching);
+  const authenticationError = useSelector(selectAuthenticationError);
 
   const handleAuth = useCallback(
     async (action, payload) => {
-      setErrorMessage('');
-      try {
-        if (action === 'login') {
-          await dispatch(loginThunk(payload)).unwrap();
-        } else {
-          await dispatch(registrationThunk(payload)).unwrap();
-        }
-        navigate('/');
-      } catch (error) {
-        setErrorMessage(error?.message);
+      if (action === 'login') {
+        await dispatch(loginThunk(payload));
+      } else {
+        await dispatch(registrationThunk(payload));
       }
+      navigate('/');
     },
     [dispatch, navigate]
   );
@@ -40,19 +42,21 @@ function AuthPage() {
   return (
     <div id='auth-container'>
       <div className='error-big-container'>
-        {errorMessage && <div className='error'>{errorMessage}</div>}
+        {authenticationError && (
+          <div className='error'>{authenticationError.message}</div>
+        )}
       </div>
 
       {isLoginMode ? (
         <LoginForm
-          isSubmitting={authIsLoading}
+          isSubmitting={authenticationIsFetching}
           onSubmit={({ email, password }) =>
             handleAuth('login', { email, password })
           }
         />
       ) : (
         <RegistrationForm
-          isSubmitting={authIsLoading}
+          isSubmitting={authenticationIsFetching}
           onSubmit={({ fullName, email, password }) =>
             handleAuth('registration', { fullName, email, password })
           }
@@ -62,8 +66,8 @@ function AuthPage() {
       <button
         id='auth-switch-button'
         onClick={() => {
+          dispatch(clearAuthenticationStore());
           setIsLoginMode(!isLoginMode);
-          setErrorMessage('');
         }}
       >
         Перейти до

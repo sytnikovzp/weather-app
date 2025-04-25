@@ -5,7 +5,7 @@ const STRING_SCHEME = yup
   .trim('Введені дані не можуть містити пробіли на початку або в кінці')
   .max(100, 'Введені дані не можуть перевищувати 100 символів');
 
-const COORD_REQUIRED_SCHEME = yup
+const COORDINATE_REQUIRED_SCHEME = yup
   .number('Це має бути числом')
   .required('Будь ласка, введіть координати');
 
@@ -37,8 +37,8 @@ const LOGIN_VALIDATION_SCHEME = yup.object().shape({
 const FAVORITE_VALIDATION_SCHEME = yup.object().shape({
   cityName: STRING_SCHEME.required('Будь ласка, введіть назву міста'),
   country: STRING_SCHEME.required('Будь ласка, введіть назву країни'),
-  latitude: COORD_REQUIRED_SCHEME,
-  longitude: COORD_REQUIRED_SCHEME,
+  latitude: COORDINATE_REQUIRED_SCHEME,
+  longitude: COORDINATE_REQUIRED_SCHEME,
 });
 
 const USER_VALIDATION_SCHEME = yup.object().shape({

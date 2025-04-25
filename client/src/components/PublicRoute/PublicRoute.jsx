@@ -1,17 +1,17 @@
 import { Navigate } from 'react-router-dom';
 
-import useAuthUser from '../../hooks/useAuthUser';
+import useAuthentication from '../../hooks/useAuthentication';
 
-import SplashScreen from '../../pages/SplashScreen/SplashScreen';
+import FullScreenLoader from '../FullScreenLoader/FullScreenLoader';
 
 function PublicRoute({ children }) {
-  const { authenticatedUser, isFetchingUser } = useAuthUser();
+  const { isAuthenticated, userProfileIsFetching } = useAuthentication();
 
-  if (isFetchingUser) {
-    return <SplashScreen />;
+  if (userProfileIsFetching) {
+    return <FullScreenLoader />;
   }
 
-  if (authenticatedUser) {
+  if (isAuthenticated) {
     return <Navigate replace to='/' />;
   }
 

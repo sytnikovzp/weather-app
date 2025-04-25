@@ -1,39 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { SLICE_NAMES } from '../../constants';
-import { setErrorState, setLoadingState } from '../../utils/sharedFunctions';
+import { setErrorState, setFetchingState } from '../../utils/sharedFunctions';
 
-import { getUserProfile } from '../thunks/userProfileThunks';
+import { fetchUserProfile } from '../thunks/userProfileThunks';
 
 const initialState = {
-  data: null,
-  isLoading: false,
+  isFetching: false,
   error: null,
+  data: null,
+  isAuthenticated: false,
 };
 
 const userProfileSlice = createSlice({
   name: SLICE_NAMES.USER_PROFILE_SLICE_NAME,
   initialState,
   reducers: {
-    clearUserProfileStore: (state) => {
-      state.error = null;
-      state.data = null;
-    },
+    clearUserProfileStore: () => initialState,
   },
   extraReducers: (builder) => {
     builder
       // Fulfilled
-      .addCase(getUserProfile.fulfilled, (state, { payload }) => {
-        state.isLoading = false;
+      .addCase(fetchUserProfile.fulfilled, (state, { payload }) => {
+        state.isFetching = false;
         state.error = null;
         state.data = payload;
+        state.isAuthenticated = true;
       })
 
       // Pending
-      .addCase(getUserProfile.pending, setLoadingState)
+      .addCase(fetchUserProfile.pending, setFetchingState)
 
       // Rejected
-      .addCase(getUserProfile.rejected, setErrorState);
+      .addCase(fetchUserProfile.rejected, setErrorState);
   },
 });
 const { actions, reducer } = userProfileSlice;

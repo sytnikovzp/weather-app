@@ -1,28 +1,28 @@
 import api from '../api';
 
 const getAllFavorites = async () => {
-  const { data } = await api.get('/favorites');
-  return data;
+  const response = await api.get('/favorites');
+  return response;
 };
 
 const addCityToFavorites = async (cityName, country, latitude, longitude) => {
-  const { data } = await api.post('/favorites', {
+  const response = await api.post('/favorites', {
     cityName,
     country,
     latitude,
     longitude,
   });
-  return data;
+  return response;
 };
 
 const removeCityFromFavorites = async (latitude, longitude) => {
-  const { data } = await api.delete('/favorites', {
+  const response = await api.delete('/favorites', {
     params: {
       latitude,
       longitude,
     },
   });
-  return data;
+  return response;
 };
 
 export { addCityToFavorites, getAllFavorites, removeCityFromFavorites };

@@ -3,14 +3,14 @@ import { useDispatch } from 'react-redux';
 import { faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import useAuthUser from '../../hooks/useAuthUser';
+import useAuthentication from '../../hooks/useAuthentication';
 
-import { logoutThunk } from '../../store/thunks/authThunks';
+import { logoutThunk } from '../../store/thunks/authenticationThunks';
 
 import './Welcome.css';
 
 function Welcome() {
-  const { authenticatedUser } = useAuthUser();
+  const { userProfile, isAuthenticated } = useAuthentication();
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,7 +22,7 @@ function Welcome() {
 
   return (
     <div id='welcome'>
-      {authenticatedUser && <p>Привіт, {authenticatedUser.fullName}!</p>}
+      {isAuthenticated && <p>Привіт, {userProfile.fullName}!</p>}
       <button onClick={handleLogout}>
         <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
