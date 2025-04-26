@@ -3,6 +3,7 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { SLICE_NAMES } from '../../constants';
 
 import { authService } from '../../services';
+import { clearFavoritesState } from '../slices/favoritesSlice';
 import { clearUserProfileStore } from '../slices/userProfileSlice';
 
 import store from '..';
@@ -40,6 +41,7 @@ export const logoutThunk = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       await authService.logout();
+      store.dispatch(clearFavoritesState());
       store.dispatch(clearUserProfileStore());
       return null;
     } catch (error) {

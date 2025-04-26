@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   faHeartCircleMinus,
   faHeartCirclePlus,
@@ -12,7 +13,10 @@ import {
   getWindDirection,
 } from '../../utils/sharedFunctions';
 
-import { favoritesService } from '../../services';
+import {
+  addToFavorites,
+  removeFromFavorites,
+} from '../../store/thunks/favoritesThunks';
 
 import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
@@ -35,6 +39,8 @@ function WeatherCard({
 }) {
   const [viewMode, setViewMode] = useState('current-weather');
 
+  const dispatch = useDispatch();
+
   const handleAddToFavorites = async () => {
     if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
       setIsModalOpen(true);
@@ -50,11 +56,8 @@ function WeatherCard({
       return;
     }
     try {
-      await favoritesService.addCityToFavorites(
-        cityName,
-        country,
-        latitude,
-        longitude
+      await dispatch(
+        addToFavorites({ cityName, country, latitude, longitude })
       );
     } catch (error) {
       console.error(error.message);
@@ -63,14 +66,14 @@ function WeatherCard({
 
   const handleRemoveFromFavorites = async () => {
     try {
-      await favoritesService.removeCityFromFavorites(latitude, longitude);
+      await dispatch(removeFromFavorites({ latitude, longitude }));
     } catch (error) {
       console.error(error.message);
     }
   };
 
-  const handleToggleFavorite = (e) => {
-    e.stopPropagation();
+  const handleToggleFavorite = (event) => {
+    event.stopPropagation();
     isFavorite ? handleRemoveFromFavorites() : handleAddToFavorites();
     fetchFavorites();
   };
@@ -80,8 +83,8 @@ function WeatherCard({
       <div className='weather-view-toggle'>
         <button
           className={viewMode === 'current-weather' ? 'active' : ''}
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={(event) => {
+            event.stopPropagation();
             setViewMode('current-weather');
           }}
         >
@@ -90,8 +93,8 @@ function WeatherCard({
 
         <button
           className={viewMode === 'forecast' ? 'active' : ''}
-          onClick={(e) => {
-            e.stopPropagation();
+          onClick={(event) => {
+            event.stopPropagation();
             setViewMode('forecast');
           }}
         >

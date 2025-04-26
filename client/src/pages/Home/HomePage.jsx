@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
 
 import {
   formatWeeklyData,
@@ -6,11 +7,8 @@ import {
   processWeeklyTemperatureData,
 } from '../../utils/sharedFunctions';
 
-import {
-  favoritesService,
-  locationService,
-  weatherService,
-} from '../../services';
+import { selectFavorites } from '../../store/selectors/favoritesSelectors';
+import { locationService, weatherService } from '../../services';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
@@ -34,6 +32,8 @@ function HomePage() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+
+  const favoriteCities = useSelector(selectFavorites);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -103,7 +103,6 @@ function HomePage() {
 
   const fetchFavorites = useCallback(async () => {
     try {
-      const favoriteCities = await favoritesService.getAllFavorites();
       const favoritesWithWeather = await Promise.all(
         favoriteCities.map(async (city) => {
           const { currentWeather, weeklyWeather } =
@@ -115,7 +114,7 @@ function HomePage() {
     } catch (error) {
       console.error(error.message);
     }
-  }, [fetchWeatherData]);
+  }, [favoriteCities, fetchWeatherData]);
 
   const fetchWeatherForUserLocation = async () => {
     setIsLoading(true);

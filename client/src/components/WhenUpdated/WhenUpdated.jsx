@@ -8,8 +8,8 @@ import BarLoader from '../BarLoader/BarLoader';
 import './WhenUpdated.css';
 
 function WhenUpdated({ isLoading, onRefresh, weatherData }) {
-  const handleRefresh = (e) => {
-    e.stopPropagation();
+  const handleRefresh = (event) => {
+    event.stopPropagation();
     onRefresh();
   };
 
