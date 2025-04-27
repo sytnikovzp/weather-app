@@ -1,4 +1,6 @@
 import { useEffect, useState } from 'react';
+import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { weatherService } from '../../services';
 
@@ -50,9 +52,14 @@ function CityAutocomplete({ onCitySelect }) {
   };
 
   const handleCitySelect = (city) => {
-    setQuery(city.name);
+    setQuery('');
     setSuggestions([]);
     onCitySelect(city);
+  };
+
+  const handleClearInput = () => {
+    setQuery('');
+    setSuggestions([]);
   };
 
   return (
@@ -65,17 +72,33 @@ function CityAutocomplete({ onCitySelect }) {
         value={query}
         onChange={handleInputChange}
       />
-
-      {isLoading && !suggestions.length && <BarLoader />}
-      {errorMessage && !suggestions.length && (
-        <ErrorMessageBlock message={errorMessage} />
+      {query && (
+        <button className='clear-button' onClick={handleClearInput}>
+          <FontAwesomeIcon icon={faXmark} />
+        </button>
       )}
 
-      {suggestions.length === 0 && !isLoading && !errorMessage && (
-        <div className='no-results'>Немає результатів</div>
+      {(isLoading || errorMessage || suggestions.length === 0) && query && (
+        <ul className='autocomplete-list' id='autocomplete-list'>
+          {isLoading && !suggestions.length && (
+            <li className='autocomplete-item loading'>
+              <BarLoader />
+            </li>
+          )}
+
+          {errorMessage && !suggestions.length && (
+            <li className='autocomplete-item error'>
+              <ErrorMessageBlock message={errorMessage} />
+            </li>
+          )}
+
+          {suggestions.length === 0 && !isLoading && !errorMessage && (
+            <li className='autocomplete-item no-results'>Немає результатів</li>
+          )}
+        </ul>
       )}
 
-      {suggestions.length > 0 && (
+      {suggestions.length > 0 && query && (
         <ul className='autocomplete-list' id='autocomplete-list'>
           {suggestions.map((city) => (
             <li

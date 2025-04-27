@@ -26,3 +26,43 @@
 .autocomplete-item:hover {
   background-color: #f0f0f0;
 }
+
+.autocomplete-item.loading {
+  min-height: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  color: #888;
+}
+
+.autocomplete-item.error {
+  padding: 10px 15px;
+  color: red;
+  font-size: 14px;
+  cursor: default;
+}
+
+.autocomplete-item.no-results {
+  padding: 10px 15px;
+  font-size: 14px;
+  color: #888;
+  text-align: center;
+  cursor: default;
+}
+
+.clear-button {
+  background: none;
+  cursor: pointer;
+  font-size: 14px;
+  position: absolute;
+  color: #888;
+  border: none;
+  right: 5px;
+  border-radius: 20px;
+}
+
+.clear-button:hover {
+  color: #333;
+  background: transparent;
+}
