@@ -19,7 +19,7 @@ function CityAutocomplete({ onCitySelect }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       setDebouncedQuery(query);
-    }, 300);
+    }, 500);
     return () => clearTimeout(timer);
   }, [query]);
 

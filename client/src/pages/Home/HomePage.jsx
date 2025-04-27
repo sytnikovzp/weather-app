@@ -2,16 +2,12 @@ import { useCallback, useEffect, useState } from 'react';
 
 import useUserLocationWeather from '../../hooks/useUserLocationWeather';
 
-import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
-import ErrorMessageBlock from '../../components/ErrorMessageBlock/ErrorMessageBlock';
-import FavoritesList from '../../components/FavoritesList/FavoritesList';
+import FavoritesTabContent from '../../components/FavoritesTabContent/FavoritesTabContent';
 import Footer from '../../components/Footer/Footer';
 import Logo from '../../components/Logo/Logo';
+import MainTabContent from '../../components/MainTabContent/MainTabContent';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
-import SpinerLoader from '../../components/SpinerLoader/SpinerLoader';
-import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
-import WeatherCard from '../../components/WeatherCard/WeatherCard';
-import Welcome from '../../components/Welcome/Welcome';
+import Tabs from '../../components/Tabs/Tabs';
 
 import './HomePage.css';
 
@@ -20,8 +16,6 @@ function HomePage() {
   const [selectedCity, setSelectedCity] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { userCity, isLoading, errorMessage } = useUserLocationWeather();
-
-  const isCitySelected = Boolean(selectedCity);
 
   const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);
@@ -47,47 +41,19 @@ function HomePage() {
     <div className='app-container'>
       <Logo />
       <div className='header'>
-        <div className='tabs-container'>
-          <div
-            className={`tab ${activeTab === 'main' ? 'active' : ''}`}
-            onClick={() => handleTabClick('main')}
-          >
-            Головна
-          </div>
-          <div
-            className={`tab ${activeTab === 'favorites' ? 'active' : ''}`}
-            onClick={() => handleTabClick('favorites')}
-          >
-            Обране
-          </div>
-        </div>
-        <Welcome />
+        <Tabs activeTab={activeTab} onTabClick={handleTabClick} />
       </div>
+
       {activeTab === 'main' ? (
-        <div className='content'>
-          <CityAutocomplete onCitySelect={handleCitySelect} />
-          {isLoading && <SpinerLoader />}
-
-          {errorMessage && (
-            <div className='error-big-container'>
-              <ErrorMessageBlock message={errorMessage} />
-            </div>
-          )}
-
-          {isCitySelected && !isLoading && !errorMessage && (
-            <>
-              <WeatherCard
-                selectedCity={selectedCity}
-                setIsModalOpen={setIsModalOpen}
-              />
-              <TemperatureChart selectedCity={selectedCity} />
-            </>
-          )}
-        </div>
+        <MainTabContent
+          errorMessage={errorMessage}
+          isLoading={isLoading}
+          selectedCity={selectedCity}
+          setIsModalOpen={setIsModalOpen}
+          onCitySelect={handleCitySelect}
+        />
       ) : (
-        <div className='content'>
-          <FavoritesList onSelectClick={handleCitySelect} />
-        </div>
+        <FavoritesTabContent onCitySelect={handleCitySelect} />
       )}
 
       <Footer />
