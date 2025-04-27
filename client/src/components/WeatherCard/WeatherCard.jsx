@@ -174,7 +174,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
                 <strong>Облачність:</strong> {currentWeatherData.clouds.all}%
               </p>
               <p>
-                <strong>Захід сонця:</strong>
+                <strong>Захід сонця: </strong>
                 {formatDateTime(currentWeatherData.sys.sunset, 'HH:mm')}
               </p>
             </div>

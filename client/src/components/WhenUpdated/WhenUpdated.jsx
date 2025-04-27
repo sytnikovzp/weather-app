@@ -20,7 +20,7 @@ function WhenUpdated({ isLoading, onRefresh, currentWeatherData }) {
           <BarLoader />
         ) : (
           <p>
-            Оновлено:
+            <strong>Оновлено: </strong>
             {formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')}
           </p>
         )}
