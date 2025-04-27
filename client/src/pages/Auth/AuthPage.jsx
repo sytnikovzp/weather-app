@@ -2,10 +2,7 @@ import { useCallback, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 
-import {
-  selectAuthenticationError,
-  selectAuthenticationIsFetching,
-} from '../../store/selectors/authenticationSelectors';
+import { selectAuthenticationError } from '../../store/selectors/authenticationSelectors';
 import { clearAuthenticationStore } from '../../store/slices/authenticationSlice';
 import {
   loginThunk,
@@ -25,16 +22,16 @@ function AuthPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const authenticationIsFetching = useSelector(selectAuthenticationIsFetching);
   const authenticationError = useSelector(selectAuthenticationError);
 
+  const toggleMode = useCallback(() => {
+    dispatch(clearAuthenticationStore());
+    setIsLoginMode((prev) => !prev);
+  }, [dispatch]);
+
   const handleAuth = useCallback(
-    async (action, payload) => {
-      if (action === 'login') {
-        await dispatch(loginThunk(payload));
-      } else {
-        await dispatch(registrationThunk(payload));
-      }
+    async (authThunk, payload) => {
+      await dispatch(authThunk(payload));
       navigate('/');
     },
     [dispatch, navigate]
@@ -50,27 +47,19 @@ function AuthPage() {
 
       {isLoginMode ? (
         <LoginForm
-          isSubmitting={authenticationIsFetching}
           onSubmit={({ email, password }) =>
-            handleAuth('login', { email, password })
+            handleAuth(loginThunk, { email, password })
           }
         />
       ) : (
         <RegistrationForm
-          isSubmitting={authenticationIsFetching}
           onSubmit={({ fullName, email, password }) =>
-            handleAuth('registration', { fullName, email, password })
+            handleAuth(registrationThunk, { fullName, email, password })
           }
         />
       )}
 
-      <button
-        className='auth-switch-button'
-        onClick={() => {
-          dispatch(clearAuthenticationStore());
-          setIsLoginMode(!isLoginMode);
-        }}
-      >
+      <button className='auth-switch-button' onClick={toggleMode}>
         Перейти до
         {isLoginMode ? ' реєстрації ' : ' авторизації '}
         користувача

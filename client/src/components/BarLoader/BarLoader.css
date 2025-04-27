@@ -1,4 +1,4 @@
-.horizontal-loader {
+.bar-loader {
   width: 100%;
   height: 8px;
   background-color: rgba(75, 192, 192, 0.3);
@@ -7,7 +7,7 @@
   overflow: hidden;
 }
 
-.horizontal-loader::after {
+.bar-loader::after {
   content: '';
   display: block;
   width: 100%;

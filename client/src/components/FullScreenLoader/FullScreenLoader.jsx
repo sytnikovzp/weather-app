@@ -1,4 +1,4 @@
-import Logo from '../Logo/Logo';
+import SpinerLoader from '../SpinerLoader/SpinerLoader';
 
 import './FullScreenLoader.css';
 
@@ -6,8 +6,7 @@ function FullScreenLoader() {
   return (
     <div className='full-screen-loader'>
       <div className='loader-content'>
-        <Logo />
-        <div className='spinner' />
+        <SpinerLoader />
       </div>
     </div>
   );

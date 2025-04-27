@@ -1,8 +1,8 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 
 import { REGISTRATION_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import FormField from '../FormField/FormField';
 
 const initialValues = {
   fullName: '',
@@ -10,49 +10,34 @@ const initialValues = {
   password: '',
 };
 
-function RegistrationForm({ onSubmit, isSubmitting }) {
-  const renderForm = ({ isValid }) => (
+function RegistrationForm({ onSubmit }) {
+  const renderForm = ({ isSubmitting, isValid }) => (
     <Form id='registration-form'>
       <h2>Реєстрація</h2>
 
-      <Field
+      <FormField
         required
         id='fullName'
         name='fullName'
         placeholder='Повне імʼя'
         type='text'
       />
-      <div className='error-small-container'>
-        <ErrorMessage name='fullName'>
-          {(message) => <ErrorMessageBlock message={message} />}
-        </ErrorMessage>
-      </div>
 
-      <Field
+      <FormField
         required
         id='email'
         name='email'
         placeholder='E-mail'
         type='email'
       />
-      <div className='error-small-container'>
-        <ErrorMessage name='email'>
-          {(message) => <ErrorMessageBlock message={message} />}
-        </ErrorMessage>
-      </div>
 
-      <Field
+      <FormField
         required
         id='password'
         name='password'
         placeholder='Пароль'
         type='password'
       />
-      <div className='error-small-container'>
-        <ErrorMessage name='password'>
-          {(message) => <ErrorMessageBlock message={message} />}
-        </ErrorMessage>
-      </div>
 
       <button disabled={!isValid || isSubmitting} type='submit'>
         {isSubmitting ? 'Реєстрація...' : 'ЗАРЕЄСТРУВАТИСЯ ТА УВІЙТИ'}

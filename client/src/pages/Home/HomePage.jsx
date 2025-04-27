@@ -8,6 +8,7 @@ import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import Footer from '../../components/Footer/Footer';
 import Logo from '../../components/Logo/Logo';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
+import SpinerLoader from '../../components/SpinerLoader/SpinerLoader';
 import TemperatureChart from '../../components/TemperatureChart/TemperatureChart';
 import WeatherCard from '../../components/WeatherCard/WeatherCard';
 import Welcome from '../../components/Welcome/Welcome';
@@ -65,7 +66,7 @@ function HomePage() {
       {activeTab === 'main' ? (
         <div className='content'>
           <CityAutocomplete onCitySelect={handleCitySelect} />
-          {isLoading && <div>Завантаження погоди...</div>}
+          {isLoading && <SpinerLoader />}
 
           {errorMessage && (
             <div className='error-big-container'>

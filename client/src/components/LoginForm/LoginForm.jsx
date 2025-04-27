@@ -1,44 +1,34 @@
-import { ErrorMessage, Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 
 import { LOGIN_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import FormField from '../FormField/FormField';
 
 const initialValues = {
   email: '',
   password: '',
 };
 
-function LoginForm({ onSubmit, isSubmitting }) {
-  const renderForm = ({ isValid }) => (
+function LoginForm({ onSubmit }) {
+  const renderForm = ({ isSubmitting, isValid }) => (
     <Form id='auth-form'>
       <h2>Авторизація</h2>
 
-      <Field
+      <FormField
         required
         id='email'
         name='email'
         placeholder='E-mail'
         type='email'
       />
-      <div className='error-small-container'>
-        <ErrorMessage name='email'>
-          {(message) => <ErrorMessageBlock message={message} />}
-        </ErrorMessage>
-      </div>
 
-      <Field
+      <FormField
         required
         id='password'
         name='password'
         placeholder='Пароль'
         type='password'
       />
-      <div className='error-small-container'>
-        <ErrorMessage name='password'>
-          {(message) => <ErrorMessageBlock message={message} />}
-        </ErrorMessage>
-      </div>
 
       <button disabled={!isValid || isSubmitting} type='submit'>
         {isSubmitting ? 'Вхід...' : 'УВІЙТИ'}
