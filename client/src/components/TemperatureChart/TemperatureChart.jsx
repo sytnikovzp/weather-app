@@ -2,12 +2,25 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 
+import useWeatherForCity from '../../hooks/useWeatherForCity';
+
 import './TemperatureChart.css';
 
-function TemperatureChart({ cityName, dayData, weeklyData }) {
+function TemperatureChart({ selectedCity }) {
+  const { temperatureData, fetchTemperatureData } = useWeatherForCity();
+
   const [mode, setMode] = useState('day');
   const chartRef = useRef(null);
-  const data = mode === 'day' ? dayData : weeklyData;
+  const data =
+    mode === 'day'
+      ? temperatureData?.dayData
+      : temperatureData?.weeklyWeatherData;
+
+  useEffect(() => {
+    if (selectedCity && selectedCity.latitude && selectedCity.longitude) {
+      fetchTemperatureData(selectedCity.latitude, selectedCity.longitude);
+    }
+  }, [selectedCity, fetchTemperatureData]);
 
   useEffect(() => {
     const ctx = chartRef.current?.getContext('2d');
@@ -23,7 +36,7 @@ function TemperatureChart({ cityName, dayData, weeklyData }) {
         plugins: {
           title: {
             display: false,
-            text: `Температура в ${cityName}`,
+            text: `Температура в ${selectedCity.city}`,
           },
         },
         interaction: { intersect: false },
@@ -35,7 +48,7 @@ function TemperatureChart({ cityName, dayData, weeklyData }) {
     });
 
     return () => tempChart.destroy();
-  }, [data, cityName, mode]);
+  }, [data, selectedCity.city, mode]);
 
   return (
     <div className='card'>

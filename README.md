@@ -464,7 +464,7 @@ CTRL + C
 [
   {
     "id": 1,
-    "cityName": "Назва міста",
+    "city": "Назва міста",
     "country": "Країна",
     "latitude": "Широта міста з OpenWeather",
     "longitude": "Довгота міста з OpenWeather"
@@ -484,7 +484,7 @@ CTRL + C
 
 <pre><code>
 {
-  "cityName": "Назва міста",
+  "city": "Назва міста",
   "country": "Країна",
   "latitude": "Широта міста з OpenWeather",
   "longitude": "Довгота міста з OpenWeather"
@@ -496,7 +496,7 @@ CTRL + C
 <pre><code>
 {
   "id": 1,
-  "cityName": "Назва міста",
+  "city": "Назва міста",
   "country": "Країна",
   "latitude": "Широта міста з OpenWeather",
   "longitude": "Довгота міста з OpenWeather"

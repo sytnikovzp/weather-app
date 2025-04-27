@@ -1,13 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useEffect, useState } from 'react';
 
-import {
-  formatWeeklyData,
-  processTemperatureData,
-  processWeeklyTemperatureData,
-} from '../../utils/sharedFunctions';
-
-import { selectFavorites } from '../../store/selectors/favoritesSelectors';
 import { locationService, weatherService } from '../../services';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
@@ -24,16 +16,7 @@ import './HomePage.css';
 function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
   const [selectedCity, setSelectedCity] = useState(null);
-  const [favorites, setFavorites] = useState([]);
-  const [weatherData, setWeatherData] = useState(null);
-  const [weeklyData, setWeeklyData] = useState(null);
-  const [temperatureData, setTemperatureData] = useState(null);
-  const [isFavorite, setIsFavorite] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
-
-  const favoriteCities = useSelector(selectFavorites);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -41,137 +24,28 @@ function HomePage() {
 
   const handleCitySelect = (city) => {
     setSelectedCity({
-      cityName: city.name,
+      city: city.name,
       country: city.country,
-      lat: city.lat,
-      lon: city.lon,
+      latitude: city.lat,
+      longitude: city.lon,
     });
-  };
-
-  const fetchWeatherData = useCallback(async (selectedCity) => {
-    if (!selectedCity.lat || !selectedCity.lon) {
-      return { error: 'Координати недоступні' };
-    }
-    try {
-      const currentWeather = await weatherService.getWeather(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const weeklyWeather = await weatherService.getForecast(
-        selectedCity.lat,
-        selectedCity.lon
-      );
-      const formattedWeeklyData = formatWeeklyData(weeklyWeather);
-      return { currentWeather, weeklyWeather: formattedWeeklyData };
-    } catch (error) {
-      console.error(error.message);
-      throw error;
-    }
-  }, []);
-
-  const fetchTemperatureData = async (selectedCity) => {
-    const data = await weatherService.getForecast(
-      selectedCity.lat,
-      selectedCity.lon
-    );
-    const dayData = processTemperatureData(data);
-    const weeklyData = processWeeklyTemperatureData(data);
-    return { dayData, weeklyData };
-  };
-
-  const handleRefresh = async () => {
-    setIsLoading(true);
-    setErrorMessage('');
-    try {
-      const { currentWeather, weeklyWeather } =
-        await fetchWeatherData(selectedCity);
-      const { dayData, weeklyData } = await fetchTemperatureData(selectedCity);
-      setWeatherData(currentWeather);
-      setWeeklyData(weeklyWeather);
-      setTemperatureData({ dayData, weeklyData });
-    } catch (error) {
-      setErrorMessage(error.response?.data?.message);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleSelectCity = (city) => {
-    setSelectedCity(city);
     setActiveTab('main');
   };
 
-  const fetchFavorites = useCallback(async () => {
-    try {
-      const favoritesWithWeather = await Promise.all(
-        favoriteCities.map(async (city) => {
-          const { currentWeather, weeklyWeather } =
-            await fetchWeatherData(city);
-          return { ...city, weather: currentWeather, weeklyWeather };
-        })
-      );
-      setFavorites(favoritesWithWeather);
-    } catch (error) {
-      console.error(error.message);
-    }
-  }, [favoriteCities, fetchWeatherData]);
-
   const fetchWeatherForUserLocation = async () => {
-    setIsLoading(true);
-    setErrorMessage('');
-    try {
-      const { latitude, longitude } = await locationService.getLocationByIP();
-      const weather = await weatherService.getWeather(latitude, longitude);
-      setWeatherData(weather);
-      setSelectedCity({
-        cityName: weather.name,
-        country: weather.sys.country,
-        lat: latitude,
-        lon: longitude,
-      });
-    } catch (error) {
-      setErrorMessage(error.response?.data?.message);
-    } finally {
-      setIsLoading(false);
-    }
+    const { latitude, longitude } = await locationService.getLocationByIP();
+    const weather = await weatherService.getWeather(latitude, longitude);
+    setSelectedCity({
+      city: weather.name,
+      country: weather.sys.country,
+      latitude,
+      longitude,
+    });
   };
 
   useEffect(() => {
-    fetchFavorites();
     fetchWeatherForUserLocation();
-  }, [fetchFavorites]);
-
-  useEffect(() => {
-    if (selectedCity) {
-      const cityExistsInFavorites = favorites.some(
-        (fav) => fav.cityName === selectedCity.cityName
-      );
-      setIsFavorite(cityExistsInFavorites);
-    }
-  }, [selectedCity, favorites]);
-
-  useEffect(() => {
-    if (selectedCity) {
-      const getWeather = async () => {
-        setIsLoading(true);
-        setErrorMessage('');
-        try {
-          const { currentWeather, weeklyWeather } =
-            await fetchWeatherData(selectedCity);
-          const { dayData, weeklyData } =
-            await fetchTemperatureData(selectedCity);
-          setWeatherData(currentWeather);
-          setWeeklyData(weeklyWeather);
-          setTemperatureData({ dayData, weeklyData });
-        } catch (error) {
-          setErrorMessage(error.response?.data?.message);
-        } finally {
-          setIsLoading(false);
-        }
-      };
-      getWeather();
-    }
-  }, [fetchWeatherData, selectedCity]);
+  }, []);
 
   return (
     <div id='app-container'>
@@ -200,39 +74,17 @@ function HomePage() {
           {selectedCity && (
             <>
               <WeatherCard
-                cityCountry={selectedCity.country}
-                cityName={selectedCity.cityName}
-                errorMessage={errorMessage}
-                favorites={favorites}
-                fetchFavorites={fetchFavorites}
-                isFavorite={isFavorite}
-                isLoading={isLoading}
-                latitude={selectedCity.lat}
-                longitude={selectedCity.lon}
+                selectedCity={selectedCity}
                 setIsModalOpen={setIsModalOpen}
-                weatherData={weatherData}
-                weeklyData={weeklyData}
-                onRefresh={handleRefresh}
               />
 
-              <TemperatureChart
-                cityName={selectedCity.cityName}
-                dayData={temperatureData?.dayData}
-                weeklyData={temperatureData?.weeklyData}
-              />
+              <TemperatureChart selectedCity={selectedCity} />
             </>
           )}
         </div>
       ) : (
         <div className='content'>
-          <FavoritesList
-            errorMessage={errorMessage}
-            favorites={favorites}
-            isFavorite={isFavorite}
-            isLoading={isLoading}
-            onRefresh={handleRefresh}
-            onSelectClick={handleSelectCity}
-          />
+          <FavoritesList onSelectClick={handleCitySelect} />
         </div>
       )}
 

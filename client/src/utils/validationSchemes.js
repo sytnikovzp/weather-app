@@ -35,7 +35,7 @@ const LOGIN_VALIDATION_SCHEME = yup.object().shape({
 });
 
 const FAVORITE_VALIDATION_SCHEME = yup.object().shape({
-  cityName: STRING_SCHEME.required('Будь ласка, введіть назву міста'),
+  city: STRING_SCHEME.required('Будь ласка, введіть назву міста'),
   country: STRING_SCHEME.required('Будь ласка, введіть назву країни'),
   latitude: COORDINATE_REQUIRED_SCHEME,
   longitude: COORDINATE_REQUIRED_SCHEME,

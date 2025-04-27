@@ -1,13 +1,12 @@
+import { useSelector } from 'react-redux';
+
+import { selectFavorites } from '../../store/selectors/favoritesSelectors';
+
 import WeatherCard from '../WeatherCard/WeatherCard';
 
-function FavoritesList({
-  favorites,
-  onRefresh,
-  isFavorite,
-  onSelectClick,
-  isLoading,
-  errorMessage,
-}) {
+function FavoritesList({ onSelectClick }) {
+  const favorites = useSelector(selectFavorites);
+
   return (
     <>
       <h3>Список обраних міст</h3>
@@ -21,14 +20,8 @@ function FavoritesList({
               onClick={() => onSelectClick(city)}
             >
               <WeatherCard
-                cityCountry={city.country}
-                cityName={city.cityName}
-                errorMessage={errorMessage}
-                isFavorite={isFavorite}
-                isLoading={isLoading}
-                weatherData={city.weather}
-                weeklyData={city.weeklyWeather}
-                onRefresh={onRefresh}
+              // city={selectedCity}
+              // setIsModalOpen={setIsModalOpen}
               />
             </div>
           ))}

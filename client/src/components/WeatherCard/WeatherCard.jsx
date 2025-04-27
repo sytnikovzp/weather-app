@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   faHeartCircleMinus,
   faHeartCirclePlus,
@@ -12,9 +12,12 @@ import {
   getDayLabel,
   getWindDirection,
 } from '../../utils/sharedFunctions';
+import useWeatherForCity from '../../hooks/useWeatherForCity';
 
+import { selectFavorites } from '../../store/selectors/favoritesSelectors';
 import {
   addToFavorites,
+  fetchFavorites,
   removeFromFavorites,
 } from '../../store/thunks/favoritesThunks';
 
@@ -22,43 +25,50 @@ import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
 import './WeatherCard.css';
 
-function WeatherCard({
-  cityCountry,
-  cityName,
-  errorMessage,
-  favorites,
-  fetchFavorites,
-  weeklyData,
-  isFavorite,
-  latitude,
-  isLoading,
-  longitude,
-  setIsModalOpen,
-  weatherData,
-  onRefresh,
-}) {
+function WeatherCard({ selectedCity, setIsModalOpen }) {
   const [viewMode, setViewMode] = useState('current-weather');
+  const { city, country, latitude, longitude } = selectedCity;
 
   const dispatch = useDispatch();
+
+  const favorites = useSelector(selectFavorites);
+
+  const cityExistsInFavorites = favorites.some(
+    (fav) => fav.selectedCity === city.selectedCity
+  );
+
+  const {
+    currentWeatherData,
+    weeklyWeatherData,
+    isLoading,
+    errorMessage,
+    fetchWeatherData,
+  } = useWeatherForCity();
+
+  useEffect(() => {
+    if (selectedCity && latitude && longitude) {
+      fetchWeatherData(latitude, longitude);
+    }
+  }, [selectedCity, fetchWeatherData, latitude, longitude]);
 
   const handleAddToFavorites = async () => {
     if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
       setIsModalOpen(true);
       return;
     }
-    if (!cityName || !weatherData?.sys) {
+    if (!selectedCity || !currentWeatherData?.sys) {
       return;
     }
-    const { country } = weatherData.sys;
+    const { country } = currentWeatherData.sys;
     if (
-      favorites.some((fav) => fav.lat === latitude && fav.lon === longitude)
+      favorites.some(
+        (fav) => fav.latitude === latitude && fav.longitude === longitude
+      )
     ) {
       return;
     }
     try {
-      await dispatch(
-        addToFavorites({ cityName, country, latitude, longitude })
-      );
+      await dispatch(addToFavorites({ city, country, latitude, longitude }));
     } catch (error) {
       console.error(error.message);
     }
@@ -72,10 +82,20 @@ function WeatherCard({
     }
   };
 
+  if (!favorites) {
+    dispatch(fetchFavorites());
+  }
+
   const handleToggleFavorite = (event) => {
     event.stopPropagation();
-    isFavorite ? handleRemoveFromFavorites() : handleAddToFavorites();
+    cityExistsInFavorites
+      ? handleRemoveFromFavorites()
+      : handleAddToFavorites();
     fetchFavorites();
+  };
+
+  const handleRefresh = () => {
+    fetchWeatherData(latitude, longitude);
   };
 
   return (
@@ -103,28 +123,34 @@ function WeatherCard({
 
         <button className='favorite-button' onClick={handleToggleFavorite}>
           <FontAwesomeIcon
-            icon={isFavorite ? faHeartCircleMinus : faHeartCirclePlus}
+            icon={
+              cityExistsInFavorites ? faHeartCircleMinus : faHeartCirclePlus
+            }
           />
         </button>
       </div>
       {errorMessage && <div className='error'>{errorMessage}</div>}
-      {viewMode === 'current-weather' && weatherData && (
+      {viewMode === 'current-weather' && currentWeatherData && (
         <div className='weather-content'>
           <WhenUpdated
+            currentWeatherData={currentWeatherData}
             isLoading={isLoading}
-            weatherData={weatherData}
-            onRefresh={onRefresh}
+            onRefresh={handleRefresh}
           />
           <div className='city-info'>
-            <h3>{cityCountry}</h3>
-            <h3>{cityName}</h3>
-            <h3>{Math.round(weatherData.main.temp)}°C</h3>
+            <h3>{country}</h3>
+            <h3>{city}</h3>
+            <h3>{Math.round(currentWeatherData.main.temp)}°C</h3>
           </div>
           <div className='weather-description'>
-            <p>Відчувається як {Math.round(weatherData.main.feels_like)}°C</p>
             <p>
-              {weatherData.weather[0].description.charAt(0).toUpperCase() +
-                weatherData.weather[0].description.slice(1)}
+              Відчувається як {Math.round(currentWeatherData.main.feels_like)}°C
+            </p>
+            <p>
+              {currentWeatherData.weather[0].description
+                .charAt(0)
+                .toUpperCase() +
+                currentWeatherData.weather[0].description.slice(1)}
             </p>
           </div>
 
@@ -132,43 +158,44 @@ function WeatherCard({
             <div>
               <p>
                 <strong>Видимість: </strong>
-                {Math.round(weatherData.visibility / 1000)} км
+                {Math.round(currentWeatherData.visibility / 1000)} км
               </p>
               <p>
-                <strong>Вологість:</strong> {weatherData.main.humidity}%
+                <strong>Вологість:</strong> {currentWeatherData.main.humidity}%
               </p>
               <p>
                 <strong>Схід сонця: </strong>
-                {formatDateTime(weatherData.sys.sunrise, 'HH:mm')}
+                {formatDateTime(currentWeatherData.sys.sunrise, 'HH:mm')}
               </p>
             </div>
             <div>
               <p>
-                <strong>Вітер:</strong> {Math.round(weatherData.wind.speed)} м/с
-                {getWindDirection(weatherData.wind.deg)}
+                <strong>Вітер: </strong>
+                {Math.round(currentWeatherData.wind.speed)} м/с
+                {getWindDirection(currentWeatherData.wind.deg)}
               </p>
               <p>
-                <strong>Облачність:</strong> {weatherData.clouds.all}%
+                <strong>Облачність:</strong> {currentWeatherData.clouds.all}%
               </p>
               <p>
                 <strong>Захід сонця:</strong>
-                {formatDateTime(weatherData.sys.sunset, 'HH:mm')}
+                {formatDateTime(currentWeatherData.sys.sunset, 'HH:mm')}
               </p>
             </div>
           </div>
         </div>
       )}
       {viewMode === 'forecast' &&
-        weeklyData &&
-        Array.isArray(weeklyData.labels) &&
-        weeklyData.labels.length > 0 &&
-        Array.isArray(weeklyData.datasets) &&
-        weeklyData.datasets.length > 0 && (
+        weeklyWeatherData &&
+        Array.isArray(weeklyWeatherData.labels) &&
+        weeklyWeatherData.labels.length > 0 &&
+        Array.isArray(weeklyWeatherData.datasets) &&
+        weeklyWeatherData.datasets.length > 0 && (
           <div className='weekly-forecast'>
-            {weeklyData.labels.map((_, index) => (
+            {weeklyWeatherData.labels.map((_, index) => (
               <div key={index} className='weekly-item'>
                 <p className='day-label'>{getDayLabel(index)}</p>
-                <p>{weeklyData.datasets[0].data[index]}°C</p>
+                <p>{weeklyWeatherData.datasets[0].data[index]}°C</p>
               </div>
             ))}
           </div>

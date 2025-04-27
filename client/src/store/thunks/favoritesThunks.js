@@ -18,10 +18,10 @@ export const fetchFavorites = createAsyncThunk(
 
 export const addToFavorites = createAsyncThunk(
   `${SLICE_NAMES.FAVORITES_SLICE_NAME}/add`,
-  async ({ cityName, country, latitude, longitude }, { rejectWithValue }) => {
+  async ({ city, country, latitude, longitude }, { rejectWithValue }) => {
     try {
       const { data } = await favoritesService.addCityToFavorites(
-        cityName,
+        city,
         country,
         latitude,
         longitude

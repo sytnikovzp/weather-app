@@ -26,12 +26,12 @@ class FavoritesController {
     const transaction = await sequelize.transaction();
     try {
       const {
-        body: { cityName, country, latitude, longitude },
+        body: { city, country, latitude, longitude },
         user: { uuid },
       } = req;
       const newFavorite = await addFavorite(
         uuid,
-        cityName,
+        city,
         country,
         latitude,
         longitude,

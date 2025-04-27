@@ -26,17 +26,17 @@ class FavoritesService {
       throw notFound('Список улюблених міст порожній');
     }
     const allFavorites = foundFavorites.map((favorite) => ({
-      cityName: favorite.City.title,
+      city: favorite.City.title,
       country: favorite.City.country,
-      lat: favorite.City.latitude,
-      lon: favorite.City.longitude,
+      latitude: favorite.City.latitude,
+      longitude: favorite.City.longitude,
     }));
     return allFavorites;
   }
 
   static async addFavorite(
     uuid,
-    cityName,
+    city,
     country,
     latitude,
     longitude,
@@ -55,11 +55,14 @@ class FavoritesService {
     if (favoriteCount >= 5) {
       throw badRequest('Не можна додати більше 5 улюблених міст');
     }
-    let city = await City.findOne({ where: { latitude, longitude } });
-    if (!city) {
-      city = await City.create(
+    let newFavoriteCity = await City.findOne({
+      where: { latitude, longitude },
+    });
+
+    if (!newFavoriteCity) {
+      newFavoriteCity = await City.create(
         {
-          title: cityName,
+          title: city,
           country,
           latitude,
           longitude,
@@ -68,7 +71,7 @@ class FavoritesService {
       );
     }
     const existingFavorite = await Favorite.findOne({
-      where: { userUuid: foundUser.uuid, cityUuid: city.uuid },
+      where: { userUuid: foundUser.uuid, cityUuid: newFavoriteCity.uuid },
     });
     if (existingFavorite) {
       throw badRequest('Це місто вже є у списку улюблених');
@@ -76,17 +79,17 @@ class FavoritesService {
     await Favorite.create(
       {
         userUuid: foundUser.uuid,
-        cityUuid: city.uuid,
+        cityUuid: newFavoriteCity.uuid,
       },
       { transaction }
     );
-    const newFavorite = {
-      cityName: city.title,
-      country: city.country,
-      lat: city.latitude,
-      lon: city.longitude,
+    const addedFavorite = {
+      city: newFavoriteCity.title,
+      country: newFavoriteCity.country,
+      latitude: newFavoriteCity.latitude,
+      longitude: newFavoriteCity.longitude,
     };
-    return newFavorite;
+    return addedFavorite;
   }
 
   static async removeFavorite(uuid, latitude, longitude, transaction) {

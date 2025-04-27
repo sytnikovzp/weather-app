@@ -7,7 +7,7 @@ import BarLoader from '../BarLoader/BarLoader';
 
 import './WhenUpdated.css';
 
-function WhenUpdated({ isLoading, onRefresh, weatherData }) {
+function WhenUpdated({ isLoading, onRefresh, currentWeatherData }) {
   const handleRefresh = (event) => {
     event.stopPropagation();
     onRefresh();
@@ -20,7 +20,8 @@ function WhenUpdated({ isLoading, onRefresh, weatherData }) {
           <BarLoader />
         ) : (
           <p>
-            Оновлено: {formatDateTime(weatherData.dt, 'dd MMMM yyyy, HH:mm')}
+            Оновлено:
+            {formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')}
           </p>
         )}
       </div>

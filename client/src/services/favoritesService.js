@@ -5,9 +5,9 @@ const getAllFavorites = async () => {
   return response;
 };
 
-const addCityToFavorites = async (cityName, country, latitude, longitude) => {
+const addCityToFavorites = async (city, country, latitude, longitude) => {
   const response = await api.post('/favorites', {
-    cityName,
+    city,
     country,
     latitude,
     longitude,
