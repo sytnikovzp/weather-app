@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
-import { locationService, weatherService } from '../../services';
+import useUserLocationWeather from '../../hooks/useUserLocationWeather';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
@@ -17,12 +17,15 @@ function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
   const [selectedCity, setSelectedCity] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { userCity, isLoading, errorMessage } = useUserLocationWeather();
 
-  const handleTabClick = (tab) => {
+  const isCitySelected = Boolean(selectedCity);
+
+  const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);
-  };
+  }, []);
 
-  const handleCitySelect = (city) => {
+  const handleCitySelect = useCallback((city) => {
     setSelectedCity({
       city: city.name,
       country: city.country,
@@ -30,28 +33,19 @@ function HomePage() {
       longitude: city.lon,
     });
     setActiveTab('main');
-  };
-
-  const fetchWeatherForUserLocation = async () => {
-    const { latitude, longitude } = await locationService.getLocationByIP();
-    const weather = await weatherService.getWeather(latitude, longitude);
-    setSelectedCity({
-      city: weather.name,
-      country: weather.sys.country,
-      latitude,
-      longitude,
-    });
-  };
-
-  useEffect(() => {
-    fetchWeatherForUserLocation();
   }, []);
 
+  useEffect(() => {
+    if (userCity) {
+      setSelectedCity(userCity);
+    }
+  }, [userCity]);
+
   return (
-    <div id='app-container'>
+    <div className='app-container'>
       <Logo />
-      <div id='header'>
-        <div id='tabs-container'>
+      <div className='header'>
+        <div className='tabs-container'>
           <div
             className={`tab ${activeTab === 'main' ? 'active' : ''}`}
             onClick={() => handleTabClick('main')}
@@ -70,14 +64,20 @@ function HomePage() {
       {activeTab === 'main' ? (
         <div className='content'>
           <CityAutocomplete onCitySelect={handleCitySelect} />
+          {isLoading && <div>Завантаження погоди...</div>}
 
-          {selectedCity && (
+          <div className='error-big-container'>
+            {errorMessage && (
+              <div className='error-message'>{errorMessage}</div>
+            )}
+          </div>
+
+          {isCitySelected && !isLoading && !errorMessage && (
             <>
               <WeatherCard
                 selectedCity={selectedCity}
                 setIsModalOpen={setIsModalOpen}
               />
-
               <TemperatureChart selectedCity={selectedCity} />
             </>
           )}

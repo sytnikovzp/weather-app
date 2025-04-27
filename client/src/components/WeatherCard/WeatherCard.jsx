@@ -129,7 +129,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
           />
         </button>
       </div>
-      {errorMessage && <div className='error'>{errorMessage}</div>}
+      {errorMessage && <div className='error-message'>{errorMessage}</div>}
       {viewMode === 'current-weather' && currentWeatherData && (
         <div className='weather-content'>
           <WhenUpdated

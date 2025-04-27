@@ -21,7 +21,7 @@ function Welcome() {
   };
 
   return (
-    <div id='welcome'>
+    <div className='welcome-block'>
       {isAuthenticated && <p>Привіт, {userProfile.fullName}!</p>}
       <button onClick={handleLogout}>
         <FontAwesomeIcon icon={faRightFromBracket} />

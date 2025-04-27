@@ -16,9 +16,9 @@ function NotFoundPage() {
   }, [navigate]);
 
   return (
-    <div id='error-page-container'>
-      <h2 className='error-title'>Помилка 404</h2>
-      <h4 className='error-message'>{randomMessage}</h4>
+    <div className='not-found-container'>
+      <h2 className='not-found-title'>Помилка 404</h2>
+      <h4 className='not-found-message'>{randomMessage}</h4>
       <button onClick={handleNavigateToHome}>Повернутися на головну</button>
     </div>
   );

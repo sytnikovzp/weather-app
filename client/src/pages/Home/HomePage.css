@@ -1,4 +1,4 @@
-#app-container {
+.app-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,12 +6,12 @@
   width: 300px;
 }
 
-#header {
+.header {
   display: flex;
   justify-content: space-between;
 }
 
-#tabs-container {
+.tabs-container {
   display: flex;
   align-items: center;
 }

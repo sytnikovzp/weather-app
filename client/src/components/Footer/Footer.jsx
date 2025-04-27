@@ -4,7 +4,7 @@ function Footer() {
   const currentYear = new Date().getFullYear();
 
   return (
-    <div id='footer'>
+    <div className='footer'>
       <p>Designed by Alexandr Sytnikov</p>
       <p>© 2024 - {currentYear}</p>
     </div>

@@ -16,9 +16,9 @@ function useWeatherForCity() {
   const [errorMessage, setErrorMessage] = useState('');
 
   const fetchWeatherData = useCallback(async (latitude, longitude) => {
-    setIsLoading(true);
-    setErrorMessage('');
     try {
+      setIsLoading(true);
+      setErrorMessage('');
       const currentWeather = await weatherService.getWeather(
         latitude,
         longitude
@@ -33,9 +33,7 @@ function useWeatherForCity() {
     } catch (error) {
       console.log('error', error);
 
-      setErrorMessage(
-        error.response?.data?.message || 'Ошибка при загрузке погоды'
-      );
+      setErrorMessage(error.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
@@ -50,9 +48,7 @@ function useWeatherForCity() {
     } catch (error) {
       console.log('error', error);
 
-      setErrorMessage(
-        error.response?.data?.message || 'Ошибка при загрузке температуры'
-      );
+      setErrorMessage(error.response?.data?.message);
     }
   }, []);
 

@@ -32,7 +32,7 @@ function CityAutocomplete({ onCitySelect }) {
   };
 
   return (
-    <div id='autocomplete-container'>
+    <div className='autocomplete-container'>
       <input
         placeholder='Вкажіть назву міста...'
         type='text'

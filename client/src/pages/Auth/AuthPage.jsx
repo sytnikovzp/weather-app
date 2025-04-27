@@ -40,10 +40,10 @@ function AuthPage() {
   );
 
   return (
-    <div id='auth-container'>
+    <div className='auth-container'>
       <div className='error-big-container'>
         {authenticationError && (
-          <div className='error'>{authenticationError.message}</div>
+          <div className='error-message'>{authenticationError.message}</div>
         )}
       </div>
 
@@ -64,7 +64,7 @@ function AuthPage() {
       )}
 
       <button
-        id='auth-switch-button'
+        className='auth-switch-button'
         onClick={() => {
           dispatch(clearAuthenticationStore());
           setIsLoginMode(!isLoginMode);

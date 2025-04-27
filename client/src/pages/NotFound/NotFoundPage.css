@@ -1,4 +1,4 @@
-#error-page-container {
+.not-found-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -6,13 +6,13 @@
   height: 100vh;
 }
 
-.error-title {
+.not-found-title {
   color: #ff5252;
   font-weight: 700;
   font-size: 2.5rem;
 }
 
-.error-message {
+.not-found-message {
   color: #0056b3;
   font-weight: 500;
   margin: 24px 0;

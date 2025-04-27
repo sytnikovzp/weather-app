@@ -22,7 +22,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='fullName'>
-          {(msg) => <div className='error'>{msg}</div>}
+          {(message) => <div className='error-message'>{message}</div>}
         </ErrorMessage>
       </div>
 
@@ -35,7 +35,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='email'>
-          {(msg) => <div className='error'>{msg}</div>}
+          {(message) => <div className='error-message'>{message}</div>}
         </ErrorMessage>
       </div>
 
@@ -48,7 +48,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='password'>
-          {(msg) => <div className='error'>{msg}</div>}
+          {(message) => <div className='error-message'>{message}</div>}
         </ErrorMessage>
       </div>
 
