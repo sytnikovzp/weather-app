@@ -12,6 +12,7 @@ import {
   registrationThunk,
 } from '../../store/thunks/authenticationThunks';
 
+import ErrorMessageBlock from '../../components/ErrorMessageBlock/ErrorMessageBlock';
 import Footer from '../../components/Footer/Footer';
 import LoginForm from '../../components/LoginForm/LoginForm';
 import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
@@ -43,7 +44,7 @@ function AuthPage() {
     <div className='auth-container'>
       <div className='error-big-container'>
         {authenticationError && (
-          <div className='error-message'>{authenticationError.message}</div>
+          <ErrorMessageBlock message={authenticationError.message} />
         )}
       </div>
 

@@ -21,6 +21,7 @@ import {
   removeFromFavorites,
 } from '../../store/thunks/favoritesThunks';
 
+import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
 import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
 import './WeatherCard.css';
@@ -124,7 +125,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
           />
         </button>
       </div>
-      {errorMessage && <div className='error-message'>{errorMessage}</div>}
+      {errorMessage && <ErrorMessageBlock message={errorMessage} />}
       {viewMode === 'current-weather' && currentWeatherData && (
         <div className='weather-content'>
           <WhenUpdated

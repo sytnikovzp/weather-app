@@ -2,6 +2,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 import { REGISTRATION_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 
+import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+
 const initialValues = {
   fullName: '',
   email: '',
@@ -22,7 +24,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='fullName'>
-          {(message) => <div className='error-message'>{message}</div>}
+          {(message) => <ErrorMessageBlock message={message} />}
         </ErrorMessage>
       </div>
 
@@ -35,7 +37,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='email'>
-          {(message) => <div className='error-message'>{message}</div>}
+          {(message) => <ErrorMessageBlock message={message} />}
         </ErrorMessage>
       </div>
 
@@ -48,7 +50,7 @@ function RegistrationForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='password'>
-          {(message) => <div className='error-message'>{message}</div>}
+          {(message) => <ErrorMessageBlock message={message} />}
         </ErrorMessage>
       </div>
 

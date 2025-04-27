@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import useUserLocationWeather from '../../hooks/useUserLocationWeather';
 
 import CityAutocomplete from '../../components/CityAutocomplete/CityAutocomplete';
+import ErrorMessageBlock from '../../components/ErrorMessageBlock/ErrorMessageBlock';
 import FavoritesList from '../../components/FavoritesList/FavoritesList';
 import Footer from '../../components/Footer/Footer';
 import Logo from '../../components/Logo/Logo';
@@ -68,7 +69,7 @@ function HomePage() {
 
           {errorMessage && (
             <div className='error-big-container'>
-              <div className='error-message'>{errorMessage}</div>
+              <ErrorMessageBlock message={errorMessage} />
             </div>
           )}
 

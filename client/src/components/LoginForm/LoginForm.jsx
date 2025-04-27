@@ -2,6 +2,8 @@ import { ErrorMessage, Field, Form, Formik } from 'formik';
 
 import { LOGIN_VALIDATION_SCHEME } from '../../utils/validationSchemes';
 
+import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+
 const initialValues = {
   email: '',
   password: '',
@@ -21,7 +23,7 @@ function LoginForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='email'>
-          {(message) => <div className='error-message'>{message}</div>}
+          {(message) => <ErrorMessageBlock message={message} />}
         </ErrorMessage>
       </div>
 
@@ -34,7 +36,7 @@ function LoginForm({ onSubmit, isSubmitting }) {
       />
       <div className='error-small-container'>
         <ErrorMessage name='password'>
-          {(message) => <div className='error-message'>{message}</div>}
+          {(message) => <ErrorMessageBlock message={message} />}
         </ErrorMessage>
       </div>
 
