@@ -1,4 +1,5 @@
 import { format } from 'date-fns';
+import { uk } from 'date-fns/locale/uk';
 
 const getAccessToken = () => {
   const token = localStorage.getItem('weatherAppToken');
@@ -15,7 +16,9 @@ const saveAccessToken = (token) =>
 const removeAccessToken = () => localStorage.removeItem('weatherAppToken');
 
 const formatDateTime = (timestamp, dateFormat) =>
-  format(new Date(timestamp * 1000), dateFormat);
+  format(new Date(timestamp * 1000), dateFormat, {
+    locale: uk,
+  });
 
 const formatWeeklyData = (forecastData) => {
   const dailyData = forecastData.list.reduce((acc, data) => {
@@ -93,8 +96,8 @@ const getDayLabel = (index) => {
   return dayNames[dayOfWeek.getDay()];
 };
 
-const processTemperatureData = (data) => {
-  const hourlyData = data.list.slice(0, 8);
+const processDayTemperatureData = (forecastData) => {
+  const hourlyData = forecastData.list.slice(0, 8);
   const labels = hourlyData.map((item) =>
     new Date(item.dt * 1000).toLocaleTimeString([], {
       hour: '2-digit',
@@ -117,8 +120,8 @@ const processTemperatureData = (data) => {
   };
 };
 
-const processWeeklyTemperatureData = (data) => {
-  const dailyData = data.list.reduce((acc, current) => {
+const processWeeklyTemperatureData = (forecastData) => {
+  const dailyData = forecastData.list.reduce((acc, current) => {
     const date = new Date(current.dt * 1000).toLocaleDateString([], {
       day: '2-digit',
       month: '2-digit',
@@ -169,7 +172,7 @@ export {
   getAccessToken,
   getDayLabel,
   getWindDirection,
-  processTemperatureData,
+  processDayTemperatureData,
   processWeeklyTemperatureData,
   removeAccessToken,
   saveAccessToken,

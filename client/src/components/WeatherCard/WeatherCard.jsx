@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   faHeartCircleMinus,
@@ -34,7 +34,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
   const favorites = useSelector(selectFavorites);
 
   const cityExistsInFavorites = favorites.some(
-    (fav) => fav.selectedCity === city.selectedCity
+    (favorite) => favorite.selectedCity === city.selectedCity
   );
 
   const {
@@ -42,14 +42,8 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
     weeklyWeatherData,
     isLoading,
     errorMessage,
-    fetchWeatherData,
-  } = useWeatherForCity();
-
-  useEffect(() => {
-    if (selectedCity && latitude && longitude) {
-      fetchWeatherData(latitude, longitude);
-    }
-  }, [selectedCity, fetchWeatherData, latitude, longitude]);
+    onRefresh,
+  } = useWeatherForCity(latitude, longitude);
 
   const handleAddToFavorites = async () => {
     if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
@@ -62,7 +56,8 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
     const { country } = currentWeatherData.sys;
     if (
       favorites.some(
-        (fav) => fav.latitude === latitude && fav.longitude === longitude
+        (favorite) =>
+          favorite.latitude === latitude && favorite.longitude === longitude
       )
     ) {
       return;
@@ -95,7 +90,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
   };
 
   const handleRefresh = () => {
-    fetchWeatherData(latitude, longitude);
+    onRefresh();
   };
 
   return (

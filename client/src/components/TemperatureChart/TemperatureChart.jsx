@@ -7,20 +7,15 @@ import useWeatherForCity from '../../hooks/useWeatherForCity';
 import './TemperatureChart.css';
 
 function TemperatureChart({ selectedCity }) {
-  const { temperatureData, fetchTemperatureData } = useWeatherForCity();
-
-  const [mode, setMode] = useState('day');
   const chartRef = useRef(null);
+  const [mode, setMode] = useState('day');
+  const { latitude, longitude } = selectedCity;
+  const { temperatureData } = useWeatherForCity(latitude, longitude);
+
   const data =
     mode === 'day'
-      ? temperatureData?.dayData
+      ? temperatureData?.dayWeatherData
       : temperatureData?.weeklyWeatherData;
-
-  useEffect(() => {
-    if (selectedCity && selectedCity.latitude && selectedCity.longitude) {
-      fetchTemperatureData(selectedCity.latitude, selectedCity.longitude);
-    }
-  }, [selectedCity, fetchTemperatureData]);
 
   useEffect(() => {
     const ctx = chartRef.current?.getContext('2d');

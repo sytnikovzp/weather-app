@@ -66,11 +66,11 @@ function HomePage() {
           <CityAutocomplete onCitySelect={handleCitySelect} />
           {isLoading && <div>Завантаження погоди...</div>}
 
-          <div className='error-big-container'>
-            {errorMessage && (
+          {errorMessage && (
+            <div className='error-big-container'>
               <div className='error-message'>{errorMessage}</div>
-            )}
-          </div>
+            </div>
+          )}
 
           {isCitySelected && !isLoading && !errorMessage && (
             <>

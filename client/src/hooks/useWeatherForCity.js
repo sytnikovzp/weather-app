@@ -1,21 +1,25 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import {
   formatWeeklyData,
-  processTemperatureData,
+  processDayTemperatureData,
   processWeeklyTemperatureData,
 } from '../utils/sharedFunctions';
 
 import { weatherService } from '../services';
 
-function useWeatherForCity() {
+function useWeatherForCity(latitude, longitude) {
   const [currentWeatherData, setCurrentWeatherData] = useState(null);
   const [weeklyWeatherData, setWeeklyWeatherData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
-  const fetchWeatherData = useCallback(async (latitude, longitude) => {
+  const fetchWeatherData = useCallback(async () => {
+    if (!latitude || !longitude) {
+      return;
+    }
+
     try {
       setIsLoading(true);
       setErrorMessage('');
@@ -27,30 +31,24 @@ function useWeatherForCity() {
         latitude,
         longitude
       );
+
       const weeklyWeather = formatWeeklyData(forecastData);
+      const dayWeatherData = processDayTemperatureData(forecastData);
+      const weeklyWeatherData = processWeeklyTemperatureData(forecastData);
+
       setCurrentWeatherData(currentWeather);
       setWeeklyWeatherData(weeklyWeather);
+      setTemperatureData({ dayWeatherData, weeklyWeatherData });
     } catch (error) {
-      console.log('error', error);
-
       setErrorMessage(error.response?.data?.message);
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [latitude, longitude]);
 
-  const fetchTemperatureData = useCallback(async (latitude, longitude) => {
-    try {
-      const data = await weatherService.getForecast(latitude, longitude);
-      const dayData = processTemperatureData(data);
-      const weeklyWeatherData = processWeeklyTemperatureData(data);
-      setTemperatureData({ dayData, weeklyWeatherData });
-    } catch (error) {
-      console.log('error', error);
-
-      setErrorMessage(error.response?.data?.message);
-    }
-  }, []);
+  useEffect(() => {
+    fetchWeatherData();
+  }, [fetchWeatherData]);
 
   return {
     currentWeatherData,
@@ -58,8 +56,7 @@ function useWeatherForCity() {
     temperatureData,
     isLoading,
     errorMessage,
-    fetchWeatherData,
-    fetchTemperatureData,
+    onRefresh: fetchWeatherData,
   };
 }
 
