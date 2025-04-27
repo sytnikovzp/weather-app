@@ -1,13 +1,19 @@
 import './Footer.css';
 
 function Footer() {
+  const startYear = 2024;
   const currentYear = new Date().getFullYear();
 
+  const years =
+    startYear === currentYear
+      ? `${startYear}`
+      : `${startYear} - ${currentYear}`;
+
   return (
-    <div className='footer'>
-      <p>Designed by Alexandr Sytnikov</p>
-      <p>© 2024 - {currentYear}</p>
-    </div>
+    <footer className='footer'>
+      <p>© {years} Alexandr Sytnikov</p>
+      <p>All rights reserved</p>
+    </footer>
   );
 }
 
