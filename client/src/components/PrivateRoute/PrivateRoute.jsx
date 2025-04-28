@@ -2,13 +2,11 @@ import { Navigate } from 'react-router-dom';
 
 import useAuthentication from '../../hooks/useAuthentication';
 
-import FullScreenLoader from '../FullScreenLoader/FullScreenLoader';
-
 function PrivateRoute({ children }) {
   const { isAuthenticated, userProfileIsFetching } = useAuthentication();
 
   if (userProfileIsFetching) {
-    return <FullScreenLoader />;
+    return null;
   }
 
   if (!isAuthenticated) {
