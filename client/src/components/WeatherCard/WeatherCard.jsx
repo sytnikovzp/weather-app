@@ -7,11 +7,6 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { APP_SETTINGS } from '../../constants';
-import {
-  formatDateTime,
-  getDayLabel,
-  getWindDirection,
-} from '../../utils/sharedFunctions';
 import useWeatherForCity from '../../hooks/useWeatherForCity';
 
 import { selectFavorites } from '../../store/selectors/favoritesSelectors';
@@ -21,9 +16,10 @@ import {
   removeFromFavorites,
 } from '../../store/thunks/favoritesThunks';
 
+import CurrentWeatherCard from '../CurrentWeatherCard/CurrentWeatherCard';
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
 import SpinerLoader from '../SpinerLoader/SpinerLoader';
-import WhenUpdated from '../WhenUpdated/WhenUpdated';
+import WeeklyForecastCard from '../WeeklyForecastCard/WeeklyForecastCard';
 
 import './WeatherCard.css';
 
@@ -37,7 +33,6 @@ function WeatherCard({
   const { city, country, latitude, longitude } = selectedCity;
 
   const dispatch = useDispatch();
-
   const favorites = useSelector(selectFavorites);
 
   const cityExistsInFavorites = favorites.some(
@@ -99,10 +94,6 @@ function WeatherCard({
     fetchFavorites();
   };
 
-  const handleRefresh = () => {
-    onRefresh();
-  };
-
   if (isLoading) {
     return (
       <div className='big-card'>
@@ -128,20 +119,14 @@ function WeatherCard({
       <div className='weather-view-toggle'>
         <button
           className={viewMode === 'current-weather' ? 'active' : ''}
-          onClick={(event) => {
-            event.stopPropagation();
-            setViewMode('current-weather');
-          }}
+          onClick={() => setViewMode('current-weather')}
         >
           На зараз
         </button>
 
         <button
           className={viewMode === 'forecast' ? 'active' : ''}
-          onClick={(event) => {
-            event.stopPropagation();
-            setViewMode('forecast');
-          }}
+          onClick={() => setViewMode('forecast')}
         >
           На тиждень
         </button>
@@ -154,74 +139,23 @@ function WeatherCard({
           />
         </button>
       </div>
-      {viewMode === 'current-weather' && currentWeatherData && (
-        <div className='weather-content'>
-          <WhenUpdated
-            currentWeatherData={currentWeatherData}
-            onRefresh={handleRefresh}
-          />
-          <div className='city-info'>
-            <h3>{country}</h3>
-            <h3>{city}</h3>
-            <h3>{Math.round(currentWeatherData.main.temp)}°C</h3>
-          </div>
-          <div className='weather-feels-like'>
-            <p>
-              Відчувається як {Math.round(currentWeatherData.main.feels_like)}°C
-            </p>
-            <p>
-              {currentWeatherData.weather[0].description
-                .charAt(0)
-                .toUpperCase() +
-                currentWeatherData.weather[0].description.slice(1)}
-            </p>
-          </div>
 
-          <div className='weather-details'>
-            <div>
-              <p>
-                <strong>Видимість: </strong>
-                {Math.round(currentWeatherData.visibility / 1000)} км
-              </p>
-              <p>
-                <strong>Вологість:</strong> {currentWeatherData.main.humidity}%
-              </p>
-              <p>
-                <strong>Схід сонця: </strong>
-                {formatDateTime(currentWeatherData.sys.sunrise, 'HH:mm')}
-              </p>
-            </div>
-            <div>
-              <p>
-                <strong>Вітер: </strong>
-                {Math.round(currentWeatherData.wind.speed)} м/с
-                {getWindDirection(currentWeatherData.wind.deg)}
-              </p>
-              <p>
-                <strong>Облачність:</strong> {currentWeatherData.clouds.all}%
-              </p>
-              <p>
-                <strong>Захід сонця: </strong>
-                {formatDateTime(currentWeatherData.sys.sunset, 'HH:mm')}
-              </p>
-            </div>
-          </div>
-        </div>
+      {viewMode === 'current-weather' && currentWeatherData && (
+        <CurrentWeatherCard
+          city={city}
+          country={country}
+          currentWeatherData={currentWeatherData}
+          onRefresh={onRefresh}
+        />
       )}
+
       {viewMode === 'forecast' &&
         weeklyWeatherData &&
         Array.isArray(weeklyWeatherData.labels) &&
         weeklyWeatherData.labels.length > 0 &&
         Array.isArray(weeklyWeatherData.datasets) &&
         weeklyWeatherData.datasets.length > 0 && (
-          <div className='weekly-forecast'>
-            {weeklyWeatherData.labels.map((_, index) => (
-              <div key={index} className='weekly-item'>
-                <p className='day-label'>{getDayLabel(index)}</p>
-                <p>{weeklyWeatherData.datasets[0].data[index]}°C</p>
-              </div>
-            ))}
-          </div>
+          <WeeklyForecastCard weeklyWeatherData={weeklyWeatherData} />
         )}
     </div>
   );
