@@ -1,13 +1,13 @@
-import { useSelector } from 'react-redux';
-
-import { selectFavorites } from '../../store/selectors/favoritesSelectors';
-
-import WeatherCard from '../WeatherCard/WeatherCard';
+import useFavorites from '../../hooks/useFavorites';
 
 import './FavoritesTabContent.css';
 
 function FavoritesTabContent({ onCitySelect }) {
-  const favorites = useSelector(selectFavorites);
+  const { favorites } = useFavorites();
+
+  const handleCitySelect = (city) => {
+    onCitySelect(city);
+  };
 
   return (
     <div className='content'>
@@ -15,30 +15,25 @@ function FavoritesTabContent({ onCitySelect }) {
         <h3>Список обраних міст</h3>
       </div>
 
-      <div className='small-card' />
-      <div className='small-card' />
-      <div className='small-card' />
-      <div className='small-card' />
-      <div className='small-card' />
-
-      {/* {favorites.length === 0 ? (
+      {favorites.length === 0 ? (
         <p>Немає обраних міст</p>
       ) : (
         <>
           {favorites.map((city) => (
             <div
+              key={`${city.latitude}-${city.longitude}`}
               className='small-card'
-              key={city.weather.sys.sunrise}
-              onClick={() => onCitySelect(city)}
+              onClick={() => handleCitySelect(city)}
             >
-              <WeatherCard
-              // selectedCity={selectedCity}
-              // setIsModalOpen={setIsModalOpen}
-              />
+              <p>{`${city.latitude}-${city.longitude}`}</p>
+              <p>{city.city}</p>
+              <p>{city.country}</p>
+              <p>{city.latitude}</p>
+              <p>{city.longitude}</p>
             </div>
           ))}
         </>
-      )} */}
+      )}
     </div>
   );
 }

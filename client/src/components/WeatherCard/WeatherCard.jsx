@@ -1,20 +1,12 @@
 import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import {
   faHeartCircleMinus,
   faHeartCirclePlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { APP_SETTINGS } from '../../constants';
+import useFavorites from '../../hooks/useFavorites';
 import useWeatherForCity from '../../hooks/useWeatherForCity';
-
-import { selectFavorites } from '../../store/selectors/favoritesSelectors';
-import {
-  addToFavorites,
-  fetchFavorites,
-  removeFromFavorites,
-} from '../../store/thunks/favoritesThunks';
 
 import CurrentWeatherCard from '../CurrentWeatherCard/CurrentWeatherCard';
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
@@ -25,76 +17,42 @@ import './WeatherCard.css';
 
 function WeatherCard({
   errorMessageUserCity,
-  isLoadingUserCity,
+  isFetchingUserCity,
   selectedCity,
-  setIsModalOpen,
+  // setIsModalOpen,
 }) {
   const [viewMode, setViewMode] = useState('current-weather');
   const { city, country, latitude, longitude } = selectedCity;
 
-  const dispatch = useDispatch();
-  const favorites = useSelector(selectFavorites);
-
-  const cityExistsInFavorites = favorites.some(
-    (favorite) => favorite.selectedCity === city.selectedCity
-  );
-
   const {
     currentWeatherData,
     weeklyWeatherData,
-    isLoading: isLoadingWeather,
+    isFetching: isFetchingWeather,
     errorMessage: errorMessageWeather,
     onRefresh,
   } = useWeatherForCity(latitude, longitude);
 
-  const isLoading = isLoadingUserCity || isLoadingWeather;
-  const errorMessage = errorMessageUserCity || errorMessageWeather;
+  const {
+    cityExistsInFavorites,
+    isFetching: isFetchingFavorites,
+    errorMessage: errorMessageFavorites,
+    handleAddToFavorites,
+    handleRemoveFromFavorites,
+  } = useFavorites(city, country, latitude, longitude);
 
-  const handleAddToFavorites = async () => {
-    if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
-      setIsModalOpen(true);
-      return;
-    }
-    if (!selectedCity || !currentWeatherData?.sys) {
-      return;
-    }
-    const { country } = currentWeatherData.sys;
-    if (
-      favorites.some(
-        (favorite) =>
-          favorite.latitude === latitude && favorite.longitude === longitude
-      )
-    ) {
-      return;
-    }
-    try {
-      await dispatch(addToFavorites({ city, country, latitude, longitude }));
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  const handleRemoveFromFavorites = async () => {
-    try {
-      await dispatch(removeFromFavorites({ latitude, longitude }));
-    } catch (error) {
-      console.error(error.message);
-    }
-  };
-
-  if (!favorites) {
-    dispatch(fetchFavorites());
-  }
+  const isFetching =
+    isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
+  const errorMessage =
+    errorMessageUserCity || errorMessageWeather || errorMessageFavorites;
 
   const handleToggleFavorite = (event) => {
     event.stopPropagation();
     cityExistsInFavorites
       ? handleRemoveFromFavorites()
       : handleAddToFavorites();
-    fetchFavorites();
   };
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className='big-card'>
         <div className='status-container'>

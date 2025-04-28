@@ -9,7 +9,7 @@ import SpinerLoader from '../SpinerLoader/SpinerLoader';
 
 function TemperatureChart({
   errorMessageUserCity,
-  isLoadingUserCity,
+  isFetchingUserCity,
   selectedCity,
 }) {
   const chartRef = useRef(null);
@@ -17,11 +17,11 @@ function TemperatureChart({
   const { latitude, longitude } = selectedCity;
   const {
     temperatureData,
-    isLoading: isLoadingWeather,
+    isFetching: isFetchingWeather,
     errorMessage: errorMessageWeather,
   } = useWeatherForCity(latitude, longitude);
 
-  const isLoading = isLoadingUserCity || isLoadingWeather;
+  const isFetching = isFetchingUserCity || isFetchingWeather;
   const errorMessage = errorMessageUserCity || errorMessageWeather;
 
   const data =
@@ -57,7 +57,7 @@ function TemperatureChart({
     return () => tempChart.destroy();
   }, [data, selectedCity.city, mode]);
 
-  if (isLoading) {
+  if (isFetching) {
     return (
       <div className='big-card'>
         <div className='status-container'>

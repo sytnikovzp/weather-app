@@ -4,12 +4,12 @@ import { locationService, weatherService } from '../services';
 
 function useUserLocationWeather() {
   const [userCity, setUserCity] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
 
   const fetchWeatherForUserLocation = async () => {
     try {
-      setIsLoading(true);
+      setIsFetching(true);
       setErrorMessage('');
       const { latitude, longitude } = await locationService.getLocationByIP();
       const currentWeather = await weatherService.getWeather(
@@ -26,7 +26,7 @@ function useUserLocationWeather() {
     } catch (error) {
       setErrorMessage(error.response?.data?.message);
     } finally {
-      setIsLoading(false);
+      setIsFetching(false);
     }
   };
 
@@ -34,7 +34,7 @@ function useUserLocationWeather() {
     fetchWeatherForUserLocation();
   }, []);
 
-  return { userCity, isLoading, errorMessage };
+  return { userCity, isFetching, errorMessage };
 }
 
 export default useUserLocationWeather;

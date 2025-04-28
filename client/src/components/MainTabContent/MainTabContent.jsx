@@ -6,7 +6,7 @@ import './MainTabContent.css';
 
 function MainTabContent({
   errorMessageUserCity,
-  isLoadingUserCity,
+  isFetchingUserCity,
   selectedCity,
   setIsModalOpen,
   onCitySelect,
@@ -21,13 +21,13 @@ function MainTabContent({
         <>
           <WeatherCard
             errorMessageUserCity={errorMessageUserCity}
-            isLoadingUserCity={isLoadingUserCity}
+            isFetchingUserCity={isFetchingUserCity}
             selectedCity={selectedCity}
             setIsModalOpen={setIsModalOpen}
           />
           <TemperatureChart
             errorMessageUserCity={errorMessageUserCity}
-            isLoadingUserCity={isLoadingUserCity}
+            isFetchingUserCity={isFetchingUserCity}
             selectedCity={selectedCity}
           />
         </>

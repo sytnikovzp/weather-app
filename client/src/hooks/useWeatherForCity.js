@@ -12,7 +12,7 @@ function useWeatherForCity(latitude, longitude) {
   const [currentWeatherData, setCurrentWeatherData] = useState(null);
   const [weeklyWeatherData, setWeeklyWeatherData] = useState(null);
   const [temperatureData, setTemperatureData] = useState(null);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
   const fetchWeatherData = useCallback(async () => {
@@ -21,7 +21,7 @@ function useWeatherForCity(latitude, longitude) {
     }
 
     try {
-      setIsLoading(true);
+      setIsFetching(true);
       setErrorMessage('');
       const currentWeather = await weatherService.getWeather(
         latitude,
@@ -42,7 +42,7 @@ function useWeatherForCity(latitude, longitude) {
     } catch (error) {
       setErrorMessage(error.response?.data?.message);
     } finally {
-      setIsLoading(false);
+      setIsFetching(false);
     }
   }, [latitude, longitude]);
 
@@ -54,7 +54,7 @@ function useWeatherForCity(latitude, longitude) {
     currentWeatherData,
     weeklyWeatherData,
     temperatureData,
-    isLoading,
+    isFetching,
     errorMessage,
     onRefresh: fetchWeatherData,
   };

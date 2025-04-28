@@ -15,7 +15,9 @@ function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
   const [selectedCity, setSelectedCity] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { userCity, isLoading, errorMessage } = useUserLocationWeather();
+  const { userCity, isFetching, errorMessage } = useUserLocationWeather();
+
+  console.log('selectedCity', selectedCity);
 
   const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);
@@ -46,7 +48,7 @@ function HomePage() {
       {activeTab === 'main' ? (
         <MainTabContent
           errorMessageUserCity={errorMessage}
-          isLoadingUserCity={isLoading}
+          isFetchingUserCity={isFetching}
           selectedCity={selectedCity}
           setIsModalOpen={setIsModalOpen}
           onCitySelect={handleCitySelect}

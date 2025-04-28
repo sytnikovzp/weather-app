@@ -11,7 +11,7 @@ import './CityAutocomplete.css';
 
 function CityAutocomplete({ onCitySelect }) {
   const [query, setQuery] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
+  const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [debouncedQuery, setDebouncedQuery] = useState('');
@@ -26,7 +26,7 @@ function CityAutocomplete({ onCitySelect }) {
   useEffect(() => {
     if (debouncedQuery.length > 2) {
       const fetchSuggestions = async () => {
-        setIsLoading(true);
+        setIsFetching(true);
         try {
           const citySuggestions =
             await weatherService.getCitySuggestions(debouncedQuery);
@@ -35,7 +35,7 @@ function CityAutocomplete({ onCitySelect }) {
           setErrorMessage(errorMessage.message);
           setSuggestions([]);
         } finally {
-          setIsLoading(false);
+          setIsFetching(false);
         }
       };
 
@@ -46,7 +46,7 @@ function CityAutocomplete({ onCitySelect }) {
   }, [debouncedQuery]);
 
   const handleInputChange = (event) => {
-    setIsLoading(true);
+    setIsFetching(true);
     setErrorMessage(null);
     setQuery(event.target.value);
   };
@@ -79,9 +79,9 @@ function CityAutocomplete({ onCitySelect }) {
         </button>
       )}
 
-      {(isLoading || errorMessage || suggestions.length === 0) && query && (
+      {(isFetching || errorMessage || suggestions.length === 0) && query && (
         <ul className='autocomplete-list' id='autocomplete-list'>
-          {isLoading && !suggestions.length && (
+          {isFetching && !suggestions.length && (
             <li className='autocomplete-item loading'>
               <BarLoader />
             </li>
@@ -93,7 +93,7 @@ function CityAutocomplete({ onCitySelect }) {
             </li>
           )}
 
-          {suggestions.length === 0 && !isLoading && !errorMessage && (
+          {suggestions.length === 0 && !isFetching && !errorMessage && (
             <li className='autocomplete-item no-results'>Немає результатів</li>
           )}
         </ul>
