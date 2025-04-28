@@ -12,11 +12,11 @@ import {
   removeFromFavorites,
 } from '../store/thunks/favoritesThunks';
 
-export default function useFavorites(city, country, latitude, longitude) {
+function useFavorites(city, country, latitude, longitude) {
   const dispatch = useDispatch();
   const favorites = useSelector(selectFavorites);
   const isFetching = useSelector(selectFavoritesIsFetching);
-  const errorMessage = useSelector(selectFavoritesError);
+  const error = useSelector(selectFavoritesError);
 
   const cityExistsInFavorites = favorites.some(
     (favorite) =>
@@ -39,8 +39,10 @@ export default function useFavorites(city, country, latitude, longitude) {
     favorites,
     cityExistsInFavorites,
     isFetching,
-    errorMessage,
+    error,
     handleAddToFavorites,
     handleRemoveFromFavorites,
   };
 }
+
+export default useFavorites;

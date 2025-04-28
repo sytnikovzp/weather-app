@@ -1,4 +1,4 @@
-.weather-big-card {
+.weather-container {
   border: 1px solid #ccc;
   border-radius: 8px;
   margin: 10px 0;
@@ -26,4 +26,18 @@
 
 .weather-view-toggle > button.active {
   font-weight: bold;
+}
+
+.favorite-button {
+  background: transparent;
+  cursor: pointer;
+  font-size: 28px;
+  padding: 0;
+  margin: 0;
+  color: red;
+}
+
+.favorite-button:hover {
+  color: rgba(255, 0, 0, 0.7);
+  background-color: white;
 }

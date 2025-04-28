@@ -1,22 +1,23 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useDispatch } from 'react-redux';
 import {
   faHeartCircleMinus,
   faHeartCirclePlus,
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import useFavorites from '../../hooks/useFavorites';
-import useWeatherForCity from '../../hooks/useWeatherForCity';
+import useFavorites from '../../../hooks/useFavorites';
+import useWeatherForCity from '../../../hooks/useWeatherForCity';
 
+import { clearFavoritesError } from '../../../store/slices/favoritesSlice';
+
+import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
+import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
+import ModalWindow from '../../ModalWindow/ModalWindow';
 import CurrentWeatherCard from '../CurrentWeatherCard/CurrentWeatherCard';
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
-import ModalWindow from '../ModalWindow/ModalWindow';
-import SpinerLoader from '../SpinerLoader/SpinerLoader';
 import WeeklyForecastCard from '../WeeklyForecastCard/WeeklyForecastCard';
 
-import './WeatherBigCard.css';
-
-function WeatherBigCard({
+function WeatherCard({
   errorMessageUserCity,
   isFetchingUserCity,
   selectedCity,
@@ -25,28 +26,38 @@ function WeatherBigCard({
   const { city, country, latitude, longitude } = selectedCity;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  const dispatch = useDispatch();
+
+  const handleCloseModal = useCallback(() => {
+    dispatch(clearFavoritesError());
+    setIsModalOpen(false);
+  }, [dispatch]);
+
   const {
     currentWeatherData,
     weeklyWeatherData,
     isFetching: isFetchingWeather,
-    errorMessage: errorMessageWeather,
+    error: errorMessageWeather,
     onRefresh,
   } = useWeatherForCity(latitude, longitude);
 
   const {
     cityExistsInFavorites,
     isFetching: isFetchingFavorites,
-    errorMessage: errorMessageFavorites,
+    error: errorMessageFavorites,
     handleAddToFavorites,
     handleRemoveFromFavorites,
   } = useFavorites(city, country, latitude, longitude);
 
   const isFetching =
     isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
-  const errorMessage = errorMessageUserCity || errorMessageWeather;
+  const error = errorMessageUserCity || errorMessageWeather;
 
   useEffect(() => {
-    if (errorMessageFavorites) {
+    if (
+      errorMessageFavorites &&
+      errorMessageFavorites.message !== 'Список улюблених міст порожній'
+    ) {
       setIsModalOpen(true);
     }
   }, [errorMessageFavorites]);
@@ -59,7 +70,7 @@ function WeatherBigCard({
 
   if (isFetching) {
     return (
-      <div className='weather-big-card'>
+      <div className='weather-container'>
         <div className='status-container'>
           <SpinerLoader />
         </div>
@@ -67,11 +78,11 @@ function WeatherBigCard({
     );
   }
 
-  if (errorMessage) {
+  if (error) {
     return (
-      <div className='weather-big-card'>
+      <div className='weather-container'>
         <div className='status-container'>
-          <ErrorMessageBlock message={errorMessageUserCity} />
+          <ErrorMessageBlock message={error?.message} />
         </div>
       </div>
     );
@@ -79,7 +90,7 @@ function WeatherBigCard({
 
   return (
     <>
-      <div className='weather-big-card'>
+      <div className='weather-container'>
         <div className='weather-view-toggle'>
           <button
             className={viewMode === 'current-weather' ? 'active' : ''}
@@ -122,10 +133,10 @@ function WeatherBigCard({
         isOpen={isModalOpen}
         message={errorMessageFavorites?.message}
         title={errorMessageFavorites?.title}
-        onClose={() => setIsModalOpen(false)}
+        onClose={handleCloseModal}
       />
     </>
   );
 }
 
-export default WeatherBigCard;
+export default WeatherCard;

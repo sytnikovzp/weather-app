@@ -11,8 +11,8 @@ import {
 
 import ErrorMessageBlock from '../../components/ErrorMessageBlock/ErrorMessageBlock';
 import Footer from '../../components/Footer/Footer';
-import LoginForm from '../../components/LoginForm/LoginForm';
-import RegistrationForm from '../../components/RegistrationForm/RegistrationForm';
+import LoginForm from '../../components/Forms/LoginForm/LoginForm';
+import RegistrationForm from '../../components/Forms/RegistrationForm/RegistrationForm';
 
 import './AuthPage.css';
 
@@ -41,7 +41,7 @@ function AuthPage() {
     <div className='auth-container'>
       <div className='error-big-container'>
         {authenticationError && (
-          <ErrorMessageBlock message={authenticationError.message} />
+          <ErrorMessageBlock message={authenticationError?.message} />
         )}
       </div>
 

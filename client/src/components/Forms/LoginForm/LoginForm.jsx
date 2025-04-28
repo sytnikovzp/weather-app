@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
 
-import { LOGIN_VALIDATION_SCHEME } from '../../utils/validationSchemes';
+import { LOGIN_VALIDATION_SCHEME } from '../../../utils/validationSchemes';
 
 import FormField from '../FormField/FormField';
 
@@ -13,7 +13,6 @@ function LoginForm({ onSubmit }) {
   const renderForm = ({ isSubmitting, isValid }) => (
     <Form id='auth-form'>
       <h2>Авторизація</h2>
-
       <FormField
         required
         id='email'
@@ -21,7 +20,6 @@ function LoginForm({ onSubmit }) {
         placeholder='E-mail'
         type='email'
       />
-
       <FormField
         required
         id='password'
@@ -29,7 +27,6 @@ function LoginForm({ onSubmit }) {
         placeholder='Пароль'
         type='password'
       />
-
       <button disabled={!isValid || isSubmitting} type='submit'>
         {isSubmitting ? 'Вхід...' : 'УВІЙТИ'}
       </button>

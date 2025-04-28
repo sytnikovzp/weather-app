@@ -4,15 +4,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { weatherService } from '../../services';
 
-import BarLoader from '../BarLoader/BarLoader';
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import BarLoader from '../Loaders/BarLoader/BarLoader';
 
 import './CityAutocomplete.css';
 
 function CityAutocomplete({ onCitySelect }) {
   const [query, setQuery] = useState('');
   const [isFetching, setIsFetching] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [error, setError] = useState(null);
   const [suggestions, setSuggestions] = useState([]);
   const [debouncedQuery, setDebouncedQuery] = useState('');
 
@@ -31,8 +31,8 @@ function CityAutocomplete({ onCitySelect }) {
           const citySuggestions =
             await weatherService.getCitySuggestions(debouncedQuery);
           setSuggestions(citySuggestions);
-        } catch (errorMessage) {
-          setErrorMessage(errorMessage.message);
+        } catch (error) {
+          setError(error.message);
           setSuggestions([]);
         } finally {
           setIsFetching(false);
@@ -47,7 +47,7 @@ function CityAutocomplete({ onCitySelect }) {
 
   const handleInputChange = (event) => {
     setIsFetching(true);
-    setErrorMessage(null);
+    setError(null);
     setQuery(event.target.value);
   };
 
@@ -79,37 +79,36 @@ function CityAutocomplete({ onCitySelect }) {
         </button>
       )}
 
-      {(isFetching || errorMessage || suggestions.length === 0) && query && (
+      {query && (
         <ul className='autocomplete-list' id='autocomplete-list'>
-          {isFetching && !suggestions.length && (
+          {isFetching && (
             <li className='autocomplete-item loading'>
               <BarLoader />
             </li>
           )}
 
-          {errorMessage && !suggestions.length && (
+          {error && !isFetching && (
             <li className='autocomplete-item error'>
-              <ErrorMessageBlock message={errorMessage} />
+              <ErrorMessageBlock message={error} />
             </li>
           )}
 
-          {suggestions.length === 0 && !isFetching && !errorMessage && (
+          {!isFetching && !error && suggestions.length === 0 && (
             <li className='autocomplete-item no-results'>Немає результатів</li>
           )}
-        </ul>
-      )}
 
-      {suggestions.length > 0 && query && (
-        <ul className='autocomplete-list' id='autocomplete-list'>
-          {suggestions.map((city) => (
-            <li
-              key={`${city.lat}-${city.lon}`}
-              className='autocomplete-item'
-              onClick={() => handleCitySelect(city)}
-            >
-              {city.name}, {city.state && `${city.state},`} {city.country}
-            </li>
-          ))}
+          {!isFetching &&
+            !error &&
+            suggestions.length > 0 &&
+            suggestions.map((city) => (
+              <li
+                key={`${city.lat}-${city.lon}`}
+                className='autocomplete-item'
+                onClick={() => handleCitySelect(city)}
+              >
+                {city.name}, {city.state && `${city.state},`} {city.country}
+              </li>
+            ))}
         </ul>
       )}
     </div>

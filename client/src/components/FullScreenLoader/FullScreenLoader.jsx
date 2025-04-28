@@ -1,4 +1,4 @@
-import BarLoader from '../BarLoader/BarLoader';
+import BarLoader from '../Loaders/BarLoader/BarLoader';
 import Logo from '../Logo/Logo';
 
 import './FullScreenLoader.css';

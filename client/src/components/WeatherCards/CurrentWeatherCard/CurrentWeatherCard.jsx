@@ -1,4 +1,7 @@
-import { formatDateTime, getWindDirection } from '../../utils/sharedFunctions';
+import {
+  formatDateTime,
+  getWindDirection,
+} from '../../../utils/sharedFunctions';
 
 import WhenUpdated from '../WhenUpdated/WhenUpdated';
 

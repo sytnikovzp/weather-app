@@ -1,6 +1,6 @@
 import CityAutocomplete from '../CityAutocomplete/CityAutocomplete';
-import TemperatureChart from '../TemperatureChart/TemperatureChart';
-import WeatherBigCard from '../WeatherBigCard/WeatherBigCard';
+import TemperatureChart from '../WeatherCards/TemperatureChart/TemperatureChart';
+import WeatherCard from '../WeatherCards/WeatherCard/WeatherCard';
 
 import './MainTabContent.css';
 
@@ -18,7 +18,7 @@ function MainTabContent({
 
       {isCitySelected && (
         <>
-          <WeatherBigCard
+          <WeatherCard
             errorMessageUserCity={errorMessageUserCity}
             isFetchingUserCity={isFetchingUserCity}
             selectedCity={selectedCity}

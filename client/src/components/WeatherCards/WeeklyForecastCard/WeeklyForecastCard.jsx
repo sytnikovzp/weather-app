@@ -1,4 +1,4 @@
-import { getDayLabel } from '../../utils/sharedFunctions';
+import { getDayLabel } from '../../../utils/sharedFunctions';
 
 import './WeeklyForecastCard.css';
 

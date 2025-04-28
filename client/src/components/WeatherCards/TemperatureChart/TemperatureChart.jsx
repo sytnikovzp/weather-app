@@ -2,10 +2,10 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 
-import useWeatherForCity from '../../hooks/useWeatherForCity';
+import useWeatherForCity from '../../../hooks/useWeatherForCity';
 
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
-import SpinerLoader from '../SpinerLoader/SpinerLoader';
+import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
+import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
 function TemperatureChart({
   errorMessageUserCity,
@@ -59,7 +59,7 @@ function TemperatureChart({
 
   if (isFetching) {
     return (
-      <div className='weather-big-card'>
+      <div className='weather-container'>
         <div className='status-container'>
           <SpinerLoader />
         </div>
@@ -69,7 +69,7 @@ function TemperatureChart({
 
   if (errorMessage) {
     return (
-      <div className='weather-big-card'>
+      <div className='weather-container'>
         <div className='status-container'>
           <ErrorMessageBlock message={errorMessageUserCity} />
         </div>
@@ -78,7 +78,7 @@ function TemperatureChart({
   }
 
   return (
-    <div className='weather-big-card'>
+    <div className='weather-container'>
       <div className='weather-view-toggle'>
         <button
           className={mode === 'day' ? 'active' : ''}

@@ -1,11 +1,11 @@
 import useFavorites from '../../hooks/useFavorites';
 
-import WeatherSmallCard from '../WeatherSmallCard/WeatherSmallCard';
+import FavoriteWeatherCard from '../WeatherCards/FavoriteWeatherCard/FavoriteWeatherCard';
 
 import './FavoritesTabContent.css';
 
 function FavoritesTabContent({ onCitySelect }) {
-  const { favorites, errorMessage } = useFavorites();
+  const { favorites, error } = useFavorites();
 
   return (
     <div className='content'>
@@ -15,11 +15,11 @@ function FavoritesTabContent({ onCitySelect }) {
 
       {favorites.length === 0 ? (
         <div className='status-container'>
-          <p>{errorMessage?.message}</p>
+          <p>{error?.message}</p>
         </div>
       ) : (
         favorites.map((city) => (
-          <WeatherSmallCard
+          <FavoriteWeatherCard
             key={`${city.latitude}-${city.longitude}`}
             selectedCity={city}
             onClick={() => onCitySelect(city)}

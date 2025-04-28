@@ -1,6 +1,6 @@
 import { Form, Formik } from 'formik';
 
-import { REGISTRATION_VALIDATION_SCHEME } from '../../utils/validationSchemes';
+import { REGISTRATION_VALIDATION_SCHEME } from '../../../utils/validationSchemes';
 
 import FormField from '../FormField/FormField';
 
@@ -14,7 +14,6 @@ function RegistrationForm({ onSubmit }) {
   const renderForm = ({ isSubmitting, isValid }) => (
     <Form id='registration-form'>
       <h2>Реєстрація</h2>
-
       <FormField
         required
         id='fullName'
@@ -22,7 +21,6 @@ function RegistrationForm({ onSubmit }) {
         placeholder='Повне імʼя'
         type='text'
       />
-
       <FormField
         required
         id='email'
@@ -30,7 +28,6 @@ function RegistrationForm({ onSubmit }) {
         placeholder='E-mail'
         type='email'
       />
-
       <FormField
         required
         id='password'
@@ -38,7 +35,6 @@ function RegistrationForm({ onSubmit }) {
         placeholder='Пароль'
         type='password'
       />
-
       <button disabled={!isValid || isSubmitting} type='submit'>
         {isSubmitting ? 'Реєстрація...' : 'ЗАРЕЄСТРУВАТИСЯ ТА УВІЙТИ'}
       </button>

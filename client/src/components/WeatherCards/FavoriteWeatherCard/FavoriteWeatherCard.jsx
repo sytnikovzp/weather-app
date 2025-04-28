@@ -4,20 +4,20 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import useFavorites from '../../hooks/useFavorites';
+import useFavorites from '../../../hooks/useFavorites';
 
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
-import SpinerLoader from '../SpinerLoader/SpinerLoader';
+import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
+import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
-import './WeatherSmallCard.css';
+import './FavoriteWeatherCard.css';
 
-function WeatherSmallCard({ selectedCity, onClick }) {
+function FavoriteWeatherCard({ selectedCity, onClick }) {
   const { city, country, latitude, longitude } = selectedCity;
 
   const {
     cityExistsInFavorites,
     isFetching,
-    errorMessage,
+    error,
     handleAddToFavorites,
     handleRemoveFromFavorites,
   } = useFavorites(city, country, latitude, longitude);
@@ -31,7 +31,7 @@ function WeatherSmallCard({ selectedCity, onClick }) {
 
   if (isFetching) {
     return (
-      <div className='weather-small-card'>
+      <div className='favorite-weather-card'>
         <div className='status-container'>
           <SpinerLoader />
         </div>
@@ -39,18 +39,18 @@ function WeatherSmallCard({ selectedCity, onClick }) {
     );
   }
 
-  if (errorMessage) {
+  if (error) {
     return (
-      <div className='weather-small-card'>
+      <div className='favorite-weather-card'>
         <div className='status-container'>
-          <ErrorMessageBlock message={errorMessage} />
+          <ErrorMessageBlock message={error?.message} />
         </div>
       </div>
     );
   }
 
   return (
-    <div className='weather-small-card' onClick={onClick}>
+    <div className='favorite-weather-card' onClick={onClick}>
       <div className='city-name'>
         <h3>{country}</h3>
         <h3>{city}</h3>
@@ -74,4 +74,4 @@ function WeatherSmallCard({ selectedCity, onClick }) {
   );
 }
 
-export default WeatherSmallCard;
+export default FavoriteWeatherCard;

@@ -1,7 +1,7 @@
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { formatDateTime } from '../../utils/sharedFunctions';
+import { formatDateTime } from '../../../utils/sharedFunctions';
 
 import './WhenUpdated.css';
 

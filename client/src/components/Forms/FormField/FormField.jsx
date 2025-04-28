@@ -1,6 +1,6 @@
 import { ErrorMessage, Field } from 'formik';
 
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
 
 function FormField({ id, name, type, placeholder, required }) {
   return (
