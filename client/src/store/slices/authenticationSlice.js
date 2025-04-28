@@ -15,7 +15,6 @@ const initialState = {
   error: null,
 };
 
-// Slice
 const authenticationSlice = createSlice({
   name: SLICE_NAMES.AUTHENTICATION_SLICE_NAME,
   initialState,

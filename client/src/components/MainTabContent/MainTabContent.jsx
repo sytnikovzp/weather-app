@@ -1,6 +1,6 @@
 import CityAutocomplete from '../CityAutocomplete/CityAutocomplete';
 import TemperatureChart from '../TemperatureChart/TemperatureChart';
-import WeatherCard from '../WeatherCard/WeatherCard';
+import WeatherBigCard from '../WeatherBigCard/WeatherBigCard';
 
 import './MainTabContent.css';
 
@@ -8,7 +8,6 @@ function MainTabContent({
   errorMessageUserCity,
   isFetchingUserCity,
   selectedCity,
-  setIsModalOpen,
   onCitySelect,
 }) {
   const isCitySelected = Boolean(selectedCity);
@@ -19,11 +18,10 @@ function MainTabContent({
 
       {isCitySelected && (
         <>
-          <WeatherCard
+          <WeatherBigCard
             errorMessageUserCity={errorMessageUserCity}
             isFetchingUserCity={isFetchingUserCity}
             selectedCity={selectedCity}
-            setIsModalOpen={setIsModalOpen}
           />
           <TemperatureChart
             errorMessageUserCity={errorMessageUserCity}

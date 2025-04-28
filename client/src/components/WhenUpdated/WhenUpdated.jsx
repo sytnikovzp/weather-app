@@ -6,8 +6,7 @@ import { formatDateTime } from '../../utils/sharedFunctions';
 import './WhenUpdated.css';
 
 function WhenUpdated({ onRefresh, currentWeatherData }) {
-  const handleRefresh = (event) => {
-    event.stopPropagation();
+  const handleRefresh = () => {
     onRefresh();
   };
 

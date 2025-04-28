@@ -7,17 +7,13 @@ import Footer from '../../components/Footer/Footer';
 import Header from '../../components/Header/Header';
 import Logo from '../../components/Logo/Logo';
 import MainTabContent from '../../components/MainTabContent/MainTabContent';
-import ModalWindow from '../../components/ModalWindow/ModalWindow';
 
 import './HomePage.css';
 
 function HomePage() {
   const [activeTab, setActiveTab] = useState('main');
   const [selectedCity, setSelectedCity] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
   const { userCity, isFetching, errorMessage } = useUserLocationWeather();
-
-  console.log('selectedCity', selectedCity);
 
   const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);
@@ -25,10 +21,10 @@ function HomePage() {
 
   const handleCitySelect = useCallback((city) => {
     setSelectedCity({
-      city: city.name,
+      city: city.name || city.city,
       country: city.country,
-      latitude: city.lat,
-      longitude: city.lon,
+      latitude: city.lat ?? city.latitude,
+      longitude: city.lon ?? city.longitude,
     });
     setActiveTab('main');
   }, []);
@@ -42,29 +38,18 @@ function HomePage() {
   return (
     <div className='app-container'>
       <Logo />
-
       <Header activeTab={activeTab} onTabClick={handleTabClick} />
-
       {activeTab === 'main' ? (
         <MainTabContent
           errorMessageUserCity={errorMessage}
           isFetchingUserCity={isFetching}
           selectedCity={selectedCity}
-          setIsModalOpen={setIsModalOpen}
           onCitySelect={handleCitySelect}
         />
       ) : (
         <FavoritesTabContent onCitySelect={handleCitySelect} />
       )}
-
       <Footer />
-
-      <ModalWindow
-        isOpen={isModalOpen}
-        message='Щоб зберегти нове місто, спершу видаліть одне з наявних (максимум — 5).'
-        title='Увага'
-        onClose={() => setIsModalOpen(false)}
-      />
     </div>
   );
 }

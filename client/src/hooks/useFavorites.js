@@ -24,19 +24,11 @@ export default function useFavorites(city, country, latitude, longitude) {
   );
 
   const handleAddToFavorites = async () => {
-    try {
-      await dispatch(addToFavorites({ city, country, latitude, longitude }));
-    } catch (error) {
-      console.log(error.message);
-    }
+    await dispatch(addToFavorites({ city, country, latitude, longitude }));
   };
 
   const handleRemoveFromFavorites = async () => {
-    try {
-      await dispatch(removeFromFavorites({ latitude, longitude }));
-    } catch (error) {
-      console.log(error.message);
-    }
+    await dispatch(removeFromFavorites({ latitude, longitude }));
   };
 
   useEffect(() => {

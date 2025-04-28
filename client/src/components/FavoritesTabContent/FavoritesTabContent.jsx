@@ -1,13 +1,11 @@
 import useFavorites from '../../hooks/useFavorites';
 
+import WeatherSmallCard from '../WeatherSmallCard/WeatherSmallCard';
+
 import './FavoritesTabContent.css';
 
 function FavoritesTabContent({ onCitySelect }) {
-  const { favorites } = useFavorites();
-
-  const handleCitySelect = (city) => {
-    onCitySelect(city);
-  };
+  const { favorites, errorMessage } = useFavorites();
 
   return (
     <div className='content'>
@@ -16,23 +14,17 @@ function FavoritesTabContent({ onCitySelect }) {
       </div>
 
       {favorites.length === 0 ? (
-        <p>Немає обраних міст</p>
+        <div className='status-container'>
+          <p>{errorMessage?.message}</p>
+        </div>
       ) : (
-        <>
-          {favorites.map((city) => (
-            <div
-              key={`${city.latitude}-${city.longitude}`}
-              className='small-card'
-              onClick={() => handleCitySelect(city)}
-            >
-              <p>{`${city.latitude}-${city.longitude}`}</p>
-              <p>{city.city}</p>
-              <p>{city.country}</p>
-              <p>{city.latitude}</p>
-              <p>{city.longitude}</p>
-            </div>
-          ))}
-        </>
+        favorites.map((city) => (
+          <WeatherSmallCard
+            key={`${city.latitude}-${city.longitude}`}
+            selectedCity={city}
+            onClick={() => onCitySelect(city)}
+          />
+        ))
       )}
     </div>
   );

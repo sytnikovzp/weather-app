@@ -59,7 +59,7 @@ function TemperatureChart({
 
   if (isFetching) {
     return (
-      <div className='big-card'>
+      <div className='weather-big-card'>
         <div className='status-container'>
           <SpinerLoader />
         </div>
@@ -69,7 +69,7 @@ function TemperatureChart({
 
   if (errorMessage) {
     return (
-      <div className='big-card'>
+      <div className='weather-big-card'>
         <div className='status-container'>
           <ErrorMessageBlock message={errorMessageUserCity} />
         </div>
@@ -78,7 +78,7 @@ function TemperatureChart({
   }
 
   return (
-    <div className='big-card'>
+    <div className='weather-big-card'>
       <div className='weather-view-toggle'>
         <button
           className={mode === 'day' ? 'active' : ''}
