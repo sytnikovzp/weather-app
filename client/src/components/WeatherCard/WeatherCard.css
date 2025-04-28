@@ -10,10 +10,11 @@
   flex-wrap: nowrap;
 }
 
-.weather-description {
+.weather-feels-like {
   display: flex;
   justify-content: space-around;
   align-items: center;
+  margin: 5px 0 0;
   color: #555;
 }
 
@@ -38,7 +39,7 @@
 .weekly-item {
   display: flex;
   justify-content: space-between;
-  margin: 5px;
+  margin: 7px;
 }
 
 .day-label {

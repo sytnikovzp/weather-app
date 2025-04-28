@@ -3,11 +3,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { formatDateTime } from '../../utils/sharedFunctions';
 
-import BarLoader from '../BarLoader/BarLoader';
-
 import './WhenUpdated.css';
 
-function WhenUpdated({ isLoading, onRefresh, currentWeatherData }) {
+function WhenUpdated({ onRefresh, currentWeatherData }) {
   const handleRefresh = (event) => {
     event.stopPropagation();
     onRefresh();
@@ -16,20 +14,12 @@ function WhenUpdated({ isLoading, onRefresh, currentWeatherData }) {
   return (
     <div className='updated-info'>
       <div className='updated-text'>
-        {isLoading ? (
-          <BarLoader />
-        ) : (
-          <p>
-            <strong>Оновлено: </strong>
-            {formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')}
-          </p>
-        )}
+        <p>
+          <strong>Оновлено: </strong>
+          {formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')}
+        </p>
       </div>
-      <button
-        className='refresh-button'
-        disabled={isLoading}
-        onClick={handleRefresh}
-      >
+      <button className='refresh-button' onClick={handleRefresh}>
         <FontAwesomeIcon icon={faArrowsRotate} />
       </button>
     </div>

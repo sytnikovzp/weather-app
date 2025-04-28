@@ -4,10 +4,10 @@ import useUserLocationWeather from '../../hooks/useUserLocationWeather';
 
 import FavoritesTabContent from '../../components/FavoritesTabContent/FavoritesTabContent';
 import Footer from '../../components/Footer/Footer';
+import Header from '../../components/Header/Header';
 import Logo from '../../components/Logo/Logo';
 import MainTabContent from '../../components/MainTabContent/MainTabContent';
 import ModalWindow from '../../components/ModalWindow/ModalWindow';
-import Tabs from '../../components/Tabs/Tabs';
 
 import './HomePage.css';
 
@@ -40,14 +40,13 @@ function HomePage() {
   return (
     <div className='app-container'>
       <Logo />
-      <div className='header'>
-        <Tabs activeTab={activeTab} onTabClick={handleTabClick} />
-      </div>
+
+      <Header activeTab={activeTab} onTabClick={handleTabClick} />
 
       {activeTab === 'main' ? (
         <MainTabContent
-          errorMessage={errorMessage}
-          isLoading={isLoading}
+          errorMessageUserCity={errorMessage}
+          isLoadingUserCity={isLoading}
           selectedCity={selectedCity}
           setIsModalOpen={setIsModalOpen}
           onCitySelect={handleCitySelect}

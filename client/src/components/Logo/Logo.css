@@ -1,5 +1,5 @@
 .logo {
-  width: 100%;
+  height: 110px;
   will-change: filter;
   transition: filter 300ms;
 }

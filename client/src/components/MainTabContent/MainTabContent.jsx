@@ -1,12 +1,12 @@
 import CityAutocomplete from '../CityAutocomplete/CityAutocomplete';
-import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
-import SpinerLoader from '../SpinerLoader/SpinerLoader';
 import TemperatureChart from '../TemperatureChart/TemperatureChart';
 import WeatherCard from '../WeatherCard/WeatherCard';
 
+import './MainTabContent.css';
+
 function MainTabContent({
-  errorMessage,
-  isLoading,
+  errorMessageUserCity,
+  isLoadingUserCity,
   selectedCity,
   setIsModalOpen,
   onCitySelect,
@@ -16,19 +16,20 @@ function MainTabContent({
   return (
     <div className='content'>
       <CityAutocomplete onCitySelect={onCitySelect} />
-      {isLoading && <SpinerLoader />}
-      {errorMessage && (
-        <div className='error-big-container'>
-          <ErrorMessageBlock message={errorMessage} />
-        </div>
-      )}
-      {isCitySelected && !isLoading && !errorMessage && (
+
+      {isCitySelected && (
         <>
           <WeatherCard
+            errorMessageUserCity={errorMessageUserCity}
+            isLoadingUserCity={isLoadingUserCity}
             selectedCity={selectedCity}
             setIsModalOpen={setIsModalOpen}
           />
-          <TemperatureChart selectedCity={selectedCity} />
+          <TemperatureChart
+            errorMessageUserCity={errorMessageUserCity}
+            isLoadingUserCity={isLoadingUserCity}
+            selectedCity={selectedCity}
+          />
         </>
       )}
     </div>

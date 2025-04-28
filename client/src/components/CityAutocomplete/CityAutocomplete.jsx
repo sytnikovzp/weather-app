@@ -68,6 +68,7 @@ function CityAutocomplete({ onCitySelect }) {
         aria-autocomplete='list'
         aria-controls='autocomplete-list'
         placeholder='Вкажіть назву міста...'
+        style={{ margin: 0 }}
         type='text'
         value={query}
         onChange={handleInputChange}

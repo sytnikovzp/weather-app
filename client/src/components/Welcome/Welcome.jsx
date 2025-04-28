@@ -16,7 +16,7 @@ function Welcome() {
   const navigate = useNavigate();
 
   const handleLogout = async () => {
-    await dispatch(logoutThunk()).unwrap();
+    await dispatch(logoutThunk());
     navigate('/auth');
   };
 

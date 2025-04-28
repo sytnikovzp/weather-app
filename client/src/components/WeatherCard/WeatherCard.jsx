@@ -22,11 +22,17 @@ import {
 } from '../../store/thunks/favoritesThunks';
 
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import SpinerLoader from '../SpinerLoader/SpinerLoader';
 import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
 import './WeatherCard.css';
 
-function WeatherCard({ selectedCity, setIsModalOpen }) {
+function WeatherCard({
+  errorMessageUserCity,
+  isLoadingUserCity,
+  selectedCity,
+  setIsModalOpen,
+}) {
   const [viewMode, setViewMode] = useState('current-weather');
   const { city, country, latitude, longitude } = selectedCity;
 
@@ -41,10 +47,13 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
   const {
     currentWeatherData,
     weeklyWeatherData,
-    isLoading,
-    errorMessage,
+    isLoading: isLoadingWeather,
+    errorMessage: errorMessageWeather,
     onRefresh,
   } = useWeatherForCity(latitude, longitude);
+
+  const isLoading = isLoadingUserCity || isLoadingWeather;
+  const errorMessage = errorMessageUserCity || errorMessageWeather;
 
   const handleAddToFavorites = async () => {
     if (favorites.length >= APP_SETTINGS.MAX_FAVORITES) {
@@ -94,8 +103,28 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
     onRefresh();
   };
 
+  if (isLoading) {
+    return (
+      <div className='big-card'>
+        <div className='status-container'>
+          <SpinerLoader />
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className='big-card'>
+        <div className='status-container'>
+          <ErrorMessageBlock message={errorMessageUserCity} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className='card'>
+    <div className='big-card'>
       <div className='weather-view-toggle'>
         <button
           className={viewMode === 'current-weather' ? 'active' : ''}
@@ -125,12 +154,10 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
           />
         </button>
       </div>
-      {errorMessage && <ErrorMessageBlock message={errorMessage} />}
       {viewMode === 'current-weather' && currentWeatherData && (
         <div className='weather-content'>
           <WhenUpdated
             currentWeatherData={currentWeatherData}
-            isLoading={isLoading}
             onRefresh={handleRefresh}
           />
           <div className='city-info'>
@@ -138,7 +165,7 @@ function WeatherCard({ selectedCity, setIsModalOpen }) {
             <h3>{city}</h3>
             <h3>{Math.round(currentWeatherData.main.temp)}°C</h3>
           </div>
-          <div className='weather-description'>
+          <div className='weather-feels-like'>
             <p>
               Відчувається як {Math.round(currentWeatherData.main.feels_like)}°C
             </p>

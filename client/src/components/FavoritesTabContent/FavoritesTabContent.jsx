@@ -4,18 +4,30 @@ import { selectFavorites } from '../../store/selectors/favoritesSelectors';
 
 import WeatherCard from '../WeatherCard/WeatherCard';
 
+import './FavoritesTabContent.css';
+
 function FavoritesTabContent({ onCitySelect }) {
   const favorites = useSelector(selectFavorites);
 
   return (
     <div className='content'>
-      <h3>Список обраних міст</h3>
-      {favorites.length === 0 ? (
+      <div className='title-container'>
+        <h3>Список обраних міст</h3>
+      </div>
+
+      <div className='small-card' />
+      <div className='small-card' />
+      <div className='small-card' />
+      <div className='small-card' />
+      <div className='small-card' />
+
+      {/* {favorites.length === 0 ? (
         <p>Немає обраних міст</p>
       ) : (
         <>
           {favorites.map((city) => (
             <div
+              className='small-card'
               key={city.weather.sys.sunrise}
               onClick={() => onCitySelect(city)}
             >
@@ -26,7 +38,7 @@ function FavoritesTabContent({ onCitySelect }) {
             </div>
           ))}
         </>
-      )}
+      )} */}
     </div>
   );
 }

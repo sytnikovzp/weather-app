@@ -4,13 +4,25 @@ import Chart from 'chart.js/auto';
 
 import useWeatherForCity from '../../hooks/useWeatherForCity';
 
-import './TemperatureChart.css';
+import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
+import SpinerLoader from '../SpinerLoader/SpinerLoader';
 
-function TemperatureChart({ selectedCity }) {
+function TemperatureChart({
+  errorMessageUserCity,
+  isLoadingUserCity,
+  selectedCity,
+}) {
   const chartRef = useRef(null);
   const [mode, setMode] = useState('day');
   const { latitude, longitude } = selectedCity;
-  const { temperatureData } = useWeatherForCity(latitude, longitude);
+  const {
+    temperatureData,
+    isLoading: isLoadingWeather,
+    errorMessage: errorMessageWeather,
+  } = useWeatherForCity(latitude, longitude);
+
+  const isLoading = isLoadingUserCity || isLoadingWeather;
+  const errorMessage = errorMessageUserCity || errorMessageWeather;
 
   const data =
     mode === 'day'
@@ -26,7 +38,7 @@ function TemperatureChart({ selectedCity }) {
       type: 'line',
       data,
       options: {
-        responsive: true,
+        responsive: false,
         maintainAspectRatio: false,
         plugins: {
           title: {
@@ -45,8 +57,28 @@ function TemperatureChart({ selectedCity }) {
     return () => tempChart.destroy();
   }, [data, selectedCity.city, mode]);
 
+  if (isLoading) {
+    return (
+      <div className='big-card'>
+        <div className='status-container'>
+          <SpinerLoader />
+        </div>
+      </div>
+    );
+  }
+
+  if (errorMessage) {
+    return (
+      <div className='big-card'>
+        <div className='status-container'>
+          <ErrorMessageBlock message={errorMessageUserCity} />
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className='card'>
+    <div className='big-card'>
       <div className='weather-view-toggle'>
         <button
           className={mode === 'day' ? 'active' : ''}
@@ -62,7 +94,7 @@ function TemperatureChart({ selectedCity }) {
           На тиждень
         </button>
       </div>
-      <canvas ref={chartRef} className='chart-canvas' />
+      <canvas ref={chartRef} height={190} width={260} />
     </div>
   );
 }

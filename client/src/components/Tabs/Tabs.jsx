@@ -1,4 +1,4 @@
-import Welcome from '../Welcome/Welcome';
+import './Tabs.css';
 
 function Tabs({ activeTab, onTabClick }) {
   return (
@@ -15,7 +15,6 @@ function Tabs({ activeTab, onTabClick }) {
       >
         Обране
       </div>
-      <Welcome />
     </div>
   );
 }

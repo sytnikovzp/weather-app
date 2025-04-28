@@ -5,7 +5,7 @@
 .autocomplete-list {
   position: absolute;
   z-index: 1;
-  top: 80%;
+  top: 90%;
   left: 0;
   right: 0;
   overflow-y: auto;
@@ -58,6 +58,7 @@
   position: absolute;
   color: #888;
   border: none;
+  top: -20%;
   right: 5px;
   border-radius: 20px;
 }
