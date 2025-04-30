@@ -22,7 +22,7 @@ function WeatherCard({
   isFetchingUserCity,
   selectedCity,
 }) {
-  const [viewMode, setViewMode] = useState('current-weather');
+  const [viewMode, setViewMode] = useState('current');
   const { city, country, latitude, longitude } = selectedCity;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -35,7 +35,7 @@ function WeatherCard({
 
   const {
     currentWeatherData,
-    weeklyForecastData,
+    nextWeekForecastData,
     isFetching: isFetchingWeather,
     error: errorMessageWeather,
     onRefresh,
@@ -93,17 +93,17 @@ function WeatherCard({
       <div className='weather-container'>
         <div className='weather-view-toggle'>
           <button
-            className={viewMode === 'current-weather' ? 'active' : ''}
+            className={viewMode === 'current' ? 'active' : ''}
             type='button'
-            onClick={() => setViewMode('current-weather')}
+            onClick={() => setViewMode('current')}
           >
             На зараз
           </button>
 
           <button
-            className={viewMode === 'forecast' ? 'active' : ''}
+            className={viewMode === 'week' ? 'active' : ''}
             type='button'
-            onClick={() => setViewMode('forecast')}
+            onClick={() => setViewMode('week')}
           >
             На тиждень
           </button>
@@ -121,7 +121,7 @@ function WeatherCard({
           </button>
         </div>
 
-        {viewMode === 'current-weather' && currentWeatherData && (
+        {viewMode === 'current' && currentWeatherData && (
           <CurrentWeatherCard
             city={city}
             country={country}
@@ -130,8 +130,8 @@ function WeatherCard({
           />
         )}
 
-        {viewMode === 'forecast' && weeklyForecastData && (
-          <WeeklyForecastCard weeklyForecastData={weeklyForecastData} />
+        {viewMode === 'week' && nextWeekForecastData && (
+          <WeeklyForecastCard nextWeekForecastData={nextWeekForecastData} />
         )}
       </div>
 

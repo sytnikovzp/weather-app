@@ -19,39 +19,37 @@ function TemperatureChart({
   const chartRef = useRef(null);
   const chartInstanceRef = useRef(null);
 
-  const [mode, setMode] = useState('day');
+  const [viewMode, setViewMode] = useState('day');
   const { latitude, longitude } = selectedCity;
 
   const {
-    todayForecastData,
-    weeklyForecastData,
+    nextDayForecastData,
+    nextWeekForecastData,
     isFetching: isFetchingForecast,
     errorMessage: errorMessageForecast,
   } = useWeatherForCity(latitude, longitude);
 
   const isFetching = isFetchingUserCity || isFetchingForecast;
   const errorMessage = errorMessageUserCity || errorMessageForecast;
-  const data = mode === 'day' ? todayForecastData : weeklyForecastData;
+  const forecastData =
+    viewMode === 'day' ? nextDayForecastData : nextWeekForecastData;
 
   useEffect(() => {
-    if (!data || !chartRef.current) {
+    if (!forecastData || !chartRef.current) {
       return;
     }
-
     const ctx = chartRef.current.getContext('2d');
-
     if (chartInstanceRef.current) {
-      updateChartInstance(chartInstanceRef.current, data);
+      updateChartInstance(chartInstanceRef.current, forecastData);
     } else {
-      chartInstanceRef.current = createChartInstance(ctx, data);
+      chartInstanceRef.current = createChartInstance(ctx, forecastData);
     }
-
     return () => {
       if (chartInstanceRef.current) {
         destroyChartInstance(chartInstanceRef.current);
       }
     };
-  }, [data]);
+  }, [forecastData]);
 
   if (isFetching) {
     return (
@@ -77,16 +75,16 @@ function TemperatureChart({
     <div className='weather-container'>
       <div className='weather-view-toggle'>
         <button
-          className={mode === 'day' ? 'active' : ''}
+          className={viewMode === 'day' ? 'active' : ''}
           type='button'
-          onClick={() => setMode('day')}
+          onClick={() => setViewMode('day')}
         >
-          На сьогодні
+          На 24 години
         </button>
         <button
-          className={mode === 'weekly' ? 'active' : ''}
+          className={viewMode === 'week' ? 'active' : ''}
           type='button'
-          onClick={() => setMode('weekly')}
+          onClick={() => setViewMode('week')}
         >
           На тиждень
         </button>

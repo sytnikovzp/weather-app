@@ -1,16 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import {
-  getTodayTemperatureChartData,
-  getWeeklyTemperatureChartData,
+  getNextDayTemperatureChartData,
+  getNextWeekTemperatureChartData,
 } from '../utils/sharedFunctions';
 
 import { weatherService } from '../services';
 
 function useWeatherForCity(latitude, longitude) {
   const [currentWeatherData, setCurrentWeatherData] = useState(null);
-  const [todayForecastData, setTodayForecastData] = useState(null);
-  const [weeklyForecastData, setWeeklyForecastData] = useState(null);
+  const [nextDayForecastData, setNextDayForecastData] = useState(null);
+  const [nextWeekForecastData, setNextWeekForecastData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -31,12 +31,13 @@ function useWeatherForCity(latitude, longitude) {
         longitude
       );
 
-      const todayForecastData = getTodayTemperatureChartData(forecastData);
-      const weeklyForecastData = getWeeklyTemperatureChartData(forecastData);
+      const nextDayForecastData = getNextDayTemperatureChartData(forecastData);
+      const nextWeekForecastData =
+        getNextWeekTemperatureChartData(forecastData);
 
       setCurrentWeatherData(currentWeatherData);
-      setTodayForecastData(todayForecastData);
-      setWeeklyForecastData(weeklyForecastData);
+      setNextDayForecastData(nextDayForecastData);
+      setNextWeekForecastData(nextWeekForecastData);
     } catch (error) {
       setErrorMessage(error.response?.data?.message);
     } finally {
@@ -50,8 +51,8 @@ function useWeatherForCity(latitude, longitude) {
 
   return {
     currentWeatherData,
-    todayForecastData,
-    weeklyForecastData,
+    nextDayForecastData,
+    nextWeekForecastData,
     isFetching,
     errorMessage,
     onRefresh: fetchWeatherData,
