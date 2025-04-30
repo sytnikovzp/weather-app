@@ -59,7 +59,7 @@ function AuthPage() {
         />
       )}
 
-      <button className='auth-switch-button' onClick={toggleMode}>
+      <button className='auth-switch-button' type='button' onClick={toggleMode}>
         Перейти до
         {isLoginMode ? ' реєстрації ' : ' авторизації '}
         користувача

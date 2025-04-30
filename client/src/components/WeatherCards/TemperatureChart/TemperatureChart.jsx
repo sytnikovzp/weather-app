@@ -1,4 +1,3 @@
-/* eslint-disable consistent-return */
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 
@@ -13,8 +12,11 @@ function TemperatureChart({
   selectedCity,
 }) {
   const chartRef = useRef(null);
+  const chartInstanceRef = useRef(null);
+
   const [mode, setMode] = useState('day');
   const { latitude, longitude } = selectedCity;
+
   const {
     temperatureData,
     isFetching: isFetchingWeather,
@@ -30,12 +32,31 @@ function TemperatureChart({
       : temperatureData?.weeklyWeatherData;
 
   useEffect(() => {
-    const ctx = chartRef.current?.getContext('2d');
-    if (!data || !ctx) {
+    if (!data || !chartRef.current) {
       return;
     }
 
-    const tempChart = new Chart(ctx, {
+    const ctx = chartRef.current.getContext('2d');
+
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.data = {
+        ...data,
+        datasets: data.datasets.map((dataset) => ({
+          ...dataset,
+          backgroundColor: '#5B92D9',
+          borderColor: '#3A6EA5',
+          pointBackgroundColor: '#3A6EA5',
+          pointBorderColor: '#FFFFFF',
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          tension: 0.3,
+        })),
+      };
+      chartInstanceRef.current.update();
+      return;
+    }
+
+    chartInstanceRef.current = new Chart(ctx, {
       type: 'line',
       data: {
         ...data,
@@ -80,8 +101,11 @@ function TemperatureChart({
       },
     });
 
-    return () => tempChart.destroy();
-  }, [data, selectedCity.city, mode]);
+    return () => {
+      chartInstanceRef.current?.destroy();
+      chartInstanceRef.current = null;
+    };
+  }, [data]);
 
   if (isFetching) {
     return (
@@ -108,13 +132,14 @@ function TemperatureChart({
       <div className='weather-view-toggle'>
         <button
           className={mode === 'day' ? 'active' : ''}
+          type='button'
           onClick={() => setMode('day')}
         >
           На сьогодні
         </button>
-
         <button
           className={mode === 'weekly' ? 'active' : ''}
+          type='button'
           onClick={() => setMode('weekly')}
         >
           На тиждень

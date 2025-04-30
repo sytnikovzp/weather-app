@@ -94,6 +94,7 @@ function WeatherCard({
         <div className='weather-view-toggle'>
           <button
             className={viewMode === 'current-weather' ? 'active' : ''}
+            type='button'
             onClick={() => setViewMode('current-weather')}
           >
             На зараз
@@ -101,12 +102,17 @@ function WeatherCard({
 
           <button
             className={viewMode === 'forecast' ? 'active' : ''}
+            type='button'
             onClick={() => setViewMode('forecast')}
           >
             На тиждень
           </button>
 
-          <button className='favorite-button' onClick={handleToggleFavorite}>
+          <button
+            className='favorite-button'
+            type='button'
+            onClick={handleToggleFavorite}
+          >
             <FontAwesomeIcon
               icon={
                 cityExistsInFavorites ? faHeartCircleMinus : faHeartCirclePlus

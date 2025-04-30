@@ -54,7 +54,11 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
       <div className='city-name'>
         <h3>{country}</h3>
         <h3>{city}</h3>
-        <button className='favorite-button' onClick={handleToggleFavorite}>
+        <button
+          className='favorite-button'
+          type='button'
+          onClick={handleToggleFavorite}
+        >
           <FontAwesomeIcon
             icon={
               cityExistsInFavorites ? faHeartCircleMinus : faHeartCirclePlus

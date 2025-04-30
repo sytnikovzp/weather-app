@@ -30,7 +30,7 @@ function ModalWindow({ isOpen, onClose, title, message }) {
       <div className='modal-content'>
         <h3>{title}</h3>
         <p>{message}</p>
-        <button ref={closeButtonRef} onClick={onClose}>
+        <button ref={closeButtonRef} type='button' onClick={onClose}>
           Закрити
         </button>
       </div>

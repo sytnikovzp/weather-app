@@ -6,19 +6,19 @@ import { formatDateTime } from '../../../utils/sharedFunctions';
 import './WhenUpdated.css';
 
 function WhenUpdated({ onRefresh, currentWeatherData }) {
-  const handleRefresh = () => {
-    onRefresh();
-  };
+  const formattedDate = currentWeatherData?.dt
+    ? formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')
+    : 'Невідомо';
 
   return (
     <div className='updated-info'>
       <div className='updated-text'>
         <p>
           <strong>Оновлено: </strong>
-          {formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')}
+          {formattedDate}
         </p>
       </div>
-      <button className='refresh-button' onClick={handleRefresh}>
+      <button className='refresh-button' type='button' onClick={onRefresh}>
         <FontAwesomeIcon icon={faArrowsRotate} />
       </button>
     </div>

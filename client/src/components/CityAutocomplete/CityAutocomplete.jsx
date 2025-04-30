@@ -74,7 +74,11 @@ function CityAutocomplete({ onCitySelect }) {
         onChange={handleInputChange}
       />
       {query && (
-        <button className='clear-button' onClick={handleClearInput}>
+        <button
+          className='clear-button'
+          type='button'
+          onClick={handleClearInput}
+        >
           <FontAwesomeIcon icon={faXmark} />
         </button>
       )}

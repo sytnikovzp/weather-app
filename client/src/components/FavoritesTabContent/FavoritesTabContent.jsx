@@ -1,5 +1,6 @@
 import useFavorites from '../../hooks/useFavorites';
 
+import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
 import FavoriteWeatherCard from '../WeatherCards/FavoriteWeatherCard/FavoriteWeatherCard';
 
 import './FavoritesTabContent.css';
@@ -15,7 +16,7 @@ function FavoritesTabContent({ onCitySelect }) {
 
       {favorites.length === 0 ? (
         <div className='status-container'>
-          <p>{error?.message}</p>
+          <ErrorMessageBlock message={error?.message} />
         </div>
       ) : (
         favorites.map((city) => (
