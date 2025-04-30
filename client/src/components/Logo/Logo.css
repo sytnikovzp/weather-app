@@ -2,6 +2,7 @@
   height: 110px;
   transition: filter 300ms;
   will-change: filter;
+  margin: 8px;
 }
 
 .logo:hover {

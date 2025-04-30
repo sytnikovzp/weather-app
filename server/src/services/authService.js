@@ -11,7 +11,7 @@ const {
 const { generateTokens, validateRefreshToken } = require('./tokenService');
 
 class AuthService {
-  static async registration(fullName, email, password, transaction) {
+  static async registration(name, email, password, transaction) {
     const emailToLower = emailToLowerCase(email);
     const person = await User.findOne({ where: { email: emailToLower } });
     if (person) {
@@ -20,7 +20,7 @@ class AuthService {
     const hashedPassword = await hashPassword(password);
     const newUser = await User.create(
       {
-        fullName,
+        name,
         email: emailToLower,
         password: hashedPassword,
       },
@@ -34,7 +34,7 @@ class AuthService {
       ...tokens,
       authenticatedUser: {
         uuid: newUser.uuid,
-        fullName: newUser.fullName,
+        name: newUser.name,
       },
     };
   }
@@ -54,7 +54,7 @@ class AuthService {
       ...tokens,
       authenticatedUser: {
         uuid: foundUser.uuid,
-        fullName: foundUser.fullName,
+        name: foundUser.name,
       },
     };
   }
@@ -74,7 +74,7 @@ class AuthService {
       ...tokens,
       authenticatedUser: {
         uuid: foundUser.uuid,
-        fullName: foundUser.fullName,
+        name: foundUser.name,
       },
     };
   }

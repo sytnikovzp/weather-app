@@ -10,13 +10,9 @@ import store from '..';
 
 export const registrationThunk = createAsyncThunk(
   `${SLICE_NAMES.AUTHENTICATION_SLICE_NAME}/registration`,
-  async ({ fullName, email, password }, { rejectWithValue }) => {
+  async ({ name, email, password }, { rejectWithValue }) => {
     try {
-      const { data } = await authService.registration(
-        fullName,
-        email,
-        password
-      );
+      const { data } = await authService.registration(name, email, password);
       return data;
     } catch (error) {
       return rejectWithValue(error.response.data);

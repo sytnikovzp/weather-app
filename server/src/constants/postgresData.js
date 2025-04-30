@@ -8,7 +8,7 @@ const postgresData = async () => {
   return {
     users: [
       {
-        full_name: 'Test User',
+        name: 'User',
         email: 'test.user@gmail.com',
         password: await hashPassword('Qwerty12'),
         created_at: now,

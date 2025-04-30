@@ -1,5 +1,8 @@
 .welcome-block {
   display: flex;
   align-items: center;
-  height: 55px;
+}
+
+.logout-button {
+  margin: 0;
 }

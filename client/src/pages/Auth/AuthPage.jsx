@@ -53,8 +53,8 @@ function AuthPage() {
         />
       ) : (
         <RegistrationForm
-          onSubmit={({ fullName, email, password }) =>
-            handleAuth(registrationThunk, { fullName, email, password })
+          onSubmit={({ name, email, password }) =>
+            handleAuth(registrationThunk, { name, email, password })
           }
         />
       )}

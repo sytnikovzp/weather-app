@@ -1,9 +1,9 @@
 import { removeAccessToken, saveAccessToken } from '../utils/sharedFunctions';
 import api from '../api';
 
-const registration = async (fullName, email, password) => {
+const registration = async (name, email, password) => {
   const response = await api.post('/auth/registration', {
-    fullName,
+    name,
     email,
     password,
   });

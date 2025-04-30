@@ -14,7 +14,7 @@ class UsersService {
     }
     return {
       uuid: foundUser.uuid,
-      fullName: foundUser.fullName,
+      name: foundUser.name,
       email: foundUser.email,
       createdAt: formatDateTime(foundUser.createdAt),
       updatedAt: formatDateTime(foundUser.updatedAt),

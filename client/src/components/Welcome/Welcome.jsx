@@ -22,8 +22,8 @@ function Welcome() {
 
   return (
     <div className='welcome-block'>
-      {isAuthenticated && <p>Привіт, {userProfile.fullName}!</p>}
-      <button onClick={handleLogout}>
+      {isAuthenticated && <p>Привіт, {userProfile.name}!</p>}
+      <button className='logout-button' onClick={handleLogout}>
         <FontAwesomeIcon icon={faRightFromBracket} />
       </button>
     </div>

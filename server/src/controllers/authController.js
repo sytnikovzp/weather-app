@@ -8,13 +8,8 @@ class AuthController {
   static async registration(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { fullName, email, password } = req.body;
-      const authData = await registration(
-        fullName,
-        email,
-        password,
-        transaction
-      );
+      const { name, email, password } = req.body;
+      const authData = await registration(name, email, password, transaction);
       await transaction.commit();
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(201).json(authData);

@@ -5,7 +5,7 @@ import { REGISTRATION_VALIDATION_SCHEME } from '../../../utils/validationSchemes
 import FormField from '../FormField/FormField';
 
 const initialValues = {
-  fullName: '',
+  name: '',
   email: '',
   password: '',
 };
@@ -16,9 +16,9 @@ function RegistrationForm({ onSubmit }) {
       <h2>Реєстрація</h2>
       <FormField
         required
-        id='fullName'
-        name='fullName'
-        placeholder='Повне імʼя'
+        id='name'
+        name='name'
+        placeholder='Імʼя'
         type='text'
       />
       <FormField

@@ -24,7 +24,7 @@ const PASSWORD_REQUIRED_SCHEME = yup
   .required('Будь ласка, введіть пароль');
 
 const REGISTRATION_VALIDATION_SCHEME = yup.object().shape({
-  fullName: STRING_SCHEME.required('Будь ласка, введіть повне ім`я'),
+  name: STRING_SCHEME.required('Будь ласка, введіть ім`я'),
   email: EMAIL_SCHEME.required('Будь ласка, введіть email'),
   password: PASSWORD_REQUIRED_SCHEME,
 });
@@ -42,7 +42,7 @@ const FAVORITE_VALIDATION_SCHEME = yup.object().shape({
 });
 
 const USER_VALIDATION_SCHEME = yup.object().shape({
-  fullName: STRING_SCHEME.required('Будь ласка, введіть повне ім`я'),
+  name: STRING_SCHEME.required('Будь ласка, введіть ім`я'),
   email: EMAIL_SCHEME.nullable(),
 });
 
