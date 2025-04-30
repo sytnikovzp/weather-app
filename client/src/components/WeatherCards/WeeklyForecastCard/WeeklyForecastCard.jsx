@@ -4,9 +4,9 @@ import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
 
 import './WeeklyForecastCard.css';
 
-function WeeklyForecastCard({ weeklyWeatherData }) {
-  const labels = weeklyWeatherData?.labels || [];
-  const temperatures = weeklyWeatherData?.datasets?.[0]?.data || [];
+function WeeklyForecastCard({ weeklyForecastData }) {
+  const labels = weeklyForecastData?.labels || [];
+  const temperatures = weeklyForecastData?.datasets?.[0]?.data || [];
 
   if (labels.length === 0 || temperatures.length === 0) {
     return <ErrorMessageBlock message={'Немає даних для прогнозу'} />;

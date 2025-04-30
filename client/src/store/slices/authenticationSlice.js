@@ -1,7 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 import { SLICE_NAMES } from '../../constants';
-import { setErrorState, setFetchingState } from '../../utils/sharedFunctions';
+import { setErrorState, setFetchingState } from '../../utils/reduxHelpers';
 
 import {
   loginThunk,

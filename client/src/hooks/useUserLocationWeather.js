@@ -12,14 +12,14 @@ function useUserLocationWeather() {
       setIsFetching(true);
       setErrorMessage('');
       const { latitude, longitude } = await locationService.getLocationByIP();
-      const currentWeather = await weatherService.getWeather(
+      const currentWeatherData = await weatherService.getWeather(
         latitude,
         longitude
       );
 
       setUserCity({
-        city: currentWeather.name,
-        country: currentWeather.sys.country,
+        city: currentWeatherData.name,
+        country: currentWeatherData.sys.country,
         latitude,
         longitude,
       });

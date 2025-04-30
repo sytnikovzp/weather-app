@@ -1,48 +1,10 @@
 import { format } from 'date-fns';
 import { uk } from 'date-fns/locale/uk';
 
-const getAccessToken = () => {
-  const token = localStorage.getItem('weatherAppToken');
-  if (token === 'undefined') {
-    localStorage.removeItem('weatherAppToken');
-    return null;
-  }
-  return token;
-};
-
-const saveAccessToken = (token) =>
-  localStorage.setItem('weatherAppToken', token);
-
-const removeAccessToken = () => localStorage.removeItem('weatherAppToken');
-
 const formatDateTime = (timestamp, dateFormat) =>
   format(new Date(timestamp * 1000), dateFormat, {
     locale: uk,
   });
-
-const formatWeeklyData = (forecastData) => {
-  const dailyData = forecastData.list.reduce((acc, data) => {
-    const [date] = data.dt_txt.split(' ');
-    if (!acc[date]) {
-      acc[date] = { sum: 0, count: 0 };
-    }
-    acc[date].sum += data.main.temp;
-    acc[date].count += 1;
-    return acc;
-  }, {});
-  const labels = Object.keys(dailyData);
-  const data = labels.map((date) =>
-    Math.round(dailyData[date].sum / dailyData[date].count)
-  );
-  return {
-    labels,
-    datasets: [
-      {
-        data,
-      },
-    ],
-  };
-};
 
 const getWindDirection = (deg) => {
   if ((deg >= 0 && deg <= 22.5) || (deg > 337.5 && deg <= 360)) {
@@ -96,86 +58,64 @@ const getDayLabel = (index) => {
   return dayNames[dayOfWeek.getDay()];
 };
 
-const processDayTemperatureData = (forecastData) => {
-  const hourlyData = forecastData.list.slice(0, 8);
-  const labels = hourlyData.map((item) =>
-    new Date(item.dt * 1000).toLocaleTimeString([], {
+const getTodayTemperatureChartData = (forecastData) => {
+  const now = new Date();
+  const [todayStr] = now.toISOString().split('T');
+  const todayForecast = forecastData.list.filter((item) => {
+    const [itemDateStr] = new Date(item.dt * 1000).toISOString().split('T');
+    return itemDateStr === todayStr;
+  });
+  const labels = todayForecast.map((item) => {
+    const date = new Date(item.dt * 1000);
+    return date.toLocaleTimeString('uk-UA', {
       hour: '2-digit',
       minute: '2-digit',
-    })
-  );
-  const temperatures = hourlyData.map((item) => item.main.temp);
-  return {
-    labels,
-    datasets: [
-      {
-        label: 'Температура на сьогодні (°C)',
-        data: temperatures,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
-        tension: 0.4,
-      },
-    ],
-  };
-};
-
-const processWeeklyTemperatureData = (forecastData) => {
-  const dailyData = forecastData.list.reduce((acc, current) => {
-    const date = new Date(current.dt * 1000).toLocaleDateString([], {
-      day: '2-digit',
-      month: '2-digit',
     });
-    if (acc[date]) {
-      acc[date].tempSum += current.main.temp;
-      acc[date].count += 1;
-    } else {
-      acc[date] = {
-        tempSum: current.main.temp,
-        count: 1,
-      };
-    }
-    return acc;
-  }, {});
-  const labels = Object.keys(dailyData);
-  const temperatures = Object.values(dailyData).map((day) =>
-    Math.round(day.tempSum / day.count)
-  );
+  });
+  const temperatures = todayForecast.map((item) => Math.round(item.main.temp));
   return {
     labels,
     datasets: [
       {
-        label: 'Середня температура на день (°C)',
+        label: 'Прогноз температури на сьогодні',
         data: temperatures,
-        borderColor: 'rgba(75, 192, 192, 1)',
-        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-        fill: false,
-        tension: 0.4,
       },
     ],
   };
 };
 
-const setErrorState = (state, { payload }) => {
-  state.isFetching = false;
-  state.error = payload;
-};
-
-const setFetchingState = (state) => {
-  state.isFetching = true;
-  state.error = null;
-};
+function getWeeklyTemperatureChartData(forecastData) {
+  const dailyData = {};
+  for (const item of forecastData.list) {
+    const [date] = item.dt_txt.split(' ');
+    if (!dailyData[date]) {
+      dailyData[date] = { sum: 0, count: 0 };
+    }
+    dailyData[date].sum += item.main.temp;
+    dailyData[date].count += 1;
+  }
+  const labels = Object.keys(dailyData).map((date) => {
+    const d = new Date(date);
+    return d.toLocaleDateString('uk-UA', { weekday: 'short' });
+  });
+  const data = Object.values(dailyData).map((entry) =>
+    Math.round(entry.sum / entry.count)
+  );
+  return {
+    labels,
+    datasets: [
+      {
+        label: 'Прогноз температури на тиждень',
+        data,
+      },
+    ],
+  };
+}
 
 export {
   formatDateTime,
-  formatWeeklyData,
-  getAccessToken,
   getDayLabel,
+  getTodayTemperatureChartData,
+  getWeeklyTemperatureChartData,
   getWindDirection,
-  processDayTemperatureData,
-  processWeeklyTemperatureData,
-  removeAccessToken,
-  saveAccessToken,
-  setErrorState,
-  setFetchingState,
 };

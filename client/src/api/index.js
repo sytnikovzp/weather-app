@@ -5,7 +5,7 @@ import {
   getAccessToken,
   removeAccessToken,
   saveAccessToken,
-} from '../utils/sharedFunctions';
+} from '../utils/locStorHelpers';
 
 import store from '../store';
 import {

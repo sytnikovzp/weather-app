@@ -35,7 +35,7 @@ function WeatherCard({
 
   const {
     currentWeatherData,
-    weeklyWeatherData,
+    weeklyForecastData,
     isFetching: isFetchingWeather,
     error: errorMessageWeather,
     onRefresh,
@@ -130,8 +130,8 @@ function WeatherCard({
           />
         )}
 
-        {viewMode === 'forecast' && weeklyWeatherData && (
-          <WeeklyForecastCard weeklyWeatherData={weeklyWeatherData} />
+        {viewMode === 'forecast' && weeklyForecastData && (
+          <WeeklyForecastCard weeklyForecastData={weeklyForecastData} />
         )}
       </div>
 

@@ -1,17 +1,16 @@
 import { useCallback, useEffect, useState } from 'react';
 
 import {
-  formatWeeklyData,
-  processDayTemperatureData,
-  processWeeklyTemperatureData,
+  getTodayTemperatureChartData,
+  getWeeklyTemperatureChartData,
 } from '../utils/sharedFunctions';
 
 import { weatherService } from '../services';
 
 function useWeatherForCity(latitude, longitude) {
   const [currentWeatherData, setCurrentWeatherData] = useState(null);
-  const [weeklyWeatherData, setWeeklyWeatherData] = useState(null);
-  const [temperatureData, setTemperatureData] = useState(null);
+  const [todayForecastData, setTodayForecastData] = useState(null);
+  const [weeklyForecastData, setWeeklyForecastData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -23,7 +22,7 @@ function useWeatherForCity(latitude, longitude) {
     try {
       setIsFetching(true);
       setErrorMessage('');
-      const currentWeather = await weatherService.getWeather(
+      const currentWeatherData = await weatherService.getWeather(
         latitude,
         longitude
       );
@@ -32,13 +31,12 @@ function useWeatherForCity(latitude, longitude) {
         longitude
       );
 
-      const weeklyWeather = formatWeeklyData(forecastData);
-      const dayWeatherData = processDayTemperatureData(forecastData);
-      const weeklyWeatherData = processWeeklyTemperatureData(forecastData);
+      const todayForecastData = getTodayTemperatureChartData(forecastData);
+      const weeklyForecastData = getWeeklyTemperatureChartData(forecastData);
 
-      setCurrentWeatherData(currentWeather);
-      setWeeklyWeatherData(weeklyWeather);
-      setTemperatureData({ dayWeatherData, weeklyWeatherData });
+      setCurrentWeatherData(currentWeatherData);
+      setTodayForecastData(todayForecastData);
+      setWeeklyForecastData(weeklyForecastData);
     } catch (error) {
       setErrorMessage(error.response?.data?.message);
     } finally {
@@ -52,8 +50,8 @@ function useWeatherForCity(latitude, longitude) {
 
   return {
     currentWeatherData,
-    weeklyWeatherData,
-    temperatureData,
+    todayForecastData,
+    weeklyForecastData,
     isFetching,
     errorMessage,
     onRefresh: fetchWeatherData,
