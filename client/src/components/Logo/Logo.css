@@ -1,7 +1,7 @@
 .logo {
   height: 110px;
-  will-change: filter;
   transition: filter 300ms;
+  will-change: filter;
 }
 
 .logo:hover {

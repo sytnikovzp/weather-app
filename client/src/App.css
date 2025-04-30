@@ -3,22 +3,22 @@ body {
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
+  color: #333;
   font-family: Arial, sans-serif;
   background-color: #e2f0ff;
-  color: #333333;
 }
 
 input[type='text'],
 input[type='email'],
 input[type='password'] {
   width: 100%;
-  padding: 10px 15px;
   margin: 10px;
+  padding: 10px 15px;
   border: 1px solid #aad4f5;
   border-radius: 6px;
-  background-color: #ffffff;
   font-size: 14px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px rgb(0 0 0 / 10%);
+  background-color: #fff;
 }
 
 input[type='text']:focus,
@@ -29,18 +29,18 @@ input[type='password']:focus {
 }
 
 button {
-  background: linear-gradient(to bottom, #5b92d1, #3a6ea5);
-  color: #ffffff;
+  margin: 10px 0;
+  padding: 10px 15px;
   border: none;
   border-radius: 6px;
-  padding: 10px 15px;
-  margin: 10px 0;
-  cursor: pointer;
+  background: linear-gradient(to bottom, #5b92d1, #3a6ea5);
+  color: #fff;
   font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgb(0 0 0 / 20%);
   transition:
     background 0.3s ease,
     box-shadow 0.3s ease;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 button:hover {
@@ -48,18 +48,18 @@ button:hover {
 }
 
 button:disabled {
-  background: #cccccc;
   border: none;
-  color: #666666;
+  background: #ccc;
+  color: #666;
   cursor: not-allowed;
 }
 
 h2,
 h3 {
   margin: 10px;
+  color: #333;
   text-align: center;
   white-space: nowrap;
-  color: #333333;
 }
 
 p {

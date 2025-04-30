@@ -8,13 +8,13 @@
 
 .not-found-title {
   color: #d14747;
-  font-weight: 700;
   font-size: 2.5rem;
+  font-weight: 700;
 }
 
 .not-found-message {
-  color: #3a6ea5;
-  font-weight: 500;
   margin: 24px 0;
+  color: #3a6ea5;
   font-size: 1.75rem;
+  font-weight: 500;
 }

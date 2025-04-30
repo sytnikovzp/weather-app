@@ -3,8 +3,8 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   width: 300px;
+  height: 100vh;
 }
 
 .auth-switch-button {
@@ -23,11 +23,11 @@ form {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background-color: #f9f9f9;
-  border-radius: 6px;
-  box-shadow: 0 4px 12px rgba(58, 110, 165, 0.15);
-  padding: 10px;
   width: 100%;
   min-height: 355px;
+  padding: 10px;
   border: 1px solid #aad4f5;
+  border-radius: 6px;
+  box-shadow: 0 4px 12px rgb(58 110 165 / 15%);
+  background-color: #f9f9f9;
 }

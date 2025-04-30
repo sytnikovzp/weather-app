@@ -1,14 +1,14 @@
 .weather-container {
-  border: 1px solid #aad4f5;
-  border-radius: 6px;
+  height: 245px;
   margin: 10px 0;
   padding: 10px;
-  height: 245px;
-  background-color: #f2f9ff;
+  border: 1px solid #aad4f5;
+  border-radius: 6px;
   box-shadow:
-    inset 0 0 0 1px #ffffff,
-    0 2px 4px rgba(0, 0, 0, 0.08);
+    inset 0 0 0 1px #fff,
+    0 2px 4px rgb(0 0 0 / 8%);
   transition: box-shadow 0.3s ease;
+  background-color: #f2f9ff;
 }
 
 .status-container {
@@ -32,12 +32,12 @@
 }
 
 .favorite-button {
-  background: none;
-  cursor: pointer;
-  font-size: 28px;
-  padding: 0;
   margin: 0;
+  padding: 0;
+  background: none;
   color: #d14747;
+  font-size: 28px;
+  cursor: pointer;
   box-shadow: none;
   transition:
     color 0.3s ease,
@@ -45,7 +45,7 @@
 }
 
 .favorite-button:hover {
+  background: none;
   color: #b03030;
   transform: scale(1.1);
-  background: none;
 }
