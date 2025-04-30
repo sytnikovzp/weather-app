@@ -21,16 +21,16 @@
 }
 
 .modal-content {
-  background-color: #fff;
-  border-radius: 8px;
-  padding: 10px 15px;
-  box-shadow: 0 2px 15px rgba(0, 0, 0, 0.2);
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 5px 15px;
   text-align: center;
   animation: scaleIn 0.3s ease-in-out;
 }
 
-.modal-content > button {
-  padding: 10px;
+.modal-content > p {
+  margin-top: 30px;
+  margin-bottom: 20px;
 }
 
 @keyframes fadeIn {

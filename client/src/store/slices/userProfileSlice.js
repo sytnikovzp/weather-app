@@ -20,7 +20,6 @@ const userProfileSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fulfilled
       .addCase(fetchUserProfile.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.error = null;
@@ -28,10 +27,8 @@ const userProfileSlice = createSlice({
         state.isAuthenticated = true;
       })
 
-      // Pending
       .addCase(fetchUserProfile.pending, setFetchingState)
 
-      // Rejected
       .addCase(fetchUserProfile.rejected, setErrorState);
   },
 });

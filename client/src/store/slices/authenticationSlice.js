@@ -23,7 +23,6 @@ const authenticationSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fulfilled
       .addCase(registrationThunk.fulfilled, (state) => {
         state.isFetching = false;
         state.error = null;
@@ -41,13 +40,11 @@ const authenticationSlice = createSlice({
         state.error = null;
       })
 
-      // Pending
       .addCase(registrationThunk.pending, setFetchingState)
       .addCase(loginThunk.pending, setFetchingState)
       .addCase(logoutThunk.pending, setFetchingState)
       .addCase(refreshAccessTokenThunk.pending, setFetchingState)
 
-      // Rejected
       .addCase(registrationThunk.rejected, setErrorState)
       .addCase(loginThunk.rejected, setErrorState)
       .addCase(logoutThunk.rejected, setErrorState)

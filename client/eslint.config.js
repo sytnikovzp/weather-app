@@ -78,6 +78,7 @@ export default [
       'global-require': 'off',
       'guard-for-in': 'warn',
       'import/default': 'error',
+      'import/exports-last': 'warn',
       'import/extensions': [
         'warn',
         'never',
@@ -100,6 +101,7 @@ export default [
       'import/unambiguous': 'error',
       'init-declarations': ['warn', 'always'],
       'jsx-a11y/alt-text': 'warn',
+      'jsx-a11y/anchor-is-valid': 'warn',
       'jsx-a11y/no-noninteractive-element-to-interactive-role': 'error',
       'lines-between-class-members': [
         'error',
@@ -452,8 +454,6 @@ export default [
       'wrap-regex': 'off',
       'yield-star-spacing': 'warn',
       yoda: 'error',
-      // 'jsx-a11y/anchor-is-valid': 'warn',
-      // 'import/exports-last': 'warn',
       // 'react/no-array-index-key': 'warn',
       // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',

@@ -26,7 +26,6 @@ const favoritesSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fulfilled
       .addCase(fetchFavorites.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.error = null;
@@ -46,12 +45,10 @@ const favoritesSlice = createSlice({
         );
       })
 
-      // Pending
       .addCase(fetchFavorites.pending, setFetchingState)
       .addCase(addToFavorites.pending, setFetchingState)
       .addCase(removeFromFavorites.pending, setFetchingState)
 
-      // Rejected
       .addCase(fetchFavorites.rejected, setErrorState)
       .addCase(addToFavorites.rejected, setErrorState)
       .addCase(removeFromFavorites.rejected, setErrorState);

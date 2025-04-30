@@ -28,7 +28,7 @@ function LoginForm({ onSubmit }) {
         type='password'
       />
       <button disabled={!isValid || isSubmitting} type='submit'>
-        {isSubmitting ? 'Вхід...' : 'УВІЙТИ'}
+        {isSubmitting ? 'ВХІД...' : 'УВІЙТИ'}
       </button>
     </Form>
   );

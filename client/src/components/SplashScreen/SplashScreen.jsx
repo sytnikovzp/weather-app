@@ -16,8 +16,8 @@ function SplashScreen() {
     const timer3 = setTimeout(() => setDone(true), 3500);
 
     const progressInterval = setInterval(() => {
-      setProgress((prev) => (prev < 100 ? prev + 1 : 100));
-    }, 20);
+      setProgress((prev) => (prev < 100 ? prev + 1 : prev));
+    }, 30);
 
     return () => {
       clearTimeout(timer1);
