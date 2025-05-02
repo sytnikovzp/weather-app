@@ -1,6 +1,7 @@
+/* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
 
-import { locationService, weatherService } from '../services';
+import { locationService } from '../services';
 
 function useUserLocationWeather() {
   const [userCity, setUserCity] = useState(null);
@@ -10,16 +11,14 @@ function useUserLocationWeather() {
   const fetchWeatherForUserLocation = async () => {
     try {
       setIsFetching(true);
+
       setErrorMessage('');
-      const { latitude, longitude } = await locationService.getLocationByIP();
-      const currentWeatherData = await weatherService.getWeather(
-        latitude,
-        longitude
-      );
+      const { city, country_code, latitude, longitude } =
+        await locationService.getLocationByIP();
 
       setUserCity({
-        city: currentWeatherData.name,
-        country: currentWeatherData.sys.country,
+        city,
+        country: country_code,
         latitude,
         longitude,
       });

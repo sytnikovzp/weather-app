@@ -1,10 +1,11 @@
+/* eslint-disable camelcase */
 import axios from 'axios';
 
 const getLocationByIP = async () => {
   try {
     const response = await axios.get('https://ipwho.is');
-    const { latitude, longitude } = response.data;
-    return { latitude, longitude };
+    const { city, country_code, latitude, longitude } = response.data;
+    return { city, country_code, latitude, longitude };
   } catch (error) {
     console.error(
       'API ipwho.is не зміг надати дійсні дані про місцезнаходження: ',
