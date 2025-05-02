@@ -11,12 +11,12 @@ const chartStyleDataset = (dataset) => ({
   tension: 0.3,
 });
 
-const createChartInstance = (ctx, data) =>
+const createChartInstance = (ctx, forecastData) =>
   new Chart(ctx, {
     type: 'line',
     data: {
-      ...data,
-      datasets: data.datasets.map(chartStyleDataset),
+      ...forecastData,
+      datasets: forecastData.datasets.map(chartStyleDataset),
     },
     options: {
       responsive: false,
@@ -48,11 +48,11 @@ const createChartInstance = (ctx, data) =>
     },
   });
 
-const updateChartInstance = (chartArg, data) => {
+const updateChartInstance = (chartArg, forecastData) => {
   const chart = chartArg;
   const styledData = {
-    ...data,
-    datasets: data.datasets.map(chartStyleDataset),
+    ...forecastData,
+    datasets: forecastData.datasets.map(chartStyleDataset),
   };
   chart.data = styledData;
   chart.update();
