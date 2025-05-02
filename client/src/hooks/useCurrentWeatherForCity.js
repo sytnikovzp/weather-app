@@ -1,16 +1,9 @@
 import { useCallback, useEffect, useState } from 'react';
 
-import {
-  getNextDayTemperatureChartData,
-  getNextWeekTemperatureChartData,
-} from '../utils/sharedFunctions';
-
 import { weatherService } from '../services';
 
-function useWeatherForCity(latitude, longitude) {
+function useCurrentWeatherForCity(latitude, longitude) {
   const [currentWeatherData, setCurrentWeatherData] = useState(null);
-  const [nextDayForecastData, setNextDayForecastData] = useState(null);
-  const [nextWeekForecastData, setNextWeekForecastData] = useState(null);
   const [isFetching, setIsFetching] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
 
@@ -26,18 +19,8 @@ function useWeatherForCity(latitude, longitude) {
         latitude,
         longitude
       );
-      const forecastData = await weatherService.getForecast(
-        latitude,
-        longitude
-      );
-
-      const nextDayForecastData = getNextDayTemperatureChartData(forecastData);
-      const nextWeekForecastData =
-        getNextWeekTemperatureChartData(forecastData);
 
       setCurrentWeatherData(currentWeatherData);
-      setNextDayForecastData(nextDayForecastData);
-      setNextWeekForecastData(nextWeekForecastData);
     } catch (error) {
       setErrorMessage(error.response?.data?.message);
     } finally {
@@ -51,12 +34,10 @@ function useWeatherForCity(latitude, longitude) {
 
   return {
     currentWeatherData,
-    nextDayForecastData,
-    nextWeekForecastData,
     isFetching,
     errorMessage,
     onRefresh: fetchWeatherData,
   };
 }
 
-export default useWeatherForCity;
+export default useCurrentWeatherForCity;

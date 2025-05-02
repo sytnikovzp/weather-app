@@ -86,7 +86,7 @@ const getNextDayTemperatureChartData = (forecastData) => {
   };
 };
 
-function getNextWeekTemperatureChartData(forecastData) {
+const getNextWeekTemperatureChartData = (forecastData) => {
   const dailyData = {};
   for (const item of forecastData.list) {
     const [date] = item.dt_txt.split(' ');
@@ -112,7 +112,7 @@ function getNextWeekTemperatureChartData(forecastData) {
       },
     ],
   };
-}
+};
 
 export {
   formatDateTime,

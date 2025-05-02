@@ -15,7 +15,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
   const { city, country, latitude, longitude } = selectedCity;
 
   const {
-    cityExistsInFavorites,
+    isCityInFavorites,
     isFetching,
     error,
     handleAddToFavorites,
@@ -24,9 +24,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
 
   const handleToggleFavorite = (event) => {
     event.stopPropagation();
-    cityExistsInFavorites
-      ? handleRemoveFromFavorites()
-      : handleAddToFavorites();
+    isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
   };
 
   if (isFetching) {
@@ -60,9 +58,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
           onClick={handleToggleFavorite}
         >
           <FontAwesomeIcon
-            icon={
-              cityExistsInFavorites ? faHeartCircleMinus : faHeartCirclePlus
-            }
+            icon={isCityInFavorites ? faHeartCircleMinus : faHeartCirclePlus}
           />
         </button>
       </div>

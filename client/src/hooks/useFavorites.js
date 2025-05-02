@@ -18,7 +18,7 @@ function useFavorites(city, country, latitude, longitude) {
   const isFetching = useSelector(selectFavoritesIsFetching);
   const error = useSelector(selectFavoritesError);
 
-  const cityExistsInFavorites = favorites.some(
+  const isCityInFavorites = favorites.some(
     (favorite) =>
       favorite.latitude === latitude && favorite.longitude === longitude
   );
@@ -37,7 +37,7 @@ function useFavorites(city, country, latitude, longitude) {
 
   return {
     favorites,
-    cityExistsInFavorites,
+    isCityInFavorites,
     isFetching,
     error,
     handleAddToFavorites,

@@ -9,7 +9,13 @@ import WhenUpdated from '../WhenUpdated/WhenUpdated';
 
 import './CurrentWeatherCard.css';
 
-function CurrentWeatherCard({ currentWeatherData, onRefresh, city, country }) {
+function CurrentWeatherCard({
+  currentWeatherData,
+  onWeatherRefresh,
+  onForecastRefresh,
+  city,
+  country,
+}) {
   if (!currentWeatherData) {
     return null;
   }
@@ -31,7 +37,8 @@ function CurrentWeatherCard({ currentWeatherData, onRefresh, city, country }) {
     <div className='weather-content'>
       <WhenUpdated
         currentWeatherData={currentWeatherData}
-        onRefresh={onRefresh}
+        onForecastRefresh={onForecastRefresh}
+        onWeatherRefresh={onWeatherRefresh}
       />
       <div className='city-info'>
         <h3>{country}</h3>

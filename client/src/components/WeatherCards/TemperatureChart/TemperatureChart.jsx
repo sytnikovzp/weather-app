@@ -6,7 +6,7 @@ import {
   destroyChartInstance,
   updateChartInstance,
 } from '../../../utils/chartHelpers';
-import useWeatherForCity from '../../../hooks/useWeatherForCity';
+import useForecastForCity from '../../../hooks/useForecastForCity';
 
 import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
 import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
@@ -27,7 +27,7 @@ function TemperatureChart({
     nextWeekForecastData,
     isFetching: isFetchingForecast,
     errorMessage: errorMessageForecast,
-  } = useWeatherForCity(latitude, longitude);
+  } = useForecastForCity(latitude, longitude);
 
   const isFetching = isFetchingUserCity || isFetchingForecast;
   const errorMessage = errorMessageUserCity || errorMessageForecast;

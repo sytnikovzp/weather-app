@@ -6,8 +6,9 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import useCurrentWeatherForCity from '../../../hooks/useCurrentWeatherForCity';
 import useFavorites from '../../../hooks/useFavorites';
-import useWeatherForCity from '../../../hooks/useWeatherForCity';
+import useForecastForCity from '../../../hooks/useForecastForCity';
 
 import { clearFavoritesError } from '../../../store/slices/favoritesSlice';
 
@@ -35,14 +36,20 @@ function WeatherCard({
 
   const {
     currentWeatherData,
-    nextWeekForecastData,
     isFetching: isFetchingWeather,
     error: errorMessageWeather,
-    onRefresh,
-  } = useWeatherForCity(latitude, longitude);
+    onRefresh: onWeatherRefresh,
+  } = useCurrentWeatherForCity(latitude, longitude);
 
   const {
-    cityExistsInFavorites,
+    nextWeekForecastData,
+    isFetching: isFetchingForecast,
+    error: errorMessageForecast,
+    onRefresh: onForecastRefresh,
+  } = useForecastForCity(latitude, longitude);
+
+  const {
+    isCityInFavorites,
     isFetching: isFetchingFavorites,
     error: errorMessageFavorites,
     handleAddToFavorites,
@@ -50,8 +57,13 @@ function WeatherCard({
   } = useFavorites(city, country, latitude, longitude);
 
   const isFetching =
-    isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
-  const error = errorMessageUserCity || errorMessageWeather;
+    isFetchingUserCity ||
+    isFetchingWeather ||
+    isFetchingForecast ||
+    isFetchingFavorites;
+
+  const error =
+    errorMessageUserCity || errorMessageWeather || errorMessageForecast;
 
   useEffect(() => {
     if (
@@ -63,9 +75,7 @@ function WeatherCard({
   }, [errorMessageFavorites]);
 
   const handleToggleFavorite = () => {
-    cityExistsInFavorites
-      ? handleRemoveFromFavorites()
-      : handleAddToFavorites();
+    isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
   };
 
   if (isFetching) {
@@ -114,9 +124,7 @@ function WeatherCard({
             onClick={handleToggleFavorite}
           >
             <FontAwesomeIcon
-              icon={
-                cityExistsInFavorites ? faHeartCircleMinus : faHeartCirclePlus
-              }
+              icon={isCityInFavorites ? faHeartCircleMinus : faHeartCirclePlus}
             />
           </button>
         </div>
@@ -126,7 +134,8 @@ function WeatherCard({
             city={city}
             country={country}
             currentWeatherData={currentWeatherData}
-            onRefresh={onRefresh}
+            onForecastRefresh={onForecastRefresh}
+            onWeatherRefresh={onWeatherRefresh}
           />
         )}
 

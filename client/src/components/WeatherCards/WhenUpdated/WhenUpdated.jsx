@@ -5,10 +5,19 @@ import { formatDateTime } from '../../../utils/sharedFunctions';
 
 import './WhenUpdated.css';
 
-function WhenUpdated({ onRefresh, currentWeatherData }) {
+function WhenUpdated({
+  onForecastRefresh,
+  onWeatherRefresh,
+  currentWeatherData,
+}) {
   const formattedDate = currentWeatherData?.dt
     ? formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')
     : 'Невідомо';
+
+  const onRefresh = () => {
+    onWeatherRefresh();
+    onForecastRefresh();
+  };
 
   return (
     <div className='updated-info'>

@@ -11,8 +11,8 @@ function useUserLocationWeather() {
   const fetchWeatherForUserLocation = async () => {
     try {
       setIsFetching(true);
-
       setErrorMessage('');
+
       const { city, country_code, latitude, longitude } =
         await locationService.getLocationByIP();
 
