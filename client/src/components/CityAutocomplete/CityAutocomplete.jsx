@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 
-import { faXmark } from '@fortawesome/free-solid-svg-icons';
+import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { weatherService } from '../../services';
@@ -65,24 +65,27 @@ function CityAutocomplete({ onCitySelect }) {
 
   return (
     <div className='autocomplete-container'>
-      <input
-        aria-autocomplete='list'
-        aria-controls='autocomplete-list'
-        placeholder='Вкажіть назву міста...'
-        style={{ margin: 0 }}
-        type='text'
-        value={query}
-        onChange={handleInputChange}
-      />
-      {query && (
-        <button
-          className='clear-button'
-          type='button'
-          onClick={handleClearInput}
-        >
-          <FontAwesomeIcon icon={faXmark} />
-        </button>
-      )}
+      <div className='input-wrapper'>
+        <FontAwesomeIcon className='search-icon' icon={faSearch} />
+        <input
+          aria-autocomplete='list'
+          aria-controls='autocomplete-list'
+          placeholder='Вкажіть назву міста...'
+          style={{ margin: 0, paddingLeft: '35px', paddingRight: '30px' }}
+          type='text'
+          value={query}
+          onChange={handleInputChange}
+        />
+        {query && (
+          <button
+            className='clear-button'
+            type='button'
+            onClick={handleClearInput}
+          >
+            <FontAwesomeIcon icon={faXmark} />
+          </button>
+        )}
+      </div>
 
       {query && (
         <ul className='autocomplete-list' id='autocomplete-list'>
