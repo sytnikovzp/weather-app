@@ -64,11 +64,11 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
       </div>
 
       <p>
-        <strong>Latitude:</strong> {latitude}
+        <strong>Широта:</strong> {latitude}
       </p>
 
       <p>
-        <strong>Longitude:</strong> {longitude}
+        <strong>Довгота:</strong> {longitude}
       </p>
     </div>
   );

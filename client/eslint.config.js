@@ -412,6 +412,7 @@ export default [
               '^yup',
               '^@?\\w',
             ],
+            ['^@fortawesome'],
             ['^@mui/material'],
             ['^@mui/x-date-pickers'],
             [
