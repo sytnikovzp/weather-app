@@ -22,9 +22,9 @@ function HomePage() {
   const handleCitySelect = useCallback((city) => {
     setSelectedCity({
       city: city.name || city.city,
-      country: city.country,
-      latitude: city.lat ?? city.latitude,
-      longitude: city.lon ?? city.longitude,
+      countryCode: city.countryCode || city.country,
+      latitude: city.latitude ?? city.lat,
+      longitude: city.longitude ?? city.lon,
     });
     setActiveTab('main');
   }, []);

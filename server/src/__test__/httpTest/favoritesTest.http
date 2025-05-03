@@ -1,16 +1,16 @@
 ### Get list of favorite cities
 GET http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJjNGVhZTY3ZS1mNDk0LTQ1MzgtODVlMS01MDk3ODMwYTA3MjkiLCJpYXQiOjE3NDU3MTMwMzIsImV4cCI6MTc0NTcxMzkzMn0.OPSGH-InFQrWpnHE7Rwyf4QgP3MxXbjVA6isjd5yWjI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJlMWJkNTc0NC1kMDgyLTRiMDYtOTBmNS0yYTEyZDk0ODhiMzQiLCJpYXQiOjE3NDYzMTI1MzksImV4cCI6MTc0NjMxMzQzOX0.mJCxcRtklgs4mvei9SUeejEMdKIMYHxSfFJMsq0lcQs
 
 ### Add city to favorites
 POST http://localhost:5000/api/favorites HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJjNGVhZTY3ZS1mNDk0LTQ1MzgtODVlMS01MDk3ODMwYTA3MjkiLCJpYXQiOjE3NDU3MTMwMzIsImV4cCI6MTc0NTcxMzkzMn0.OPSGH-InFQrWpnHE7Rwyf4QgP3MxXbjVA6isjd5yWjI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJlMWJkNTc0NC1kMDgyLTRiMDYtOTBmNS0yYTEyZDk0ODhiMzQiLCJpYXQiOjE3NDYzMTI1MzksImV4cCI6MTc0NjMxMzQzOX0.mJCxcRtklgs4mvei9SUeejEMdKIMYHxSfFJMsq0lcQs
 
 {
   "city": "Zaporizhia",
-  "country": "UA",
+  "countryCode": "UA",
   "latitude": 47.8167,
   "longitude": 35.1833
 }
@@ -18,4 +18,4 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iO
 ### Remove city from favorites
 DELETE http://localhost:5000/api/favorites?latitude=47.8167&longitude=35.1833 HTTP/1.1
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJjNGVhZTY3ZS1mNDk0LTQ1MzgtODVlMS01MDk3ODMwYTA3MjkiLCJpYXQiOjE3NDU3MTMwMzIsImV4cCI6MTc0NTcxMzkzMn0.OPSGH-InFQrWpnHE7Rwyf4QgP3MxXbjVA6isjd5yWjI
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlblZlcnNpb24iOjAsInV1aWQiOiJlMWJkNTc0NC1kMDgyLTRiMDYtOTBmNS0yYTEyZDk0ODhiMzQiLCJpYXQiOjE3NDYzMTI1MzksImV4cCI6MTc0NjMxMzQzOX0.mJCxcRtklgs4mvei9SUeejEMdKIMYHxSfFJMsq0lcQs

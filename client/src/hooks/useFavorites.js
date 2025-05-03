@@ -12,7 +12,7 @@ import {
   removeFromFavorites,
 } from '../store/thunks/favoritesThunks';
 
-function useFavorites(city, country, latitude, longitude) {
+function useFavorites(city, countryCode, latitude, longitude) {
   const dispatch = useDispatch();
   const favorites = useSelector(selectFavorites);
   const isFetching = useSelector(selectFavoritesIsFetching);
@@ -24,7 +24,7 @@ function useFavorites(city, country, latitude, longitude) {
   );
 
   const handleAddToFavorites = async () => {
-    await dispatch(addToFavorites({ city, country, latitude, longitude }));
+    await dispatch(addToFavorites({ city, countryCode, latitude, longitude }));
   };
 
   const handleRemoveFromFavorites = async () => {

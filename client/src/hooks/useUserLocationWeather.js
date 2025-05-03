@@ -18,7 +18,7 @@ function useUserLocationWeather() {
 
       setUserCity({
         city,
-        country: country_code,
+        countryCode: country_code,
         latitude,
         longitude,
       });

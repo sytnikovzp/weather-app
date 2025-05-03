@@ -14,7 +14,7 @@ function CurrentWeatherCard({
   onWeatherRefresh,
   onForecastRefresh,
   city,
-  country,
+  countryCode,
 }) {
   if (!currentWeatherData) {
     return null;
@@ -41,7 +41,7 @@ function CurrentWeatherCard({
         onWeatherRefresh={onWeatherRefresh}
       />
       <div className='city-info'>
-        <h3>{country}</h3>
+        <h3>{countryCode}</h3>
         <h3>{city}</h3>
         <h3>{Math.round(temp)}°C</h3>
       </div>

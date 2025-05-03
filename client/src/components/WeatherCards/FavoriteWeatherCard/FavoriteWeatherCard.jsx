@@ -12,7 +12,7 @@ import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 import './FavoriteWeatherCard.css';
 
 function FavoriteWeatherCard({ selectedCity, onClick }) {
-  const { city, country, latitude, longitude } = selectedCity;
+  const { city, countryCode, latitude, longitude } = selectedCity;
 
   const {
     isCityInFavorites,
@@ -20,7 +20,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
     error,
     handleAddToFavorites,
     handleRemoveFromFavorites,
-  } = useFavorites(city, country, latitude, longitude);
+  } = useFavorites(city, countryCode, latitude, longitude);
 
   const handleToggleFavorite = (event) => {
     event.stopPropagation();
@@ -50,7 +50,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
   return (
     <div className='favorite-weather-card' onClick={onClick}>
       <div className='city-name'>
-        <h3>{country}</h3>
+        <h3>{countryCode}</h3>
         <h3>{city}</h3>
         <button
           className='favorite-button'

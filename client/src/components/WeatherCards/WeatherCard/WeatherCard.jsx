@@ -25,7 +25,7 @@ function WeatherCard({
   selectedCity,
 }) {
   const [viewMode, setViewMode] = useState('current');
-  const { city, country, latitude, longitude } = selectedCity;
+  const { city, countryCode, latitude, longitude } = selectedCity;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const dispatch = useDispatch();
@@ -55,7 +55,7 @@ function WeatherCard({
     error: errorMessageFavorites,
     handleAddToFavorites,
     handleRemoveFromFavorites,
-  } = useFavorites(city, country, latitude, longitude);
+  } = useFavorites(city, countryCode, latitude, longitude);
 
   const isFetching =
     isFetchingUserCity ||
@@ -133,7 +133,7 @@ function WeatherCard({
         {viewMode === 'current' && currentWeatherData && (
           <CurrentWeatherCard
             city={city}
-            country={country}
+            countryCode={countryCode}
             currentWeatherData={currentWeatherData}
             onForecastRefresh={onForecastRefresh}
             onWeatherRefresh={onWeatherRefresh}

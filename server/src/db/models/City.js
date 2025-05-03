@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
           len: [1, 100],
         },
       },
-      country: {
+      countryCode: {
         type: DataTypes.STRING,
         allowNull: false,
         validate: {

@@ -17,7 +17,7 @@ class FavoritesService {
       include: [
         {
           model: City,
-          attributes: ['title', 'country', 'latitude', 'longitude'],
+          attributes: ['title', 'countryCode', 'latitude', 'longitude'],
         },
       ],
       order: [['created_at', 'ASC']],
@@ -27,7 +27,7 @@ class FavoritesService {
     }
     const allFavorites = foundFavorites.map((favorite) => ({
       city: favorite.City.title,
-      country: favorite.City.country,
+      countryCode: favorite.City.countryCode,
       latitude: favorite.City.latitude,
       longitude: favorite.City.longitude,
     }));
@@ -37,7 +37,7 @@ class FavoritesService {
   static async addFavorite(
     uuid,
     city,
-    country,
+    countryCode,
     latitude,
     longitude,
     transaction
@@ -63,7 +63,7 @@ class FavoritesService {
       newFavoriteCity = await City.create(
         {
           title: city,
-          country,
+          countryCode,
           latitude,
           longitude,
         },
@@ -85,7 +85,7 @@ class FavoritesService {
     );
     const addedFavorite = {
       city: newFavoriteCity.title,
-      country: newFavoriteCity.country,
+      countryCode: newFavoriteCity.countryCode,
       latitude: newFavoriteCity.latitude,
       longitude: newFavoriteCity.longitude,
     };
