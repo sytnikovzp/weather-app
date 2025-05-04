@@ -460,7 +460,7 @@ export default [
       // 'react/no-array-index-key': 'warn',
       // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',
-      // 'react-perf/jsx-no-new-function-as-prop': 'warn',
+      'react-perf/jsx-no-new-function-as-prop': 'warn',
       'react-perf/jsx-no-new-object-as-prop': 'warn',
       'react-perf/jsx-no-new-array-as-prop': 'warn',
     },

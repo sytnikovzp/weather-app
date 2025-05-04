@@ -30,7 +30,7 @@ function AuthPage() {
   }, [dispatch]);
 
   const handleAuth = useCallback(
-    async (authThunk, payload) => {
+    (authThunk) => async (payload) => {
       await dispatch(authThunk(payload));
       navigate('/');
     },
@@ -46,17 +46,9 @@ function AuthPage() {
       </div>
 
       {isLoginMode ? (
-        <LoginForm
-          onSubmit={({ email, password }) =>
-            handleAuth(loginThunk, { email, password })
-          }
-        />
+        <LoginForm onSubmit={handleAuth(loginThunk)} />
       ) : (
-        <RegistrationForm
-          onSubmit={({ name, email, password }) =>
-            handleAuth(registrationThunk, { name, email, password })
-          }
-        />
+        <RegistrationForm onSubmit={handleAuth(registrationThunk)} />
       )}
 
       <button className='auth-switch-button' type='button' onClick={toggleMode}>
