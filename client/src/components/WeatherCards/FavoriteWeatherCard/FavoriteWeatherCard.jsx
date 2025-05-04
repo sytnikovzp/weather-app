@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import {
   faHeartCircleMinus,
   faHeartCirclePlus,
@@ -11,7 +13,7 @@ import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
 import './FavoriteWeatherCard.css';
 
-function FavoriteWeatherCard({ selectedCity, onClick }) {
+function FavoriteWeatherCard({ selectedCity, onCitySelect }) {
   const { city, countryCode, latitude, longitude } = selectedCity;
 
   const {
@@ -22,10 +24,17 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
     handleRemoveFromFavorites,
   } = useFavorites(city, countryCode, latitude, longitude);
 
-  const handleToggleFavorite = (event) => {
-    event.stopPropagation();
-    isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
-  };
+  const handleToggleFavorite = useCallback(
+    (event) => {
+      event.stopPropagation();
+      isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
+    },
+    [isCityInFavorites, handleAddToFavorites, handleRemoveFromFavorites]
+  );
+
+  const handleClick = useCallback(() => {
+    onCitySelect(selectedCity);
+  }, [onCitySelect, selectedCity]);
 
   if (isFetching) {
     return (
@@ -48,7 +57,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
   }
 
   return (
-    <div className='favorite-weather-card' onClick={onClick}>
+    <div className='favorite-weather-card' onClick={handleClick}>
       <div className='card-header'>
         <h3>{countryCode}</h3>
         <h3>{city}</h3>

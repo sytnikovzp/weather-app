@@ -23,7 +23,7 @@ function FavoritesTabContent({ onCitySelect }) {
           <FavoriteWeatherCard
             key={`${city.latitude}-${city.longitude}`}
             selectedCity={city}
-            onClick={() => onCitySelect(city)}
+            onCitySelect={onCitySelect}
           />
         ))
       )}
