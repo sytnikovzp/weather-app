@@ -461,8 +461,8 @@ export default [
       // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',
       // 'react-perf/jsx-no-new-function-as-prop': 'warn',
-      // 'react-perf/jsx-no-new-object-as-prop': 'warn',
-      // 'react-perf/jsx-no-new-array-as-prop': 'warn',
+      'react-perf/jsx-no-new-object-as-prop': 'warn',
+      'react-perf/jsx-no-new-array-as-prop': 'warn',
     },
     settings: {
       'import/resolver': {

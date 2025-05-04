@@ -1,5 +1,7 @@
 .icon {
   max-height: 40px;
+  border-radius: 6px;
+  background-color: #aad4f5;
 }
 
 .weather-content {

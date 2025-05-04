@@ -1,7 +1,18 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { motion } from 'framer-motion';
 
 import weatherLogo from '../../assets/openweather.svg';
+import {
+  logoContainerAnimate,
+  logoContainerInitial,
+  logoContainerTransition,
+  poweredByInitial,
+  poweredByTransition,
+  splashScreenInitial,
+  splashScreenTransition,
+  textInitial,
+  textTransition,
+} from '../../styles';
 import './SplashScreen.css';
 
 function SplashScreen() {
@@ -27,66 +38,79 @@ function SplashScreen() {
     };
   }, []);
 
+  const splashScreenStyle = useMemo(
+    () => ({
+      pointerEvents: done ? 'none' : 'auto',
+      zIndex: done ? -1 : 9999,
+    }),
+    [done]
+  );
+
+  const splashScreenAnimate = useMemo(
+    () => ({ opacity: done ? 0 : 1 }),
+    [done]
+  );
+
+  const textAnimate = useMemo(
+    () => ({
+      opacity: showText ? 1 : 0,
+      y: showText ? 0 : 20,
+    }),
+    [showText]
+  );
+
+  const poweredByAnimate = useMemo(
+    () => ({
+      opacity: showPoweredBy ? 1 : 0,
+      y: showPoweredBy ? 0 : 20,
+    }),
+    [showPoweredBy]
+  );
+
+  const progressBarStyle = useMemo(
+    () => ({ width: `${progress}%` }),
+    [progress]
+  );
+
   return (
     <motion.div
-      animate={{ opacity: done ? 0 : 1 }}
+      animate={splashScreenAnimate}
       className='splash-screen'
-      initial={{ opacity: 1 }}
-      style={{
-        pointerEvents: done ? 'none' : 'auto',
-        zIndex: done ? -1 : 9999,
-      }}
-      transition={{ duration: 0.4, ease: 'easeInOut' }}
+      initial={splashScreenInitial}
+      style={splashScreenStyle}
+      transition={splashScreenTransition}
     >
       <div className='splash-content'>
         <motion.div
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: [1, 1.1, 1],
-          }}
+          animate={logoContainerAnimate}
           className='logo-container'
-          initial={{ opacity: 0, y: 30, scale: 0.8 }}
-          transition={{
-            duration: 2,
-            ease: 'easeInOut',
-          }}
+          initial={logoContainerInitial}
+          transition={logoContainerTransition}
         >
           <img alt='Logo' className='splash-logo' src={weatherLogo} />
         </motion.div>
 
         <motion.div
-          animate={{ opacity: showText ? 1 : 0, y: showText ? 0 : 20 }}
+          animate={textAnimate}
           className='splash-text'
-          initial={{ opacity: 0, y: 20 }}
-          transition={{
-            duration: 0.8,
-            ease: 'easeOut',
-            delay: 0.3,
-          }}
+          initial={textInitial}
+          transition={textTransition}
         >
           Weather App
         </motion.div>
 
         <motion.div
-          animate={{
-            opacity: showPoweredBy ? 1 : 0,
-            y: showPoweredBy ? 0 : 20,
-          }}
+          animate={poweredByAnimate}
           className='powered-by'
-          initial={{ opacity: 0, y: 20 }}
-          transition={{
-            duration: 0.8,
-            ease: 'easeOut',
-            delay: 0.8,
-          }}
+          initial={poweredByInitial}
+          transition={poweredByTransition}
         >
           powered by OpenWeather
         </motion.div>
       </div>
 
       <div className='progress-bar-container'>
-        <div className='progress-bar' style={{ width: `${progress}%` }} />
+        <div className='progress-bar' style={progressBarStyle} />
       </div>
     </motion.div>
   );

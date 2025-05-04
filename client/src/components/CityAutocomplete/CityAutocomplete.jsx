@@ -8,6 +8,7 @@ import { weatherService } from '../../services';
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
 import BarLoader from '../Loaders/BarLoader/BarLoader';
 
+import { autocompleteInputStyle } from '../../styles';
 import './CityAutocomplete.css';
 
 function CityAutocomplete({ onCitySelect }) {
@@ -71,7 +72,7 @@ function CityAutocomplete({ onCitySelect }) {
           aria-autocomplete='list'
           aria-controls='autocomplete-list'
           placeholder='Вкажіть назву міста...'
-          style={{ margin: 0, paddingLeft: '35px', paddingRight: '30px' }}
+          style={autocompleteInputStyle}
           type='text'
           value={query}
           onChange={handleInputChange}
