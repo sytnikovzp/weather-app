@@ -34,30 +34,6 @@ const getWindDirection = (deg) => {
   return 'Invalid degree';
 };
 
-const getDayLabel = (index) => {
-  const today = new Date();
-  const tomorrow = new Date(today);
-  tomorrow.setDate(today.getDate() + 1);
-  const dayNames = [
-    'Неділя',
-    'Понеділок',
-    'Вівторок',
-    'Середа',
-    'Четвер',
-    'П’ятниця',
-    'Субота',
-  ];
-  if (index === 0) {
-    return 'Сьогодні';
-  }
-  if (index === 1) {
-    return 'Завтра';
-  }
-  const dayOfWeek = new Date(today);
-  dayOfWeek.setDate(today.getDate() + index);
-  return dayNames[dayOfWeek.getDay()];
-};
-
 const getNextDayTemperatureChartData = (forecastData) => {
   const now = Date.now();
   const next24h = now + 24 * 60 * 60 * 1000;
@@ -116,7 +92,6 @@ const getNextWeekTemperatureChartData = (forecastData) => {
 
 export {
   formatDateTime,
-  getDayLabel,
   getNextDayTemperatureChartData,
   getNextWeekTemperatureChartData,
   getWindDirection,

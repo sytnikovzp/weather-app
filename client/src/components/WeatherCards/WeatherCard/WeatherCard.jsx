@@ -7,24 +7,28 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
+import {
+  formatDateTime,
+  getWindDirection,
+} from '../../../utils/sharedFunctions';
 import useCurrentWeatherForCity from '../../../hooks/useCurrentWeatherForCity';
 import useFavorites from '../../../hooks/useFavorites';
-import useForecastForCity from '../../../hooks/useForecastForCity';
 
 import { clearFavoritesError } from '../../../store/slices/favoritesSlice';
 
 import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
 import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 import ModalWindow from '../../ModalWindow/ModalWindow';
-import CurrentWeatherCard from '../CurrentWeatherCard/CurrentWeatherCard';
-import WeeklyForecastCard from '../WeeklyForecastCard/WeeklyForecastCard';
+import WeatherDetail from '../WeatherDetail/WeatherDetail';
+import WhenUpdated from '../WhenUpdated/WhenUpdated';
+
+import './WeatherCard.css';
 
 function WeatherCard({
   errorMessageUserCity,
   isFetchingUserCity,
   selectedCity,
 }) {
-  const [viewMode, setViewMode] = useState('current');
   const { city, countryCode, latitude, longitude } = selectedCity;
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -43,13 +47,6 @@ function WeatherCard({
   } = useCurrentWeatherForCity(latitude, longitude);
 
   const {
-    nextWeekForecastData,
-    isFetching: isFetchingForecast,
-    error: errorMessageForecast,
-    onRefresh: onForecastRefresh,
-  } = useForecastForCity(latitude, longitude);
-
-  const {
     isCityInFavorites,
     isFetching: isFetchingFavorites,
     error: errorMessageFavorites,
@@ -58,13 +55,9 @@ function WeatherCard({
   } = useFavorites(city, countryCode, latitude, longitude);
 
   const isFetching =
-    isFetchingUserCity ||
-    isFetchingWeather ||
-    isFetchingForecast ||
-    isFetchingFavorites;
+    isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
 
-  const error =
-    errorMessageUserCity || errorMessageWeather || errorMessageForecast;
+  const error = errorMessageUserCity || errorMessageWeather;
 
   useEffect(() => {
     if (
@@ -74,6 +67,22 @@ function WeatherCard({
       setIsModalOpen(true);
     }
   }, [errorMessageFavorites]);
+
+  if (!currentWeatherData) {
+    return null;
+  }
+
+  const {
+    main: { temp, feels_like: feelsLike, humidity },
+    weather: [{ icon, description }],
+    visibility,
+    sys: { sunrise, sunset },
+    wind: { speed, deg },
+    clouds: { all: cloudiness },
+  } = currentWeatherData;
+
+  const formattedDescription =
+    description.charAt(0).toUpperCase() + description.slice(1);
 
   const handleToggleFavorite = () => {
     isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
@@ -102,22 +111,21 @@ function WeatherCard({
   return (
     <>
       <div className='weather-container'>
-        <div className='weather-view-toggle'>
-          <button
-            className={viewMode === 'current' ? 'active' : ''}
-            type='button'
-            onClick={() => setViewMode('current')}
-          >
-            На зараз
-          </button>
+        <div className='card-header'>
+          <img
+            alt={formattedDescription}
+            className='icon'
+            src={`http://openweathermap.org/img/wn/${icon}@2x.png`}
+          />
 
-          <button
-            className={viewMode === 'week' ? 'active' : ''}
-            type='button'
-            onClick={() => setViewMode('week')}
-          >
-            На тиждень
-          </button>
+          <div>
+            <p>
+              <strong>Широта:</strong> {latitude}
+            </p>
+            <p>
+              <strong>Довгота:</strong> {longitude}
+            </p>
+          </div>
 
           <button
             className='favorite-button'
@@ -130,19 +138,46 @@ function WeatherCard({
           </button>
         </div>
 
-        {viewMode === 'current' && currentWeatherData && (
-          <CurrentWeatherCard
-            city={city}
-            countryCode={countryCode}
+        <div className='weather-content'>
+          <WhenUpdated
             currentWeatherData={currentWeatherData}
-            onForecastRefresh={onForecastRefresh}
             onWeatherRefresh={onWeatherRefresh}
           />
-        )}
+          <div className='city-info'>
+            <h3>{countryCode}</h3>
+            <h3>{city}</h3>
+            <h3>{Math.round(temp)}°C</h3>
+          </div>
+          <div className='weather-feels-like'>
+            <p>Відчувається як {Math.round(feelsLike)}°C</p>
+            <p>{formattedDescription}</p>
+          </div>
 
-        {viewMode === 'week' && nextWeekForecastData && (
-          <WeeklyForecastCard nextWeekForecastData={nextWeekForecastData} />
-        )}
+          <div className='weather-details'>
+            <div>
+              <WeatherDetail
+                label='Видимість:'
+                value={`${Math.round(visibility / 1000)} км`}
+              />
+              <WeatherDetail label='Вологість:' value={`${humidity}%`} />
+              <WeatherDetail
+                label='Схід сонця:'
+                value={formatDateTime(sunrise, 'HH:mm')}
+              />
+            </div>
+            <div>
+              <WeatherDetail
+                label='Вітер:'
+                value={`${Math.round(speed)} м/с ${getWindDirection(deg)}`}
+              />
+              <WeatherDetail label='Облачність:' value={`${cloudiness}%`} />
+              <WeatherDetail
+                label='Захід сонця:'
+                value={formatDateTime(sunset, 'HH:mm')}
+              />
+            </div>
+          </div>
+        </div>
       </div>
 
       <ModalWindow

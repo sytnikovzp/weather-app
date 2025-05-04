@@ -1,0 +1,12 @@
+.weather-view-toggle {
+  display: flex;
+  justify-content: space-around;
+}
+
+.weather-view-toggle > button {
+  margin: 0;
+}
+
+.weather-view-toggle > button.active {
+  font-weight: bold;
+}

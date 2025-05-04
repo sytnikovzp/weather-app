@@ -49,7 +49,7 @@ function FavoriteWeatherCard({ selectedCity, onClick }) {
 
   return (
     <div className='favorite-weather-card' onClick={onClick}>
-      <div className='city-name'>
+      <div className='card-header'>
         <h3>{countryCode}</h3>
         <h3>{city}</h3>
         <button

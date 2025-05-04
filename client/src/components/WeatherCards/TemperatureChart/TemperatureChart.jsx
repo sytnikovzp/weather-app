@@ -11,6 +11,8 @@ import useForecastForCity from '../../../hooks/useForecastForCity';
 import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
 import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
+import './TemperatureChart.css';
+
 function TemperatureChart({
   errorMessageUserCity,
   isFetchingUserCity,

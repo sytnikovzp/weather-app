@@ -1,4 +1,3 @@
-/* eslint-disable camelcase */
 import { useEffect, useState } from 'react';
 
 import { locationService } from '../services';
@@ -13,12 +12,12 @@ function useUserLocationWeather() {
       setIsFetching(true);
       setErrorMessage('');
 
-      const { city, country_code, latitude, longitude } =
+      const { city, countryCode, latitude, longitude } =
         await locationService.getLocationByIP();
 
       setUserCity({
         city,
-        countryCode: country_code,
+        countryCode,
         latitude,
         longitude,
       });

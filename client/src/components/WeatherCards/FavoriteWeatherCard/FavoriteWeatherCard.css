@@ -20,10 +20,3 @@
     0 3px 6px rgb(0 0 0 / 12%);
   background-color: #e6f2ff;
 }
-
-.city-name {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: nowrap;
-}

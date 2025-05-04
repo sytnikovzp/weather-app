@@ -17,35 +17,3 @@
   align-items: center;
   height: 100%;
 }
-
-.weather-view-toggle {
-  display: flex;
-  justify-content: space-around;
-}
-
-.weather-view-toggle > button {
-  margin: 0;
-}
-
-.weather-view-toggle > button.active {
-  font-weight: bold;
-}
-
-.favorite-button {
-  margin: 0;
-  padding: 0;
-  background: none;
-  color: #d14747;
-  font-size: 28px;
-  cursor: pointer;
-  box-shadow: none;
-  transition:
-    color 0.3s ease,
-    transform 0.2s ease;
-}
-
-.favorite-button:hover {
-  background: none;
-  color: #b03030;
-  transform: scale(1.1);
-}
