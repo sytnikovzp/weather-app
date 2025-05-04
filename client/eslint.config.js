@@ -8,6 +8,7 @@ import prettier from 'eslint-plugin-prettier';
 import promise from 'eslint-plugin-promise';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
+import reactPerf from 'eslint-plugin-react-perf';
 import reactRefresh from 'eslint-plugin-react-refresh';
 import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import sortkeys from 'eslint-plugin-sort-keys-fix';
@@ -35,6 +36,7 @@ export default [
       promise,
       react,
       'react-hooks': reactHooks,
+      'react-perf': reactPerf,
       'react-refresh': reactRefresh,
       'simple-import-sort': simpleImportSort,
       'sort-keys-fix': sortkeys,
@@ -458,6 +460,9 @@ export default [
       // 'react/no-array-index-key': 'warn',
       // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',
+      // 'react-perf/jsx-no-new-function-as-prop': 'warn',
+      // 'react-perf/jsx-no-new-object-as-prop': 'warn',
+      // 'react-perf/jsx-no-new-array-as-prop': 'warn',
     },
     settings: {
       'import/resolver': {
