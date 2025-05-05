@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -16,10 +17,10 @@ function Welcome() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
+  const handleLogout = useCallback(async () => {
     await dispatch(logoutThunk());
     navigate('/auth');
-  };
+  }, [dispatch, navigate]);
 
   return (
     <div className='welcome-block'>

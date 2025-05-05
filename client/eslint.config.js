@@ -317,6 +317,9 @@ export default [
       'promise/prefer-await-to-then': 'warn',
       'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/rules-of-hooks': 'error',
+      'react-perf/jsx-no-new-array-as-prop': 'warn',
+      'react-perf/jsx-no-new-function-as-prop': 'warn',
+      'react-perf/jsx-no-new-object-as-prop': 'warn',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
@@ -355,6 +358,7 @@ export default [
         },
       ],
       'react/no-access-state-in-setstate': 'error',
+      'react/no-array-index-key': 'warn',
       'react/no-children-prop': 'error',
       'react/no-danger': 'error',
       'react/no-direct-mutation-state': 'error',
@@ -457,12 +461,8 @@ export default [
       'wrap-regex': 'off',
       'yield-star-spacing': 'warn',
       yoda: 'error',
-      // 'react/no-array-index-key': 'warn',
       // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',
-      'react-perf/jsx-no-new-function-as-prop': 'warn',
-      'react-perf/jsx-no-new-object-as-prop': 'warn',
-      'react-perf/jsx-no-new-array-as-prop': 'warn',
     },
     settings: {
       'import/resolver': {

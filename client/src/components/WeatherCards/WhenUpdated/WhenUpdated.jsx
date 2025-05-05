@@ -1,3 +1,5 @@
+import { useCallback } from 'react';
+
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -10,9 +12,9 @@ function WhenUpdated({ onWeatherRefresh, currentWeatherData }) {
     ? formatDateTime(currentWeatherData.dt, 'dd MMMM yyyy, HH:mm')
     : 'Невідомо';
 
-  const onRefresh = () => {
+  const onRefresh = useCallback(() => {
     onWeatherRefresh();
-  };
+  }, [onWeatherRefresh]);
 
   return (
     <div className='updated-info'>
