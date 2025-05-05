@@ -1,17 +1,27 @@
+import { useCallback } from 'react';
+
 import './Tabs.css';
 
 function Tabs({ activeTab, onTabClick }) {
+  const handleMainClick = useCallback(() => {
+    onTabClick('main');
+  }, [onTabClick]);
+
+  const handleFavoritesClick = useCallback(() => {
+    onTabClick('favorites');
+  }, [onTabClick]);
+
   return (
     <div className='tabs-container'>
       <div
         className={`tab ${activeTab === 'main' ? 'active' : ''}`}
-        onClick={() => onTabClick('main')}
+        onClick={handleMainClick}
       >
         Головна
       </div>
       <div
         className={`tab ${activeTab === 'favorites' ? 'active' : ''}`}
-        onClick={() => onTabClick('favorites')}
+        onClick={handleFavoritesClick}
       >
         Обране
       </div>

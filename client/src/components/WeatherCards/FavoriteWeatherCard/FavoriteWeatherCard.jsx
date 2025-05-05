@@ -13,7 +13,7 @@ import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
 import './FavoriteWeatherCard.css';
 
-function FavoriteWeatherCard({ selectedCity, onCitySelect }) {
+function FavoriteWeatherCard({ selectedCity, onSelect }) {
   const { city, countryCode, latitude, longitude } = selectedCity;
 
   const {
@@ -33,8 +33,8 @@ function FavoriteWeatherCard({ selectedCity, onCitySelect }) {
   );
 
   const handleClick = useCallback(() => {
-    onCitySelect(selectedCity);
-  }, [onCitySelect, selectedCity]);
+    onSelect(selectedCity);
+  }, [selectedCity, onSelect]);
 
   if (isFetching) {
     return (
