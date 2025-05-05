@@ -34,11 +34,6 @@ function WeatherCard({
 
   const dispatch = useDispatch();
 
-  const handleCloseModal = useCallback(() => {
-    dispatch(clearFavoritesError());
-    setIsModalOpen(false);
-  }, [dispatch]);
-
   const {
     currentWeatherData,
     isFetching: isFetchingWeather,
@@ -68,6 +63,15 @@ function WeatherCard({
     }
   }, [errorMessageFavorites]);
 
+  const handleToggleFavorite = useCallback(() => {
+    isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
+  }, [isCityInFavorites, handleAddToFavorites, handleRemoveFromFavorites]);
+
+  const handleCloseModal = useCallback(() => {
+    dispatch(clearFavoritesError());
+    setIsModalOpen(false);
+  }, [dispatch]);
+
   if (!currentWeatherData) {
     return null;
   }
@@ -83,10 +87,6 @@ function WeatherCard({
 
   const formattedDescription =
     description.charAt(0).toUpperCase() + description.slice(1);
-
-  const handleToggleFavorite = () => {
-    isCityInFavorites ? handleRemoveFromFavorites() : handleAddToFavorites();
-  };
 
   if (isFetching) {
     return (

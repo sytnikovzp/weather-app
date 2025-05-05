@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import {
@@ -23,13 +23,13 @@ function useFavorites(city, countryCode, latitude, longitude) {
       favorite.latitude === latitude && favorite.longitude === longitude
   );
 
-  const handleAddToFavorites = async () => {
+  const handleAddToFavorites = useCallback(async () => {
     await dispatch(addToFavorites({ city, countryCode, latitude, longitude }));
-  };
+  }, [dispatch, city, countryCode, latitude, longitude]);
 
-  const handleRemoveFromFavorites = async () => {
+  const handleRemoveFromFavorites = useCallback(async () => {
     await dispatch(removeFromFavorites({ latitude, longitude }));
-  };
+  }, [dispatch, latitude, longitude]);
 
   useEffect(() => {
     dispatch(fetchFavorites());

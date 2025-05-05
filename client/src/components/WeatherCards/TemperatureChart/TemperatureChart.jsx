@@ -1,5 +1,5 @@
 /* eslint-disable consistent-return */
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 import {
   createChartInstance,
@@ -51,6 +51,14 @@ function TemperatureChart({
     };
   }, [forecastData]);
 
+  const handleSetDayMode = useCallback(() => {
+    setViewMode('day');
+  }, []);
+
+  const handleSetWeekMode = useCallback(() => {
+    setViewMode('week');
+  }, []);
+
   if (isFetching) {
     return (
       <div className='weather-container'>
@@ -77,14 +85,14 @@ function TemperatureChart({
         <button
           className={viewMode === 'day' ? 'active' : ''}
           type='button'
-          onClick={() => setViewMode('day')}
+          onClick={handleSetDayMode}
         >
           На 24 години
         </button>
         <button
           className={viewMode === 'week' ? 'active' : ''}
           type='button'
-          onClick={() => setViewMode('week')}
+          onClick={handleSetWeekMode}
         >
           На тиждень
         </button>
