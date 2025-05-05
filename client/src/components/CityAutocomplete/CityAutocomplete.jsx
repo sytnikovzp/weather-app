@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { faSearch, faXmark } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { weatherService } from '../../services';
 
 import ErrorMessageBlock from '../ErrorMessageBlock/ErrorMessageBlock';
 import BarLoader from '../Loaders/BarLoader/BarLoader';
+import SuggestionItem from '../SuggestionItem/SuggestionItem';
 
 import { autocompleteInputStyle } from '../../styles';
 import './CityAutocomplete.css';
@@ -47,22 +48,25 @@ function CityAutocomplete({ onCitySelect }) {
     }
   }, [debouncedQuery]);
 
-  const handleInputChange = (event) => {
+  const handleInputChange = useCallback((event) => {
     setIsFetching(true);
     setError(null);
     setQuery(event.target.value);
-  };
+  }, []);
 
-  const handleCitySelect = (city) => {
+  const handleClearInput = useCallback(() => {
     setQuery('');
     setSuggestions([]);
-    onCitySelect(city);
-  };
+  }, []);
 
-  const handleClearInput = () => {
-    setQuery('');
-    setSuggestions([]);
-  };
+  const handleCitySelect = useCallback(
+    (city) => {
+      setQuery('');
+      setSuggestions([]);
+      onCitySelect(city);
+    },
+    [onCitySelect]
+  );
 
   return (
     <div className='autocomplete-container'>
@@ -110,13 +114,11 @@ function CityAutocomplete({ onCitySelect }) {
             !error &&
             suggestions.length > 0 &&
             suggestions.map((city) => (
-              <li
+              <SuggestionItem
                 key={`${city.lat}-${city.lon}`}
-                className='autocomplete-item'
-                onClick={() => handleCitySelect(city)}
-              >
-                {city.name}, {city.state && `${city.state},`} {city.country}
-              </li>
+                city={city}
+                onSelect={handleCitySelect}
+              />
             ))}
         </ul>
       )}
