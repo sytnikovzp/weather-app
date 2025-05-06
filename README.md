@@ -1,7 +1,7 @@
 # Weather App
 
 <p align="center">
-  <img src="./screenshots/OW-logo.png" alt="Weather App" style="max-width: 80%;">
+  <img src="./screenshots/Demo.gif" alt="Weather App" style="max-width: 80%;">
 </p>
 <p align="center">
   <img src="https://img.shields.io/github/last-commit/sytnikovzp/weather-app" alt="Last Commit">
