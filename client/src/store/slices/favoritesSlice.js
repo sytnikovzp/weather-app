@@ -12,7 +12,7 @@ import {
 const initialState = {
   isFetching: false,
   error: null,
-  items: [],
+  list: null,
 };
 
 const favoritesSlice = createSlice({
@@ -29,18 +29,18 @@ const favoritesSlice = createSlice({
       .addCase(fetchFavorites.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.error = null;
-        state.items = payload;
+        state.list = payload;
       })
       .addCase(addToFavorites.fulfilled, (state, { payload }) => {
         state.isFetching = false;
         state.error = null;
-        state.items.push(payload);
+        state.list.push(payload);
       })
       .addCase(removeFromFavorites.fulfilled, (state, { meta }) => {
         const { latitude, longitude } = meta.arg;
         state.isFetching = false;
         state.error = null;
-        state.items = state.items.filter(
+        state.list = state.list.filter(
           (city) => city.latitude !== latitude || city.longitude !== longitude
         );
       })

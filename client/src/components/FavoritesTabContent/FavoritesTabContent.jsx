@@ -6,7 +6,7 @@ import FavoriteWeatherCard from '../WeatherCards/FavoriteWeatherCard/FavoriteWea
 import './FavoritesTabContent.css';
 
 function FavoritesTabContent({ onCitySelect }) {
-  const { favorites, error } = useFavorites();
+  const { favorites } = useFavorites();
 
   return (
     <div className='content'>
@@ -16,7 +16,7 @@ function FavoritesTabContent({ onCitySelect }) {
 
       {favorites.length === 0 ? (
         <div className='status-container'>
-          <ErrorMessageBlock message={error?.message} />
+          <ErrorMessageBlock message={'Список улюблених міст порожній'} />
         </div>
       ) : (
         favorites.map((city) => (

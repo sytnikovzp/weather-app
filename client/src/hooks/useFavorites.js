@@ -18,10 +18,12 @@ function useFavorites(city, countryCode, latitude, longitude) {
   const isFetching = useSelector(selectFavoritesIsFetching);
   const error = useSelector(selectFavoritesError);
 
-  const isCityInFavorites = favorites.some(
-    (favorite) =>
-      favorite.latitude === latitude && favorite.longitude === longitude
-  );
+  const isCityInFavorites =
+    Array.isArray(favorites) &&
+    favorites.some(
+      (favorite) =>
+        favorite.latitude === latitude && favorite.longitude === longitude
+    );
 
   const handleAddToFavorites = useCallback(async () => {
     await dispatch(addToFavorites({ city, countryCode, latitude, longitude }));
@@ -32,8 +34,14 @@ function useFavorites(city, countryCode, latitude, longitude) {
   }, [dispatch, latitude, longitude]);
 
   useEffect(() => {
-    dispatch(fetchFavorites());
-  }, [dispatch]);
+    const initialize = async () => {
+      if (!favorites && !isFetching) {
+        await dispatch(fetchFavorites());
+      }
+    };
+
+    initialize();
+  }, [dispatch, favorites, isFetching]);
 
   return {
     favorites,

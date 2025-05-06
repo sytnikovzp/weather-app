@@ -22,9 +22,6 @@ class FavoritesService {
       ],
       order: [['created_at', 'ASC']],
     });
-    if (foundFavorites.length === 0) {
-      throw notFound('Список улюблених міст порожній');
-    }
     const allFavorites = foundFavorites.map((favorite) => ({
       city: favorite.City.title,
       countryCode: favorite.City.countryCode,

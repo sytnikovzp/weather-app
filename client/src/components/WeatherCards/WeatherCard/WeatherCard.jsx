@@ -55,10 +55,7 @@ function WeatherCard({
   const error = errorMessageUserCity || errorMessageWeather;
 
   useEffect(() => {
-    if (
-      errorMessageFavorites &&
-      errorMessageFavorites.message !== 'Список улюблених міст порожній'
-    ) {
+    if (errorMessageFavorites) {
       setIsModalOpen(true);
     }
   }, [errorMessageFavorites]);

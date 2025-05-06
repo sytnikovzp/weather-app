@@ -11,7 +11,7 @@ class FavoritesController {
     try {
       const { uuid } = req.user;
       const allFavorites = await getAllFavorites(uuid);
-      if (allFavorites.length > 0) {
+      if (allFavorites) {
         res.status(200).json(allFavorites);
       } else {
         res.status(401);
