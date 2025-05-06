@@ -43,14 +43,12 @@ function WeatherCard({
 
   const {
     isCityInFavorites,
-    isFetching: isFetchingFavorites,
     error: errorMessageFavorites,
     handleAddToFavorites,
     handleRemoveFromFavorites,
   } = useFavorites(city, countryCode, latitude, longitude);
 
-  const isFetching =
-    isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
+  const isFetching = isFetchingUserCity || isFetchingWeather;
 
   const error = errorMessageUserCity || errorMessageWeather;
 

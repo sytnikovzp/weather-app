@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import useFavorites from '../../../hooks/useFavorites';
 
 import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
-import SpinerLoader from '../../Loaders/SpinerLoader/SpinerLoader';
 
 import './FavoriteWeatherCard.css';
 
@@ -18,7 +17,6 @@ function FavoriteWeatherCard({ selectedCity, onSelect }) {
 
   const {
     isCityInFavorites,
-    isFetching,
     error,
     handleAddToFavorites,
     handleRemoveFromFavorites,
@@ -35,16 +33,6 @@ function FavoriteWeatherCard({ selectedCity, onSelect }) {
   const handleClick = useCallback(() => {
     onSelect(selectedCity);
   }, [selectedCity, onSelect]);
-
-  if (isFetching) {
-    return (
-      <div className='favorite-weather-card'>
-        <div className='status-container'>
-          <SpinerLoader />
-        </div>
-      </div>
-    );
-  }
 
   if (error) {
     return (
