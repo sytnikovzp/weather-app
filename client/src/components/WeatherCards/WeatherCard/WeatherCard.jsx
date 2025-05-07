@@ -12,6 +12,7 @@ import {
   getWindDirection,
 } from '../../../utils/sharedFunctions';
 import useCurrentWeatherForCity from '../../../hooks/useCurrentWeatherForCity';
+import useDelayedPreloader from '../../../hooks/useDelayedPreloader';
 import useFavorites from '../../../hooks/useFavorites';
 
 import { clearFavoritesError } from '../../../store/slices/favoritesSlice';
@@ -43,14 +44,18 @@ function WeatherCard({
 
   const {
     isCityInFavorites,
+    isFetching: isFetchingFavorites,
     error: errorMessageFavorites,
     handleAddToFavorites,
     handleRemoveFromFavorites,
   } = useFavorites(city, countryCode, latitude, longitude);
 
-  const isFetching = isFetchingUserCity || isFetchingWeather;
+  const isFetching =
+    isFetchingUserCity || isFetchingWeather || isFetchingFavorites;
 
   const error = errorMessageUserCity || errorMessageWeather;
+
+  const isPreloaderVisible = useDelayedPreloader(isFetching);
 
   useEffect(() => {
     if (errorMessageFavorites) {
@@ -83,7 +88,7 @@ function WeatherCard({
   const formattedDescription =
     description.charAt(0).toUpperCase() + description.slice(1);
 
-  if (isFetching) {
+  if (isPreloaderVisible) {
     return (
       <div className='weather-container'>
         <div className='status-container'>

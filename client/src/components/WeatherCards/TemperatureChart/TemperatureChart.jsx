@@ -6,6 +6,7 @@ import {
   destroyChartInstance,
   updateChartInstance,
 } from '../../../utils/chartHelpers';
+import useDelayedPreloader from '../../../hooks/useDelayedPreloader';
 import useForecastForCity from '../../../hooks/useForecastForCity';
 
 import ErrorMessageBlock from '../../ErrorMessageBlock/ErrorMessageBlock';
@@ -36,6 +37,8 @@ function TemperatureChart({
   const forecastData =
     viewMode === 'day' ? nextDayForecastData : nextWeekForecastData;
 
+  const isPreloaderVisible = useDelayedPreloader(isFetching);
+
   useEffect(() => {
     if (!forecastData || !chartRef.current) {
       return;
@@ -59,7 +62,7 @@ function TemperatureChart({
     setViewMode('week');
   }, []);
 
-  if (isFetching) {
+  if (isPreloaderVisible) {
     return (
       <div className='weather-container'>
         <div className='status-container'>
