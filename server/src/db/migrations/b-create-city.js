@@ -13,19 +13,19 @@ module.exports = {
         unique: true,
       },
       title: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(100),
         allowNull: false,
       },
       country_code: {
-        type: Sequelize.STRING,
+        type: Sequelize.STRING(2),
         allowNull: false,
       },
       latitude: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.DECIMAL(12, 8),
         allowNull: false,
       },
       longitude: {
-        type: Sequelize.FLOAT,
+        type: Sequelize.DECIMAL(12, 8),
         allowNull: false,
       },
       created_at: {

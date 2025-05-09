@@ -7,6 +7,7 @@ const registration = async (name, email, password) => {
     email,
     password,
   });
+
   saveAccessToken(response.data.accessToken);
   return response;
 };
@@ -16,17 +17,20 @@ const login = async (email, password) => {
     email,
     password,
   });
+
   saveAccessToken(response.data.accessToken);
   return response;
 };
 
 const refreshAccessToken = async () => {
   const response = await api.get('/auth/refresh');
+
   return response;
 };
 
 const logout = async () => {
   const response = await api.get('/auth/logout');
+
   removeAccessToken();
   return response;
 };

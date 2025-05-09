@@ -13,7 +13,14 @@ const getCitySuggestions = async (searchTerm) => {
       },
     }
   );
-  return data;
+
+  const formattedData = data.map((city) => ({
+    ...city,
+    lat: city.lat.toFixed(8),
+    lon: city.lon.toFixed(8),
+  }));
+
+  return formattedData;
 };
 
 const getWeather = async (latitude, longitude) => {
@@ -28,6 +35,7 @@ const getWeather = async (latitude, longitude) => {
       },
     }
   );
+
   return data;
 };
 
@@ -43,6 +51,7 @@ const getForecast = async (latitude, longitude) => {
       },
     }
   );
+
   return data;
 };
 

@@ -19,25 +19,25 @@ module.exports = (sequelize, DataTypes) => {
         primaryKey: true,
       },
       title: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(100),
         allowNull: false,
         validate: {
           len: [1, 100],
         },
       },
       countryCode: {
-        type: DataTypes.STRING,
+        type: DataTypes.STRING(2),
         allowNull: false,
         validate: {
-          len: [1, 100],
+          len: [2, 2],
         },
       },
       latitude: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.DECIMAL(12, 8),
         allowNull: false,
       },
       longitude: {
-        type: DataTypes.FLOAT,
+        type: DataTypes.DECIMAL(12, 8),
         allowNull: false,
       },
     },

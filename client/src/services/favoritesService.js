@@ -12,6 +12,7 @@ const addCityToFavorites = async (city, countryCode, latitude, longitude) => {
     latitude,
     longitude,
   });
+
   return response;
 };
 
@@ -22,6 +23,7 @@ const removeCityFromFavorites = async (latitude, longitude) => {
       longitude,
     },
   });
+
   return response;
 };
 
