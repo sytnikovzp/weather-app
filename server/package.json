@@ -20,7 +20,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/sytnikovzp/weather-app.git"
+    "url": "git+https://github.com/sytnikovzp/weather-app.git"
   },
   "bugs": {
     "url": "https://github.com/sytnikovzp/weather-app/issues"
@@ -46,7 +46,7 @@
   "devDependencies": {
     "@eslint/js": "^9.26.0",
     "eslint": "^9.26.0",
-    "eslint-config-prettier": "^10.1.2",
+    "eslint-config-prettier": "^10.1.3",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-optimize-regex": "^1.2.1",
     "eslint-plugin-prettier": "^5.4.0",
