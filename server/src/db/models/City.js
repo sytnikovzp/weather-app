@@ -30,6 +30,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         validate: {
           len: [2, 2],
+          isUppercase: true,
+          is: /^[A-Z]{2}$/,
         },
       },
       latitude: {

@@ -2,7 +2,7 @@ const yup = require('yup');
 
 const STRING_SCHEME = yup
   .string('Це має бути рядком')
-  .trim('Введені дані не можуть містити пробіли на початку або в кінці')
+  .transform((value) => (value === null ? value : value.trim()))
   .max(100, 'Введені дані не можуть перевищувати 100 символів');
 
 const COORDINATE_REQUIRED_SCHEME = yup
@@ -11,6 +11,8 @@ const COORDINATE_REQUIRED_SCHEME = yup
 
 const EMAIL_SCHEME = yup
   .string('Це має бути рядком')
+  .transform((value) => (value === null ? value : value.trim()))
+  .max(100, 'Введені дані не можуть перевищувати 100 символів')
   .email('Введіть коректний e-mail');
 
 const PASSWORD_REQUIRED_SCHEME = yup
