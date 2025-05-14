@@ -8,7 +8,9 @@ class AuthController {
   static async registration(req, res, next) {
     const transaction = await sequelize.transaction();
     try {
-      const { name, email, password } = req.body;
+      const {
+        body: { name, email, password },
+      } = req;
       const authData = await registration(name, email, password, transaction);
       await transaction.commit();
       setRefreshTokenCookie(res, authData.refreshToken);
@@ -22,7 +24,9 @@ class AuthController {
 
   static async login(req, res, next) {
     try {
-      const { email, password } = req.body;
+      const {
+        body: { email, password },
+      } = req;
       const authData = await login(email, password);
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);
@@ -44,7 +48,9 @@ class AuthController {
 
   static async refresh(req, res, next) {
     try {
-      const { refreshToken } = req.cookies;
+      const {
+        cookies: { refreshToken },
+      } = req;
       const authData = await refresh(refreshToken);
       setRefreshTokenCookie(res, authData.refreshToken);
       res.status(200).json(authData);

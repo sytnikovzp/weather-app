@@ -3,7 +3,9 @@ const { getUserProfile } = require('../services/userProfileService');
 class UserProfileController {
   static async getUserProfile(req, res, next) {
     try {
-      const { uuid } = req.user;
+      const {
+        user: { uuid },
+      } = req;
       const currentUser = await getUserProfile(uuid);
       if (currentUser) {
         res.status(200).json(currentUser);

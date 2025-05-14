@@ -9,7 +9,9 @@ const {
 class FavoritesController {
   static async getAllFavorites(req, res, next) {
     try {
-      const { uuid } = req.user;
+      const {
+        user: { uuid },
+      } = req;
       const allFavorites = await getAllFavorites(uuid);
       if (allFavorites) {
         res.status(200).json(allFavorites);
