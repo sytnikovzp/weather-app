@@ -1,4 +1,4 @@
-import { removeAccessToken, saveAccessToken } from '../utils/locStorHelpers';
+import { removeAccessToken, saveAccessToken } from '../utils/authHelpers';
 import api from '../api';
 
 const registration = async (name, email, password) => {

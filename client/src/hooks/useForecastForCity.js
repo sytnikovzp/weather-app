@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import {
   getNextDayTemperatureChartData,
   getNextWeekTemperatureChartData,
-} from '../utils/sharedFunctions';
+} from '../utils/weatherChartHelpers';
 
 import { weatherService } from '../services';
 

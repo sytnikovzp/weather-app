@@ -7,10 +7,8 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import {
-  formatDateTime,
-  getWindDirection,
-} from '../../../utils/sharedFunctions';
+import { formatDateTime } from '../../../utils/dateHelpers';
+import { getWindDirection } from '../../../utils/weatherHelpers';
 import useCurrentWeatherForCity from '../../../hooks/useCurrentWeatherForCity';
 import useDelayedPreloader from '../../../hooks/useDelayedPreloader';
 import useFavorites from '../../../hooks/useFavorites';

@@ -3,6 +3,8 @@ import { builtinModules } from 'module';
 import js from '@eslint/js';
 import importPlugin from 'eslint-plugin-import';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
+import muiPathImport from 'eslint-plugin-mui-path-imports';
+import muiSxOrder from 'eslint-plugin-mui-sx-order';
 import regexopt from 'eslint-plugin-optimize-regex';
 import prettier from 'eslint-plugin-prettier';
 import promise from 'eslint-plugin-promise';
@@ -31,6 +33,8 @@ export default [
     plugins: {
       import: importPlugin,
       'jsx-a11y': jsxA11Y,
+      'mui-path-imports': muiPathImport,
+      'mui-sx-order': muiSxOrder,
       'optimize-regex': regexopt,
       prettier,
       promise,
@@ -112,6 +116,8 @@ export default [
       ],
       'max-classes-per-file': ['error', 1],
       'max-nested-callbacks': ['error', 5],
+      'mui-path-imports/mui-path-imports': 'warn',
+      // 'mui-sx-order/sort-sx-keys': 'warn',
       'new-cap': 'off',
       'new-parens': 'error',
       'no-alert': 'error',
@@ -461,7 +467,6 @@ export default [
       'wrap-regex': 'off',
       'yield-star-spacing': 'warn',
       yoda: 'error',
-      // 'react/jsx-no-bind': ['warn', { allowArrowFunctions: false }],
       // 'sort-keys-fix/sort-keys-fix': 'warn',
     },
     settings: {

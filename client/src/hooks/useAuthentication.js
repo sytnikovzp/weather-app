@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { getAccessToken } from '../utils/locStorHelpers';
+import { getAccessToken } from '../utils/authHelpers';
 
 import {
   selectIsAuthenticated,

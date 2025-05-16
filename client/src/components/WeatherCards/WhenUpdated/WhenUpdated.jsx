@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { faArrowsRotate } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-import { formatDateTime } from '../../../utils/sharedFunctions';
+import { formatDateTime } from '../../../utils/dateHelpers';
 
 import './WhenUpdated.css';
 
