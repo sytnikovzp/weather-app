@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-const { hashPassword } = require('../utils/sharedFunctions');
+const { hashPassword } = require('../utils/authHelpers');
 
 const postgresData = async () => {
   const now = new Date();

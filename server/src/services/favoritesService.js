@@ -1,7 +1,7 @@
 const { Favorite, City, User } = require('../db/models');
 
 const { badRequest, notFound } = require('../errors/generalErrors');
-const { isValidUUID } = require('../utils/sharedFunctions');
+const { isValidUUID } = require('../utils/validators');
 
 class FavoritesService {
   static async getAllFavorites(uuid) {

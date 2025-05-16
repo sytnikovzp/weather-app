@@ -1,7 +1,8 @@
 const { User } = require('../db/models');
 
 const { badRequest, notFound } = require('../errors/generalErrors');
-const { formatDateTime, isValidUUID } = require('../utils/sharedFunctions');
+const { formatDateTime } = require('../utils/dateHelpers');
+const { isValidUUID } = require('../utils/validators');
 
 class UsersService {
   static async getUserProfile(uuid) {

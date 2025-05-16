@@ -1,6 +1,6 @@
 const { sequelize } = require('../db/models');
 
-const { setRefreshTokenCookie } = require('../utils/sharedFunctions');
+const { setRefreshTokenCookie } = require('../utils/cookieHelpers');
 
 const { registration, login, refresh } = require('../services/authService');
 

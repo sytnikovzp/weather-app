@@ -2,11 +2,8 @@ const { User } = require('../db/models');
 
 const { unAuthorizedError } = require('../errors/authErrors');
 const { badRequest } = require('../errors/generalErrors');
-const {
-  hashPassword,
-  confirmPassword,
-  emailToLowerCase,
-} = require('../utils/sharedFunctions');
+const { hashPassword, confirmPassword } = require('../utils/authHelpers');
+const { emailToLowerCase } = require('../utils/stringUtils');
 
 const { generateTokens, validateRefreshToken } = require('./tokenService');
 
