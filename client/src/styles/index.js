@@ -1,7 +1,7 @@
 const autocompleteInputStyle = {
   margin: 0,
-  paddingLeft: '35px',
   paddingRight: '30px',
+  paddingLeft: '35px',
 };
 
 const splashScreenInitial = { opacity: 1 };
